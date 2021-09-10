@@ -1,5 +1,7 @@
 package com.cts.capstone.bean;
 
+import java.util.Objects;
+
 public class Customer {
 	private String customerId;
 	private String companyName;
@@ -52,6 +54,31 @@ public class Customer {
 		this.street = street;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(customerId, companyName, contactName, street, city, state);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Customer customer = (Customer) o;
+		return Objects.equals(customerId, customer.customerId) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state);
+	}
+
+	@Override
+	public String toString() {
+		return "Customers{" +
+				"customer_id='" + customerId + '\'' +
+				", company_name='" + companyName + '\'' +
+				", contact_name='" + contactName + '\'' +
+				", street='" + street + '\'' +
+				", cist='" + city + '\'' +
+				", state='" + state + '\'' +
+				'}';
+	}
+
 	public String getCity() {
 		return city;
 	}
@@ -66,17 +93,5 @@ public class Customer {
 
 	public void setState(String state) {
 		this.state = state;
-	}
-
-	@Override
-	public String toString() {
-		return "Customers{" +
-				"customer_id='" + customerId + '\'' +
-				", company_name='" + companyName + '\'' +
-				", contact_name='" + contactName + '\'' +
-				", street='" + street + '\'' +
-				", cist='" + city + '\'' +
-				", state='" + state + '\'' +
-				'}';
 	}
 }

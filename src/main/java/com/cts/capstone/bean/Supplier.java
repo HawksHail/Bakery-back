@@ -1,5 +1,7 @@
 package com.cts.capstone.bean;
 
+import java.util.Objects;
+
 public class Supplier {
 	private long supplierId;
 	private String companyName;
@@ -36,6 +38,19 @@ public class Supplier {
 
 	public void setContactName(String contactName) {
 		this.contactName = contactName;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(supplierId, companyName, contactName);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Supplier supplier = (Supplier) o;
+		return supplierId == supplier.supplierId && Objects.equals(companyName, supplier.companyName) && Objects.equals(contactName, supplier.contactName);
 	}
 
 	@Override

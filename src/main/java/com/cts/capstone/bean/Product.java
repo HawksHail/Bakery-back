@@ -1,6 +1,7 @@
 package com.cts.capstone.bean;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Product {
 	private long productId;
@@ -62,6 +63,19 @@ public class Product {
 
 	public void setUnitPrice(String unitPrice) {
 		this.unitPrice = new BigDecimal(unitPrice);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(productId, productName, supplierId, categoryId, unitPrice);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Product product = (Product) o;
+		return productId == product.productId && supplierId == product.supplierId && categoryId == product.categoryId && Objects.equals(productName, product.productName) && Objects.equals(unitPrice, product.unitPrice);
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.cts.capstone.bean;
 
+import java.util.Objects;
+
 public class Category {
 	private long categoryId;
 	private String categoryName;
@@ -39,6 +41,19 @@ public class Category {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, categoryName, description);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Category category = (Category) o;
+		return categoryId == category.categoryId && Objects.equals(categoryName, category.categoryName) && Objects.equals(description, category.description);
+	}
+
+	@Override
 	public String toString() {
 		return "Categories{" +
 				"categoryId=" + categoryId +
@@ -46,4 +61,5 @@ public class Category {
 				", description='" + description + '\'' +
 				'}';
 	}
+
 }
