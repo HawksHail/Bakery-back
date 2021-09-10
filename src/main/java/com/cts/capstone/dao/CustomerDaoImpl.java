@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomerDaoImpl implements CustomerDao {
 
+	private static final BeanPropertyRowMapper<Customer> rowMapper = new BeanPropertyRowMapper<>(Customer.class);
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Customer getCustomer(String customerId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", new BeanPropertyRowMapper<>(Customer.class), customerId);
+		return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
 	}
 }

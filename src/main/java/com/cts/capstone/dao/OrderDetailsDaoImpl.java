@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
+	private static final BeanPropertyRowMapper<OrderDetails> rowMapper = new BeanPropertyRowMapper<>(OrderDetails.class);
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public OrderDetails getOrderDetails(long orderId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", new BeanPropertyRowMapper<>(OrderDetails.class), orderId);
+		return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
 	}
 }

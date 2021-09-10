@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SupplierDaoImpl implements SupplierDao {
 
+	private static final BeanPropertyRowMapper<Supplier> rowMapper = new BeanPropertyRowMapper<>(Supplier.class);
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Supplier getSupplier(long supplierId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM suppliers WHERE supplierid=?", new BeanPropertyRowMapper<>(Supplier.class), supplierId);
+		return jdbcTemplate.queryForObject("SELECT * FROM suppliers WHERE supplierid=?", rowMapper, supplierId);
 	}
 }

@@ -9,12 +9,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 
+	private static final BeanPropertyRowMapper<Category> rowMapper = new BeanPropertyRowMapper<>(Category.class);
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Category getCategory(long categoryId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", new BeanPropertyRowMapper<>(Category.class), categoryId);
+		return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
 
 	}
 }

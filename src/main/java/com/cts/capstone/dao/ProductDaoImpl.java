@@ -9,11 +9,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ProductDaoImpl implements ProductDao {
 
+	private static final BeanPropertyRowMapper<Product> rowMapper = new BeanPropertyRowMapper<>(Product.class);
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Product getProduct(long productId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM products WHERE productid=?", new BeanPropertyRowMapper<>(Product.class), productId);
+		return jdbcTemplate.queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);
 	}
 }
