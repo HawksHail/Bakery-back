@@ -32,4 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/connection.properties
+#git update-index --skip-worktree src/main/resources/connection.properties
+#src/main/resources/connection.properties
