@@ -14,7 +14,7 @@ import java.util.Properties;
 @Configuration
 //@EnableTransactionManagement
 @ComponentScan("com.cts")
-public class AppConfiguation {
+public class AppConfiguration {
 	@Bean
 	public JdbcTemplate jdbcTemplate() {
 		return new JdbcTemplate(mysqlDataSource());
