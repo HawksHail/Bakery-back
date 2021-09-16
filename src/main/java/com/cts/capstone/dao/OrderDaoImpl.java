@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class OrderDaoImpl implements OrderDao {
 
@@ -17,5 +19,10 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order getOrder(long orderId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE orderid=?", rowMapper, orderId);
+	}
+
+	@Override
+	public List<Order> getAllOrders() {
+		return jdbcTemplate.query("SELECT * FROM orders", rowMapper);
 	}
 }
