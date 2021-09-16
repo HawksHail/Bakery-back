@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 
@@ -18,5 +20,10 @@ public class CategoryDaoImpl implements CategoryDao {
 	public Category getCategory(long categoryId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
 
+	}
+
+	@Override
+	public List<Category> getAllCategories() {
+		return jdbcTemplate.query("SELECT * FROM categories", rowMapper);
 	}
 }

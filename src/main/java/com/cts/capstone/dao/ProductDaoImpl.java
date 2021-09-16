@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class ProductDaoImpl implements ProductDao {
 
@@ -17,5 +19,10 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public Product getProduct(long productId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);
+	}
+
+	@Override
+	public List<Product> getAllProducts() {
+		return jdbcTemplate.query("SELECT * FROM products", rowMapper);
 	}
 }
