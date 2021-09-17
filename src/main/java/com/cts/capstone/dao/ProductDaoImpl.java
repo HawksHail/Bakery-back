@@ -16,6 +16,13 @@ public class ProductDaoImpl implements ProductDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public ProductDaoImpl() {
+	}
+
+	public ProductDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public Product getProduct(long productId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);

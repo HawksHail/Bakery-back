@@ -16,6 +16,13 @@ public class SupplierDaoImpl implements SupplierDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public SupplierDaoImpl() {
+	}
+
+	public SupplierDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public Supplier getSupplier(long supplierId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM suppliers WHERE supplierid=?", rowMapper, supplierId);

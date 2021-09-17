@@ -16,6 +16,13 @@ public class OrderDaoImpl implements OrderDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public OrderDaoImpl() {
+	}
+
+	public OrderDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public Order getOrder(long orderId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE orderid=?", rowMapper, orderId);

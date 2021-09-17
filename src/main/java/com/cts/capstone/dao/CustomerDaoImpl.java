@@ -16,6 +16,13 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public CustomerDaoImpl() {
+	}
+
+	public CustomerDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public Customer getCustomer(String customerId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);

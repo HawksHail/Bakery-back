@@ -16,6 +16,13 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public OrderDetailsDaoImpl() {
+	}
+
+	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public OrderDetails getOrderDetails(long orderId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);

@@ -16,6 +16,13 @@ public class CategoryDaoImpl implements CategoryDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	public CategoryDaoImpl() {
+	}
+
+	public CategoryDaoImpl(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+
 	@Override
 	public Category getCategory(long categoryId) {
 		return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
