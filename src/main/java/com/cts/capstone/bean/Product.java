@@ -1,13 +1,30 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Entity
+@Table(name = "products")
 public class Product {
+
+	@Id
+	@Column(name = "productid")
 	private long productId;
+
+	@Column(name = "productname", nullable = false, length = 40)
 	private String productName;
+
+	@Column(name = "supplierid")
 	private long supplierId;
+
+	@Column(name = "categoryid")
 	private long categoryId;
+
+	@Column(name = "unitprice", precision = 7, scale = 2)
 	private BigDecimal unitPrice;
 
 	public Product() {
@@ -80,7 +97,7 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Products{" +
+		return "Product{" +
 				"productId=" + productId +
 				", productName='" + productName + '\'' +
 				", supplierId=" + supplierId +

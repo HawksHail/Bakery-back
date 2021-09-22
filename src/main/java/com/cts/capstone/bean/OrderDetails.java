@@ -1,10 +1,22 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "orderdetails")
 public class OrderDetails {
+	@Id
+	@Column(name = "orderid", nullable = false)
 	private long orderId;
+
+	@Column(name = "productid", nullable = false)
 	private long productId;
+
+	@Column(name = "quantity", nullable = false)
 	private int quantity;
 
 	public OrderDetails() {

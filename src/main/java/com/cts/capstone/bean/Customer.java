@@ -1,13 +1,31 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "customers")
 public class Customer {
+	@Id
+	@Column(name = "customerid", length = 5)
 	private String customerId;
+
+	@Column(name = "companyname", nullable = false, length = 40)
 	private String companyName;
+
+	@Column(name = "contactname", length = 30)
 	private String contactName;
+
+	@Column(name = "street", length = 60)
 	private String street;
+
+	@Column(name = "city", length = 15)
 	private String city;
+
+	@Column(name = "state", length = 15)
 	private String state;
 
 	public Customer() {

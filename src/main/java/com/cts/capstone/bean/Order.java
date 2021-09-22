@@ -1,11 +1,24 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "orders")
 public class Order {
+
+	@Id
+	@Column(name = "orderid")
 	private long orderId;
+
+	@Column(name = "customerid", length = 5)
 	private String customerId;
+
+	@Column(name = "orderdate")
 	private LocalDate orderDate;
 
 	public Order() {
@@ -56,7 +69,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Orders{" +
+		return "Order{" +
 				"order_id=" + orderId +
 				", customer_id='" + customerId + '\'' +
 				", orderdate=" + orderDate +

@@ -1,10 +1,23 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "categories")
 public class Category {
+
+	@Id
+	@Column(name = "categoryid")
 	private long categoryId;
+
+	@Column(name = "categoryname", nullable = false, length = 15)
 	private String categoryName;
+
+	@Column(name = "description")
 	private String description;
 
 	public Category() {
@@ -55,7 +68,7 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Categories{" +
+		return "Category{" +
 				"categoryId=" + categoryId +
 				", categoryName='" + categoryName + '\'' +
 				", description='" + description + '\'' +

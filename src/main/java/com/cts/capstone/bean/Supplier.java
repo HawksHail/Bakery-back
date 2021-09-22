@@ -1,10 +1,23 @@
 package com.cts.capstone.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@Entity
+@Table(name = "suppliers")
 public class Supplier {
+
+	@Id
+	@Column(name = "supplierid")
 	private long supplierId;
+
+	@Column(name = "companyname", nullable = false, length = 40)
 	private String companyName;
+
+	@Column(name = "contactname", length = 30)
 	private String contactName;
 
 	public Supplier() {
@@ -55,7 +68,7 @@ public class Supplier {
 
 	@Override
 	public String toString() {
-		return "Suppliers{" +
+		return "Supplier{" +
 				"supplier_id=" + supplierId +
 				", company_name='" + companyName + '\'' +
 				", contact_name='" + contactName + '\'' +
