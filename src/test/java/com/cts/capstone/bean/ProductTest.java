@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProductTest {
 
@@ -45,6 +45,7 @@ class ProductTest {
 		product.setUnitPrice(new BigDecimal("3.14"));
 		assertEquals(0, product.getUnitPrice().compareTo(new BigDecimal("3.14")));
 	}
+
 	@Test
 	void setUnitPrice_double() {
 		product.setUnitPrice("3.14");
