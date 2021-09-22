@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -44,17 +45,14 @@ class SupplierDaoImplTest {
 	}
 
 	@Test
-	void getSupplierTest_fail() {
+	void getSupplierTest_notFound() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any(), anyLong()))
-				.thenThrow(new RuntimeException("ID not found"));
+				.thenThrow(new EmptyResultDataAccessException(1));
 
-		try {
-			Supplier s = supplierDao.getSupplier(1L);
-			fail("Exception expected");
-		} catch (RuntimeException ignored) {
 
-		}
+		Supplier s = supplierDao.getSupplier(1L);
 
+		assertNull(s);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any(), anyLong());
 	}

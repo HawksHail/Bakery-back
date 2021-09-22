@@ -2,6 +2,7 @@ package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,8 +26,11 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public Category getCategory(long categoryId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
-
+		try {
+			return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override

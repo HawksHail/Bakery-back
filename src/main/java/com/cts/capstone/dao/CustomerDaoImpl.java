@@ -2,6 +2,7 @@ package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,11 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public Customer getCustomer(String customerId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
+		try {
+			return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -43,17 +44,13 @@ class CategoryDaoTest {
 	}
 
 	@Test
-	void getCategoryTest_fail() {
+	void getCategoryTest_notFound() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any(), anyLong()))
-				.thenThrow(new RuntimeException("ID not found"));
+				.thenThrow(new EmptyResultDataAccessException(1));
 
-		try {
-			Category c = categoryDao.getCategory(1);
-			fail("Exception expected");
-		} catch (RuntimeException ignored) {
+		Category c = categoryDao.getCategory(1);
 
-		}
-
+		assertNull(c);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any(), anyLong());
 	}

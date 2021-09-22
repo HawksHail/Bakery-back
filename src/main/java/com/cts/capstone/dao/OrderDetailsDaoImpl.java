@@ -2,6 +2,7 @@ package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.OrderDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +26,11 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public OrderDetails getOrderDetails(long orderId) {
-		return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
+		try {
+			return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
 	@Override
