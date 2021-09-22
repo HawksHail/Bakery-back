@@ -1,6 +1,7 @@
 package com.cts.capstone;
 
-import com.cts.capstone.service.DbService;
+import com.cts.capstone.service.DbServiceDao;
+import com.cts.capstone.service.DbServiceRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,7 +12,15 @@ public class Main {
 		ConfigurableApplicationContext context =
 				SpringApplication.run(Main.class, args);
 
-		DbService service = context.getBean(DbService.class);
-		System.out.println(service.getProduct(1));
+		DbServiceDao serviceDao = context.getBean(DbServiceDao.class);
+		DbServiceRepository serviceRepository = context.getBean(DbServiceRepository.class);
+
+		System.out.println("Dao");
+		System.out.println(serviceDao.getProduct(1));
+		System.out.println(serviceDao.getCategory(1));
+
+		System.out.println("\nRepository");
+		System.out.println(serviceRepository.getProduct(1));
+		System.out.println(serviceRepository.getCategory(1));
 	}
 }
