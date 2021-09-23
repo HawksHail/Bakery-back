@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
 	private static final Gson gson = new Gson();
-
 	@Autowired
 //	@Qualifier("DbServiceDao")
 	DbService service;
 
+	public Controller() {
+	}
+
+	public Controller(DbService service) {
+		this.service = service;
+	}
 
 	@GetMapping(value = "product", produces = "application/json")
 	public String getProduct() {
@@ -58,7 +63,7 @@ public class Controller {
 	}
 
 	@GetMapping(value = {"orderdetails", "orderDetails"}, produces = "application/json")
-	public String getAllOrderDetails() {
+	public String getOrderDetails() {
 		return gson.toJson(service.getAllOrderDetails());
 	}
 
@@ -68,7 +73,7 @@ public class Controller {
 	}
 
 	@GetMapping(value = "supplier", produces = "application/json")
-	public String getAllSuppliers() {
+	public String getSupplier() {
 		return gson.toJson(service.getAllSuppliers());
 	}
 
