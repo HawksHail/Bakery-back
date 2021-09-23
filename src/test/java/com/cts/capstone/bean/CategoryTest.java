@@ -36,4 +36,24 @@ class CategoryTest {
 		assertEquals("All vegetables", category.getDescription());
 	}
 
+	@Test
+	public void hashcodeAndEquals() {
+		Category x = CategoryBuilder.of(1, "name", "desc");
+		Category y = CategoryBuilder.of(1, "name", "desc");
+		Category a = CategoryBuilder.of();
+		Category b = CategoryBuilder.of();
+
+		assertTrue(x.equals(y) && y.equals(x));
+		assertEquals(x.hashCode(), y.hashCode());
+		assertTrue(a.equals(b) && b.equals(a));
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void toStringTest() {
+		ToStringVerifier.forClass(Category.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.verify();
+	}
+
 }

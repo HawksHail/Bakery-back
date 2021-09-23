@@ -35,4 +35,24 @@ class SupplierTest {
 		supplier.setContactName("abc");
 		assertEquals("abc", supplier.getContactName());
 	}
+
+	@Test
+	public void hashcodeAndEquals() {
+		Supplier x = SupplierBuilder.of(123L, "company", "contact");
+		Supplier y = SupplierBuilder.of(123L, "company", "contact");
+		Supplier a = SupplierBuilder.of();
+		Supplier b = SupplierBuilder.of();
+
+		assertTrue(x.equals(y) && y.equals(x));
+		assertEquals(x.hashCode(), y.hashCode());
+		assertTrue(a.equals(b) && b.equals(a));
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void toStringTest() {
+		ToStringVerifier.forClass(Supplier.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.verify();
+	}
 }

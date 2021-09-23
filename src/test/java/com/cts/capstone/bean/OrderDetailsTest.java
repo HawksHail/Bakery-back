@@ -35,4 +35,24 @@ class OrderDetailsTest {
 		orderDetails.setQuantity(987);
 		assertEquals(987, orderDetails.getQuantity());
 	}
+
+	@Test
+	public void hashcodeAndEquals() {
+		OrderDetails x = OrderDetailsBuilder.of(123L, 456L, 100);
+		OrderDetails y = OrderDetailsBuilder.of(123L, 456L, 100);
+		OrderDetails a = OrderDetailsBuilder.of();
+		OrderDetails b = OrderDetailsBuilder.of();
+
+		assertTrue(x.equals(y) && y.equals(x));
+		assertEquals(x.hashCode(), y.hashCode());
+		assertTrue(a.equals(b) && b.equals(a));
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void toStringTest() {
+		ToStringVerifier.forClass(OrderDetails.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.verify();
+	}
 }

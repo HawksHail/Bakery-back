@@ -43,4 +43,24 @@ class OrderTest {
 		order.setOrderDate(2022, 2, 22);
 		assertEquals(LocalDate.of(2022, 2, 22), order.getOrderDate());
 	}
+
+	@Test
+	public void hashcodeAndEquals() {
+		Order x = OrderBuilder.of(123L, "cm1234");
+		Order y = OrderBuilder.of(123L, "cm1234");
+		Order a = OrderBuilder.of();
+		Order b = OrderBuilder.of();
+
+		assertTrue(x.equals(y) && y.equals(x));
+		assertEquals(x.hashCode(), y.hashCode());
+		assertTrue(a.equals(b) && b.equals(a));
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void toStringTest() {
+		ToStringVerifier.forClass(Order.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.verify();
+	}
 }

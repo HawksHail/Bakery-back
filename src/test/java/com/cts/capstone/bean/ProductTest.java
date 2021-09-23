@@ -55,4 +55,24 @@ class ProductTest {
 		product.setUnitPrice("3.14");
 		assertEquals(0, product.getUnitPrice().compareTo(new BigDecimal("3.14")));
 	}
+
+	@Test
+	public void hashcodeAndEquals() {
+		Product x = ProductBuilder.of(123L, "name", 456L, 789L, "765");
+		Product y = ProductBuilder.of(123L, "name", 456L, 789L, "765");
+		Product a = ProductBuilder.of();
+		Product b = ProductBuilder.of();
+
+		assertTrue(x.equals(y) && y.equals(x));
+		assertEquals(x.hashCode(), y.hashCode());
+		assertTrue(a.equals(b) && b.equals(a));
+		assertEquals(a.hashCode(), b.hashCode());
+	}
+
+	@Test
+	public void toStringTest() {
+		ToStringVerifier.forClass(Product.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.verify();
+	}
 }
