@@ -1,9 +1,13 @@
 package com.cts.capstone.bean;
 
+import com.cts.capstone.builder.CategoryBuilder;
+import com.jparams.verifier.tostring.NameStyle;
+import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CategoryTest {
 
@@ -11,7 +15,7 @@ class CategoryTest {
 
 	@BeforeEach
 	void setUp() {
-		category = new Category(100, "Fruit", "All fruits");
+		category = CategoryBuilder.of(100, "Fruit", "All fruits");
 	}
 
 	@Test

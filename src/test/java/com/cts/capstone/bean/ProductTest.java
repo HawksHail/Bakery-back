@@ -1,11 +1,15 @@
 package com.cts.capstone.bean;
 
+import com.cts.capstone.builder.ProductBuilder;
+import com.jparams.verifier.tostring.NameStyle;
+import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ProductTest {
 
@@ -13,7 +17,7 @@ class ProductTest {
 
 	@BeforeEach
 	void setUp() {
-		product = new Product(123L, "name", 456L, 789L, new BigDecimal(765));
+		product = ProductBuilder.of(123L, "name", 456L, 789L, "765");
 	}
 
 	@Test

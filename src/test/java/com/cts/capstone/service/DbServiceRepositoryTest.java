@@ -1,14 +1,13 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.bean.*;
+import com.cts.capstone.builder.*;
 import com.cts.capstone.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +48,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getCategoryTest() {
 		when(categoryRepository.findById(anyLong()))
-				.thenReturn(Optional.of(new Category(1, "name", "description")));
+				.thenReturn(Optional.of(CategoryBuilder.of(1, "name", "description")));
 
 		Category category = serviceDao.getCategory(1);
 
@@ -70,9 +69,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllCategoriesTest() {
-		ArrayList<Category> expectedList = new ArrayList<>(2);
-		expectedList.add(new Category(1, "name", "description"));
-		expectedList.add(new Category(2, "name2", "description2"));
+		List<Category> expectedList = new CategoryBuilder()
+				.w(1, "name", "description")
+				.w(2, "name2", "description2")
+				.build();
 		when(categoryRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -85,7 +85,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllCategoriesTest_empty() {
-		ArrayList<Category> expectedList = new ArrayList<>(2);
+		List<Category> expectedList = new ArrayList<>(2);
 		when(categoryRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -99,7 +99,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getCustomerTest() {
 		when(customerRepository.findByCustomerId(anyString()))
-				.thenReturn(Optional.of(new Customer("id1", "companyName", "contactName", "street", "city", "state")));
+				.thenReturn(Optional.of(CustomerBuilder.of("id1", "companyName", "contactName", "street", "city", "state")));
 
 		Customer customer = serviceDao.getCustomer("id1");
 
@@ -120,9 +120,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllCustomersTest() {
-		ArrayList<Customer> expectedList = new ArrayList<>(2);
-		expectedList.add(new Customer("id1", "companyName", "contactName", "street", "city", "state"));
-		expectedList.add(new Customer("id2", "companyName2", "contactName2", "street2", "city2", "state2"));
+		List<Customer> expectedList = new CustomerBuilder()
+				.w("id1", "companyName", "contactName", "street", "city", "state")
+				.w("id2", "companyName2", "contactName2", "street2", "city2", "state2")
+				.build();
 		when(customerRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -135,7 +136,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllCustomersTest_empty() {
-		ArrayList<Customer> expectedList = new ArrayList<>(2);
+		List<Customer> expectedList = new ArrayList<>(2);
 		when(customerRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -149,7 +150,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getOrderTest() {
 		when(orderRepository.findById(anyLong()))
-				.thenReturn(Optional.of(new Order(1L, "id1", LocalDate.of(2020, 9, 17))));
+				.thenReturn(Optional.of(OrderBuilder.of(1L, "id1")));
 
 		Order order = serviceDao.getOrder(1L);
 
@@ -170,9 +171,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllOrdersTest() {
-		ArrayList<Order> expectedList = new ArrayList<>(2);
-		expectedList.add(new Order(1L, "id1", LocalDate.of(2020, 9, 17)));
-		expectedList.add(new Order(2L, "id2", LocalDate.of(2020, 9, 16)));
+		List<Order> expectedList = new OrderBuilder()
+				.w(1L, "id1")
+				.w(2L, "id2")
+				.build();
 		when(orderRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -185,7 +187,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllOrdersTest_empty() {
-		ArrayList<Order> expectedList = new ArrayList<>(2);
+		List<Order> expectedList = new ArrayList<>(2);
 		when(orderRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -199,7 +201,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getOrderDetailsTest() {
 		when(orderDetailsRepository.findById(anyLong()))
-				.thenReturn(Optional.of(new OrderDetails(1L, 2L, 5)));
+				.thenReturn(Optional.of(OrderDetailsBuilder.of(1L, 2L, 5)));
 
 		OrderDetails orderDetails = serviceDao.getOrderDetails(1L);
 
@@ -220,9 +222,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllOrderDetailsTest() {
-		ArrayList<OrderDetails> expectedList = new ArrayList<>(2);
-		expectedList.add(new OrderDetails(1L, 2L, 5));
-		expectedList.add(new OrderDetails(3L, 4L, 7));
+		List<OrderDetails> expectedList = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(3L, 4L, 7)
+				.build();
 		when(orderDetailsRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -235,7 +238,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllOrderDetailsTest_empty() {
-		ArrayList<OrderDetails> expectedList = new ArrayList<>(2);
+		List<OrderDetails> expectedList = new ArrayList<>(2);
 		when(orderDetailsRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -249,7 +252,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getProductTest() {
 		when(productRepository.findById(anyLong()))
-				.thenReturn(Optional.of(new Product(1L, "name", 2L, 3L, new BigDecimal("4"))));
+				.thenReturn(Optional.of(ProductBuilder.of(1L, "name", 2L, 3L, "4")));
 
 		Product product = serviceDao.getProduct(1L);
 
@@ -270,9 +273,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllProductsTest() {
-		ArrayList<Product> expectedList = new ArrayList<>(2);
-		expectedList.add(new Product(1L, "name", 2L, 3L, new BigDecimal("4")));
-		expectedList.add(new Product(5L, "name2", 5L, 7L, new BigDecimal("8")));
+		List<Product> expectedList = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(5L, "name2", 5L, 7L, "8")
+				.build();
 		when(productRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -285,7 +289,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllProductsTest_empty() {
-		ArrayList<Product> expectedList = new ArrayList<>(2);
+		List<Product> expectedList = new ArrayList<>(2);
 		when(productRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -299,7 +303,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getSupplierTest() {
 		when(supplierRepository.findById(anyLong()))
-				.thenReturn(Optional.of(new Supplier(1L, "companyName", "contactName")));
+				.thenReturn(Optional.of(SupplierBuilder.of(1L, "companyName", "contactName")));
 
 		Supplier supplier = serviceDao.getSupplier(1L);
 
@@ -320,9 +324,10 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllSuppliersTest() {
-		ArrayList<Supplier> expectedList = new ArrayList<>(2);
-		expectedList.add(new Supplier(1L, "companyName", "contactName"));
-		expectedList.add(new Supplier(2L, "companyName2", "contactName2"));
+		List<Supplier> expectedList = new SupplierBuilder()
+				.w(1L, "companyName", "contactName")
+				.w(2L, "companyName2", "contactName2")
+				.build();
 		when(supplierRepository.findAll())
 				.thenReturn(expectedList);
 
@@ -335,7 +340,7 @@ class DbServiceRepositoryTest {
 
 	@Test
 	void getAllSuppliersTest_empty() {
-		ArrayList<Supplier> expectedList = new ArrayList<>(2);
+		List<Supplier> expectedList = new ArrayList<>(2);
 		when(supplierRepository.findAll())
 				.thenReturn(expectedList);
 

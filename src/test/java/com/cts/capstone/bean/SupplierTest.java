@@ -1,9 +1,13 @@
 package com.cts.capstone.bean;
 
+import com.cts.capstone.builder.SupplierBuilder;
+import com.jparams.verifier.tostring.NameStyle;
+import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SupplierTest {
 
@@ -11,7 +15,7 @@ class SupplierTest {
 
 	@BeforeEach
 	void setUp() {
-		supplier = new Supplier(123L, "company", "contact");
+		supplier = SupplierBuilder.of(123L, "company", "contact");
 	}
 
 	@Test

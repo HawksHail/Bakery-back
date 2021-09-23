@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Order;
+import com.cts.capstone.builder.OrderBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -10,8 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +35,7 @@ class OrderDaoTest {
 	@Test
 	void getOrderTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any(), anyLong()))
-				.thenReturn(new Order(1L, "id1", LocalDate.of(2020, 9, 17)));
+				.thenReturn(OrderBuilder.of(1L, "id1"));
 
 		Order o = orderDao.getOrder(1L);
 
@@ -59,9 +58,10 @@ class OrderDaoTest {
 
 	@Test
 	void getAllOrdersTest() {
-		ArrayList<Order> expectedList = new ArrayList<>();
-		expectedList.add(new Order(1L, "id1", LocalDate.of(2020, 9, 17)));
-		expectedList.add(new Order(2L, "id2", LocalDate.of(2020, 9, 16)));
+		List<Order> expectedList = new OrderBuilder()
+				.w(1L, "id1")
+				.w(2L, "id2")
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any()))
 				.thenReturn(expectedList);
 

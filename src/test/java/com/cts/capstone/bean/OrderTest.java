@@ -1,11 +1,15 @@
 package com.cts.capstone.bean;
 
+import com.cts.capstone.builder.OrderBuilder;
+import com.jparams.verifier.tostring.NameStyle;
+import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OrderTest {
 
@@ -13,7 +17,7 @@ class OrderTest {
 
 	@BeforeEach
 	void setUp() {
-		order = new Order(123L, "cm1234", LocalDate.of(2021, 9, 10));
+		order = OrderBuilder.of(123L, "cm1234");
 	}
 
 	@Test

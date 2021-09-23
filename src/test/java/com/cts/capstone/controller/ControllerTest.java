@@ -1,23 +1,25 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.bean.*;
+import com.cts.capstone.builder.*;
 import com.cts.capstone.service.DbService;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class ControllerTest {
+
+	private final static Gson gson = new Gson();
 
 	@Mock
 	DbService service;
@@ -32,12 +34,15 @@ class ControllerTest {
 
 	@Test
 	public void getCategory() {
+		Category expected = CategoryBuilder.of(1, "name", "description");
 		when(service.getCategory(anyLong()))
-				.thenReturn(new Category(1, "name", "description"));
+				.thenReturn(expected);
 
-		String actual = controller.getCategory(1L);
+		String json = controller.getCategory(1L);
+		Category actual = gson.fromJson(json, Category.class);
 
-		assertEquals("{\"categoryId\":1,\"categoryName\":\"name\",\"description\":\"description\"}", actual);
+		assertEquals("{\"categoryId\":1,\"categoryName\":\"name\",\"description\":\"description\"}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -45,26 +50,31 @@ class ControllerTest {
 		when(service.getCategory(anyLong()))
 				.thenReturn(null);
 
-		String actual = controller.getCategory(1L);
+		String json = controller.getCategory(1L);
+		Category actual = gson.fromJson(json, Category.class);
 
-		assertEquals("null", actual);
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getCategoryList() {
+		List<Category> list = new CategoryBuilder()
+				.w(1, "name", "description")
+				.w(2, "name2", "description2")
+				.build();
 		when(service.getAllCategories())
-				.thenReturn(Arrays.asList(
-						new Category(1, "name", "description"),
-						new Category(2, "name2", "description2")
-				));
+				.thenReturn(list);
 
-		String actual = controller.getCategory();
+		String json = controller.getCategory();
+		Category[] actual = gson.fromJson(json, Category[].class);
 
 		assertEquals("[" +
 						"{\"categoryId\":1,\"categoryName\":\"name\",\"description\":\"description\"}," +
 						"{\"categoryId\":2,\"categoryName\":\"name2\",\"description\":\"description2\"}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 
 	@Test
@@ -72,19 +82,24 @@ class ControllerTest {
 		when(service.getAllCategories())
 				.thenReturn(List.of());
 
-		String actual = controller.getCategory();
+		String json = controller.getCategory();
+		Category[] actual = gson.fromJson(json, Category[].class);
 
-		assertEquals("[]", actual);
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
 	}
 
 	@Test
 	public void getCustomer() {
+		Customer expected = CustomerBuilder.of("id123", "companyName", "contactName", "street", "city", "state");
 		when(service.getCustomer(anyString()))
-				.thenReturn(new Customer("id123", "companyName", "contactName", "street", "city", "state"));
+				.thenReturn(expected);
 
-		String actual = controller.getCustomer("id123");
+		String json = controller.getCustomer("id123");
+		Customer actual = gson.fromJson(json, Customer.class);
 
-		assertEquals("{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}", actual);
+		assertEquals("{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -92,26 +107,32 @@ class ControllerTest {
 		when(service.getCustomer(anyString()))
 				.thenReturn(null);
 
-		String actual = controller.getCustomer("id123");
+		String json = controller.getCustomer("id123");
+		Customer actual = gson.fromJson(json, Customer.class);
 
-		assertEquals("null", actual);
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getCustomerList() {
+		List<Customer> list = new CustomerBuilder()
+				.w("id123", "companyName", "contactName", "street", "city", "state")
+				.w("id124", "companyName2", "contactName2", "street2", "city2", "state2")
+				.build();
 		when(service.getAllCustomers())
-				.thenReturn(Arrays.asList(
-						new Customer("id123", "companyName", "contactName", "street", "city", "state"),
-						new Customer("id124", "companyName2", "contactName2", "street2", "city2", "state2")
-				));
+				.thenReturn(list);
 
-		String actual = controller.getCustomer();
+		String json = controller.getCustomer();
+		Customer[] actual = gson.fromJson(json, Customer[].class);
+
 
 		assertEquals("[" +
 						"{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}," +
 						"{\"customerId\":\"id124\",\"companyName\":\"companyName2\",\"contactName\":\"contactName2\",\"street\":\"street2\",\"city\":\"city2\",\"state\":\"state2\"}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 
 	@Test
@@ -119,19 +140,26 @@ class ControllerTest {
 		when(service.getAllCustomers())
 				.thenReturn(List.of());
 
-		String actual = controller.getCustomer();
+		String json = controller.getCustomer();
+		Customer[] actual = gson.fromJson(json, Customer[].class);
 
-		assertEquals("[]", actual);
+
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
 	}
 
 	@Test
 	public void getOrderDetails() {
+		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
 		when(service.getOrderDetails(anyLong()))
-				.thenReturn(new OrderDetails(1, 2, 3));
+				.thenReturn(expected);
 
-		String actual = controller.getOrderDetails(1L);
+		String json = controller.getOrderDetails(1L);
+		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
 
-		assertEquals("{\"orderId\":1,\"productId\":2,\"quantity\":3}", actual);
+
+		assertEquals("{\"orderId\":1,\"productId\":2,\"quantity\":3}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -139,26 +167,33 @@ class ControllerTest {
 		when(service.getOrderDetails(anyLong()))
 				.thenReturn(null);
 
-		String actual = controller.getOrderDetails(1L);
+		String json = controller.getOrderDetails(1L);
+		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
 
-		assertEquals("null", actual);
+
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getOrderDetailsList() {
+		List<OrderDetails> list = new OrderDetailsBuilder()
+				.w(1, 2, 3)
+				.w(4, 5, 6)
+				.build();
 		when(service.getAllOrderDetails())
-				.thenReturn(Arrays.asList(
-						new OrderDetails(1, 2, 3),
-						new OrderDetails(4, 5, 6)
-				));
+				.thenReturn(list);
 
-		String actual = controller.getOrderDetails();
+		String json = controller.getOrderDetails();
+		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
+
 
 		assertEquals("[" +
 						"{\"orderId\":1,\"productId\":2,\"quantity\":3}," +
 						"{\"orderId\":4,\"productId\":5,\"quantity\":6}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 
 	@Test
@@ -166,19 +201,24 @@ class ControllerTest {
 		when(service.getAllOrderDetails())
 				.thenReturn(List.of());
 
-		String actual = controller.getOrderDetails();
+		String json = controller.getOrderDetails();
+		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
 
-		assertEquals("[]", actual);
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
 	}
 
 	@Test
 	public void getOrder() {
+		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
 		when(service.getOrder(anyLong()))
-				.thenReturn(new Order(1, "id123", LocalDate.of(2021, 9, 1)));
+				.thenReturn(expected);
 
-		String actual = controller.getOrder(1L);
+		String json = controller.getOrder(1L);
+		Order actual = gson.fromJson(json, Order.class);
 
-		assertEquals("{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}", actual);
+		assertEquals("{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -186,26 +226,31 @@ class ControllerTest {
 		when(service.getOrder(anyLong()))
 				.thenReturn(null);
 
-		String actual = controller.getOrder(1L);
+		String json = controller.getOrder(1L);
+		Order actual = gson.fromJson(json, Order.class);
 
-		assertEquals("null", actual);
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getOrderList() {
+		List<Order> list = new OrderBuilder()
+				.w(1, "id123", 2021, 9, 1)
+				.w(2, "id124", 2020, 10, 2)
+				.build();
 		when(service.getAllOrders())
-				.thenReturn(Arrays.asList(
-						new Order(1, "id123", LocalDate.of(2021, 9, 1)),
-						new Order(2, "id124", LocalDate.of(2020, 10, 2))
-				));
+				.thenReturn(list);
 
-		String actual = controller.getOrder();
+		String json = controller.getOrder();
+		Order[] actual = gson.fromJson(json, Order[].class);
 
 		assertEquals("[" +
 						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}," +
 						"{\"orderId\":2,\"customerId\":\"id124\",\"orderDate\":{\"year\":2020,\"month\":10,\"day\":2}}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 
 	@Test
@@ -213,19 +258,25 @@ class ControllerTest {
 		when(service.getAllOrders())
 				.thenReturn(List.of());
 
-		String actual = controller.getOrder();
+		String json = controller.getOrder();
+		Order[] actual = gson.fromJson(json, Order[].class);
 
-		assertEquals("[]", actual);
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
+
 	}
 
 	@Test
 	public void getProduct() {
+		Product expected = ProductBuilder.of(1, "productName", 2, 3, "4");
 		when(service.getProduct(anyLong()))
-				.thenReturn(new Product(1, "productName", 2, 3, new BigDecimal("4")));
+				.thenReturn(expected);
 
-		String actual = controller.getProduct(1L);
+		String json = controller.getProduct(1L);
+		Product actual = gson.fromJson(json, Product.class);
 
-		assertEquals("{\"productId\":1,\"productName\":\"productName\",\"supplierId\":2,\"categoryId\":3,\"unitPrice\":4}", actual);
+		assertEquals("{\"productId\":1,\"productName\":\"productName\",\"supplierId\":2,\"categoryId\":3,\"unitPrice\":4}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -233,26 +284,31 @@ class ControllerTest {
 		when(service.getProduct(anyLong()))
 				.thenReturn(null);
 
-		String actual = controller.getProduct(1L);
+		String json = controller.getProduct(1L);
+		Product actual = gson.fromJson(json, Product.class);
 
-		assertEquals("null", actual);
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getProductList() {
+		List<Product> list = new ProductBuilder()
+				.w(1, "productName", 2, 3, "4")
+				.w(5, "productName2", 6, 7, "8")
+				.build();
 		when(service.getAllProducts())
-				.thenReturn(Arrays.asList(
-						new Product(1, "productName", 2, 3, new BigDecimal("4")),
-						new Product(5, "productName2", 6, 7, new BigDecimal("8"))
-				));
+				.thenReturn(list);
 
-		String actual = controller.getProduct();
+		String json = controller.getProduct();
+		Product[] actual = gson.fromJson(json, Product[].class);
 
 		assertEquals("[" +
 						"{\"productId\":1,\"productName\":\"productName\",\"supplierId\":2,\"categoryId\":3,\"unitPrice\":4}," +
 						"{\"productId\":5,\"productName\":\"productName2\",\"supplierId\":6,\"categoryId\":7,\"unitPrice\":8}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 
 	@Test
@@ -260,19 +316,24 @@ class ControllerTest {
 		when(service.getAllProducts())
 				.thenReturn(List.of());
 
-		String actual = controller.getProduct();
+		String json = controller.getProduct();
+		Product[] actual = gson.fromJson(json, Product[].class);
 
-		assertEquals("[]", actual);
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
 	}
 
 	@Test
 	public void getSupplier() {
+		Supplier expected = SupplierBuilder.of(1, "companyName", "contactName");
 		when(service.getSupplier(anyLong()))
-				.thenReturn(new Supplier(1, "companyName", "contactName"));
+				.thenReturn(expected);
 
-		String actual = controller.getSupplier(1L);
+		String json = controller.getSupplier(1L);
+		Supplier actual = gson.fromJson(json, Supplier.class);
 
-		assertEquals("{\"supplierId\":1,\"companyName\":\"companyName\",\"contactName\":\"contactName\"}", actual);
+		assertEquals("{\"supplierId\":1,\"companyName\":\"companyName\",\"contactName\":\"contactName\"}", json);
+		assertEquals(expected, actual);
 	}
 
 	@Test
@@ -280,26 +341,31 @@ class ControllerTest {
 		when(service.getSupplier(anyLong()))
 				.thenReturn(null);
 
-		String actual = controller.getSupplier(1L);
+		String json = controller.getSupplier(1L);
+		Supplier actual = gson.fromJson(json, Supplier.class);
 
-		assertEquals("null", actual);
+		assertEquals("null", json);
+		assertNull(actual);
 	}
 
 	@Test
 	public void getSupplierList() {
+		List<Supplier> expected = new SupplierBuilder()
+				.w(1, "companyName", "contactName")
+				.w(2, "companyName2", "contactName2")
+				.build();
 		when(service.getAllSuppliers())
-				.thenReturn(Arrays.asList(
-						new Supplier(1, "companyName", "contactName"),
-						new Supplier(2, "companyName2", "contactName2")
-				));
+				.thenReturn(expected);
 
-		String actual = controller.getSupplier();
+		String json = controller.getSupplier();
+		Supplier[] actual = gson.fromJson(json, Supplier[].class);
 
 		assertEquals("[" +
 						"{\"supplierId\":1,\"companyName\":\"companyName\",\"contactName\":\"contactName\"}," +
 						"{\"supplierId\":2,\"companyName\":\"companyName2\",\"contactName\":\"contactName2\"}" +
 						"]"
-				, actual);
+				, json);
+		assertEquals(expected, List.of(actual));
 	}
 
 	@Test
@@ -307,8 +373,15 @@ class ControllerTest {
 		when(service.getAllSuppliers())
 				.thenReturn(List.of());
 
-		String actual = controller.getSupplier();
+		String json = controller.getSupplier();
+		Supplier[] actual = gson.fromJson(json, Supplier[].class);
 
-		assertEquals("[]", actual);
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
+	}
+
+	@Test
+	public void coverage() {
+		new Controller();
 	}
 }

@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.OrderDetails;
+import com.cts.capstone.builder.OrderDetailsBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -10,7 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +35,7 @@ class OrderDetailsDaoTest {
 	@Test
 	void getOrderDetailsTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
-				.thenReturn(new OrderDetails(1L, 2L, 5));
+				.thenReturn(OrderDetailsBuilder.of(1L, 2L, 5));
 
 		OrderDetails od = orderDetailsDao.getOrderDetails(1L);
 
@@ -58,9 +58,10 @@ class OrderDetailsDaoTest {
 
 	@Test
 	void getAllOrderDetailssTest() {
-		ArrayList<OrderDetails> expectedList = new ArrayList<>();
-		expectedList.add(new OrderDetails(1L, 2L, 5));
-		expectedList.add(new OrderDetails(3L, 4L, 7));
+		List<OrderDetails> expectedList = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(3L, 4L, 7)
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any()))
 				.thenReturn(expectedList);
 

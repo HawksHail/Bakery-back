@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Category;
+import com.cts.capstone.builder.CategoryBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -34,7 +35,7 @@ class CategoryDaoTest {
 	@Test
 	void getCategoryTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any(), anyLong()))
-				.thenReturn(new Category(1, "name", "description"));
+				.thenReturn(CategoryBuilder.of(1, "name", "description"));
 
 		Category c = categoryDao.getCategory(1);
 
@@ -57,9 +58,10 @@ class CategoryDaoTest {
 
 	@Test
 	void getAllCategoriesTest() {
-		ArrayList<Category> expectedList = new ArrayList<>();
-		expectedList.add(new Category(1, "name", "description"));
-		expectedList.add(new Category(2, "name2", "description2"));
+		List<Category> expectedList = new CategoryBuilder()
+				.w(1, "name", "description")
+				.w(2, "name2", "description2")
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any()))
 				.thenReturn(expectedList);
 
@@ -72,7 +74,7 @@ class CategoryDaoTest {
 
 	@Test
 	void getAllCategoriesTest_empty() {
-		ArrayList<Category> expectedList = new ArrayList<>();
+		List<Category> expectedList = new ArrayList<>();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any()))
 				.thenReturn(expectedList);
 

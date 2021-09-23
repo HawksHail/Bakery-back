@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Product;
+import com.cts.capstone.builder.ProductBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -10,8 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +35,7 @@ class ProductDaoTest {
 	@Test
 	void getProductTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any(), anyLong()))
-				.thenReturn(new Product(1L, "name", 2L, 3L, new BigDecimal("4")));
+				.thenReturn(ProductBuilder.of(1L, "name", 2L, 3L, "4"));
 
 		Product p = productDao.getProduct(1L);
 
@@ -60,9 +59,10 @@ class ProductDaoTest {
 
 	@Test
 	void getAllProductsTest() {
-		ArrayList<Product> expectedList = new ArrayList<>();
-		expectedList.add(new Product(1L, "name", 2L, 3L, new BigDecimal("4")));
-		expectedList.add(new Product(5L, "name2", 5L, 7L, new BigDecimal("8")));
+		List<Product> expectedList = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(5L, "name2", 5L, 7L, "8")
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any()))
 				.thenReturn(expectedList);
 

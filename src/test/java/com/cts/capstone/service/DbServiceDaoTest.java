@@ -1,14 +1,13 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.bean.*;
+import com.cts.capstone.builder.*;
 import com.cts.capstone.dao.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,7 @@ class DbServiceDaoTest {
 	@Test
 	void getCategoryTest() {
 		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(new Category(1, "name", "description"));
+				.thenReturn(CategoryBuilder.of(1, "name", "description"));
 
 		Category category = serviceDao.getCategory(1);
 
@@ -69,9 +68,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllCategoriesTest() {
-		ArrayList<Category> expectedList = new ArrayList<>(2);
-		expectedList.add(new Category(1, "name", "description"));
-		expectedList.add(new Category(2, "name2", "description2"));
+		List<Category> expectedList = new CategoryBuilder()
+				.w(1, "name", "description")
+				.w(2, "name2", "description2")
+				.build();
 		when(categoryDao.getAllCategories())
 				.thenReturn(expectedList);
 
@@ -96,7 +96,7 @@ class DbServiceDaoTest {
 	@Test
 	void getCustomerTest() {
 		when(customerDao.getCustomer(anyString()))
-				.thenReturn(new Customer("id1", "companyName", "contactName", "street", "city", "state"));
+				.thenReturn(CustomerBuilder.of("id1", "companyName", "contactName", "street", "city", "state"));
 
 		Customer customer = serviceDao.getCustomer("id1");
 
@@ -117,9 +117,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllCustomersTest() {
-		ArrayList<Customer> expectedList = new ArrayList<>(2);
-		expectedList.add(new Customer("id1", "companyName", "contactName", "street", "city", "state"));
-		expectedList.add(new Customer("id2", "companyName2", "contactName2", "street2", "city2", "state2"));
+		List<Customer> expectedList = new CustomerBuilder()
+				.w("id1", "companyName", "contactName", "street", "city", "state")
+				.w("id2", "companyName2", "contactName2", "street2", "city2", "state2")
+				.build();
 		when(customerDao.getAllCustomers())
 				.thenReturn(expectedList);
 
@@ -131,7 +132,7 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllCustomersTest_empty() {
-		ArrayList<Customer> expectedList = new ArrayList<>(2);
+		List<Customer> expectedList = new ArrayList<>(2);
 		when(customerDao.getAllCustomers())
 				.thenReturn(expectedList);
 
@@ -144,7 +145,7 @@ class DbServiceDaoTest {
 	@Test
 	void getOrderTest() {
 		when(orderDao.getOrder(anyLong()))
-				.thenReturn(new Order(1L, "id1", LocalDate.of(2020, 9, 17)));
+				.thenReturn(OrderBuilder.of(1L, "id1"));
 
 		Order order = serviceDao.getOrder(1L);
 
@@ -165,9 +166,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllOrdersTest() {
-		ArrayList<Order> expectedList = new ArrayList<>(2);
-		expectedList.add(new Order(1L, "id1", LocalDate.of(2020, 9, 17)));
-		expectedList.add(new Order(2L, "id2", LocalDate.of(2020, 9, 16)));
+		List<Order> expectedList = new OrderBuilder()
+				.w(1L, "id1")
+				.w(2L, "id2")
+				.build();
 		when(orderDao.getAllOrders())
 				.thenReturn(expectedList);
 
@@ -192,7 +194,7 @@ class DbServiceDaoTest {
 	@Test
 	void getOrderDetailsTest() {
 		when(orderDetailsDao.getOrderDetails(anyLong()))
-				.thenReturn(new OrderDetails(1L, 2L, 5));
+				.thenReturn(OrderDetailsBuilder.of(1L, 2L, 5));
 
 		OrderDetails orderDetails = serviceDao.getOrderDetails(1L);
 
@@ -213,9 +215,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllOrderDetailsTest() {
-		ArrayList<OrderDetails> expectedList = new ArrayList<>(2);
-		expectedList.add(new OrderDetails(1L, 2L, 5));
-		expectedList.add(new OrderDetails(3L, 4L, 7));
+		List<OrderDetails> expectedList = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(3L, 4L, 7)
+				.build();
 		when(orderDetailsDao.getAllOrderDetails())
 				.thenReturn(expectedList);
 
@@ -240,7 +243,7 @@ class DbServiceDaoTest {
 	@Test
 	void getProductTest() {
 		when(productDao.getProduct(anyLong()))
-				.thenReturn(new Product(1L, "name", 2L, 3L, new BigDecimal("4")));
+				.thenReturn(ProductBuilder.of(1L, "name", 2L, 3L, "4"));
 
 		Product product = serviceDao.getProduct(1L);
 
@@ -261,9 +264,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllProductsTest() {
-		ArrayList<Product> expectedList = new ArrayList<>(2);
-		expectedList.add(new Product(1L, "name", 2L, 3L, new BigDecimal("4")));
-		expectedList.add(new Product(5L, "name2", 5L, 7L, new BigDecimal("8")));
+		List<Product> expectedList = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(5L, "name2", 5L, 7L, "8")
+				.build();
 		when(productDao.getAllProducts())
 				.thenReturn(expectedList);
 
@@ -288,7 +292,7 @@ class DbServiceDaoTest {
 	@Test
 	void getSupplierTest() {
 		when(supplierDao.getSupplier(anyLong()))
-				.thenReturn(new Supplier(1L, "companyName", "contactName"));
+				.thenReturn(SupplierBuilder.of(1L, "companyName", "contactName"));
 
 		Supplier supplier = serviceDao.getSupplier(1L);
 
@@ -309,9 +313,10 @@ class DbServiceDaoTest {
 
 	@Test
 	void getAllSuppliersTest() {
-		ArrayList<Supplier> expectedList = new ArrayList<>(2);
-		expectedList.add(new Supplier(1L, "companyName", "contactName"));
-		expectedList.add(new Supplier(2L, "companyName2", "contactName2"));
+		List<Supplier> expectedList = new SupplierBuilder()
+				.w(1L, "companyName", "contactName")
+				.w(2L, "companyName2", "contactName2")
+				.build();
 		when(supplierDao.getAllSuppliers())
 				.thenReturn(expectedList);
 

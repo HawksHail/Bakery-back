@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Customer;
+import com.cts.capstone.builder.CustomerBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -34,7 +35,7 @@ class CustomerDaoTest {
 	@Test
 	void getCustomerTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Customer>>any(), anyString()))
-				.thenReturn(new Customer("id1", "companyName", "contactName", "street", "city", "state"));
+				.thenReturn(CustomerBuilder.of("id1", "companyName", "contactName", "street", "city", "state"));
 
 		Customer c = customerDao.getCustomer("id1");
 
@@ -57,9 +58,10 @@ class CustomerDaoTest {
 
 	@Test
 	void getAllCategoriesTest() {
-		ArrayList<Customer> expectedList = new ArrayList<>();
-		expectedList.add(new Customer("id1", "companyName", "contactName", "street", "city", "state"));
-		expectedList.add(new Customer("id2", "companyName2", "contactName2", "street2", "city2", "state2"));
+		List<Customer> expectedList = new CustomerBuilder()
+				.w("id1", "companyName", "contactName", "street", "city", "state")
+				.w("id2", "companyName2", "contactName2", "street2", "city2", "state2")
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Customer>>any()))
 				.thenReturn(expectedList);
 
@@ -72,7 +74,7 @@ class CustomerDaoTest {
 
 	@Test
 	void getAllCategoriesTest_empty() {
-		ArrayList<Customer> expectedList = new ArrayList<>();
+		List<Customer> expectedList = new ArrayList<>();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Customer>>any()))
 				.thenReturn(expectedList);
 

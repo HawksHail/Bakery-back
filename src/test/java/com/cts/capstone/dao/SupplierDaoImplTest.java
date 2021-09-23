@@ -1,6 +1,7 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Supplier;
+import com.cts.capstone.builder.SupplierBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -10,7 +11,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +35,7 @@ class SupplierDaoImplTest {
 	@Test
 	void getSupplierTest() {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any(), anyLong()))
-				.thenReturn(new Supplier(1L, "companyName", "contactName"));
+				.thenReturn(SupplierBuilder.of(1L, "companyName", "contactName"));
 
 		Supplier s = supplierDao.getSupplier(1L);
 
@@ -59,9 +59,10 @@ class SupplierDaoImplTest {
 
 	@Test
 	void getAllSuppliersTest() {
-		ArrayList<Supplier> expectedList = new ArrayList<>();
-		expectedList.add(new Supplier(1L, "companyName", "contactName"));
-		expectedList.add(new Supplier(2L, "companyName2", "contactName2"));
+		List<Supplier> expectedList = new SupplierBuilder()
+				.w(1L, "companyName", "contactName")
+				.w(2L, "companyName2", "contactName2")
+				.build();
 		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any()))
 				.thenReturn(expectedList);
 
