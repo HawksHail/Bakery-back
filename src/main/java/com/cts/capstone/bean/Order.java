@@ -74,9 +74,9 @@ public class Order {
 	@Override
 	public String toString() {
 		return "Order{" +
-				"order_id=" + orderId +
-				", customer_id='" + customerId + '\'' +
-				", orderdate=" + orderDate +
+				"orderId=" + orderId +
+				", customerId='" + customerId + '\'' +
+				", orderDate=" + orderDate +
 				'}';
 	}
 }

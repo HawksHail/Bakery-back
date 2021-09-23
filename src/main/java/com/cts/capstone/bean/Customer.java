@@ -103,12 +103,12 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customers{" +
-				"customer_id='" + customerId + '\'' +
-				", company_name='" + companyName + '\'' +
-				", contact_name='" + contactName + '\'' +
+		return "Customer{" +
+				"customerId='" + customerId + '\'' +
+				", companyName='" + companyName + '\'' +
+				", contactName='" + contactName + '\'' +
 				", street='" + street + '\'' +
-				", cist='" + city + '\'' +
+				", city='" + city + '\'' +
 				", state='" + state + '\'' +
 				'}';
 	}

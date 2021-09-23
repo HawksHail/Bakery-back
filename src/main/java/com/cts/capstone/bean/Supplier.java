@@ -69,9 +69,9 @@ public class Supplier {
 	@Override
 	public String toString() {
 		return "Supplier{" +
-				"supplier_id=" + supplierId +
-				", company_name='" + companyName + '\'' +
-				", contact_name='" + contactName + '\'' +
+				"supplierId=" + supplierId +
+				", companyName='" + companyName + '\'' +
+				", contactName='" + contactName + '\'' +
 				'}';
 	}
 }
