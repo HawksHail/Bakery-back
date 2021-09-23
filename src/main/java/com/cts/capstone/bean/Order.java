@@ -54,6 +54,10 @@ public class Order {
 		this.orderDate = orderDate;
 	}
 
+	public void setOrderDate(int year, int month, int day) {
+		this.orderDate = LocalDate.of(year, month, day);
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(orderId, customerId, orderDate);
@@ -74,9 +78,5 @@ public class Order {
 				", customer_id='" + customerId + '\'' +
 				", orderdate=" + orderDate +
 				'}';
-	}
-
-	public void setOrderDate(int year, int month, int day) {
-		this.orderDate = LocalDate.of(year, month, day);
 	}
 }

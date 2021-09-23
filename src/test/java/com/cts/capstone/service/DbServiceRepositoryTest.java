@@ -49,7 +49,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getCategoryTest() {
 		when(categoryRepository.findById(anyLong()))
-				.thenReturn(java.util.Optional.of(new Category(1, "name", "description")));
+				.thenReturn(Optional.of(new Category(1, "name", "description")));
 
 		Category category = serviceDao.getCategory(1);
 
@@ -99,7 +99,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getCustomerTest() {
 		when(customerRepository.findByCustomerId(anyString()))
-				.thenReturn(java.util.Optional.of(new Customer("id1", "companyName", "contactName", "street", "city", "state")));
+				.thenReturn(Optional.of(new Customer("id1", "companyName", "contactName", "street", "city", "state")));
 
 		Customer customer = serviceDao.getCustomer("id1");
 
@@ -149,7 +149,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getOrderTest() {
 		when(orderRepository.findById(anyLong()))
-				.thenReturn(java.util.Optional.of(new Order(1L, "id1", LocalDate.of(2020, 9, 17))));
+				.thenReturn(Optional.of(new Order(1L, "id1", LocalDate.of(2020, 9, 17))));
 
 		Order order = serviceDao.getOrder(1L);
 
@@ -199,7 +199,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getOrderDetailsTest() {
 		when(orderDetailsRepository.findById(anyLong()))
-				.thenReturn(java.util.Optional.of(new OrderDetails(1L, 2L, 5)));
+				.thenReturn(Optional.of(new OrderDetails(1L, 2L, 5)));
 
 		OrderDetails orderDetails = serviceDao.getOrderDetails(1L);
 
@@ -249,7 +249,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getProductTest() {
 		when(productRepository.findById(anyLong()))
-				.thenReturn(java.util.Optional.of(new Product(1L, "name", 2L, 3L, new BigDecimal("4"))));
+				.thenReturn(Optional.of(new Product(1L, "name", 2L, 3L, new BigDecimal("4"))));
 
 		Product product = serviceDao.getProduct(1L);
 
@@ -299,7 +299,7 @@ class DbServiceRepositoryTest {
 	@Test
 	void getSupplierTest() {
 		when(supplierRepository.findById(anyLong()))
-				.thenReturn(java.util.Optional.of(new Supplier(1L, "companyName", "contactName")));
+				.thenReturn(Optional.of(new Supplier(1L, "companyName", "contactName")));
 
 		Supplier supplier = serviceDao.getSupplier(1L);
 
