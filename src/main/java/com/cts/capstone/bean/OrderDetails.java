@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "orderdetails")
 public class OrderDetails {
+
 	@Id
 	@Column(name = "orderid", nullable = false)
 	private long orderId;

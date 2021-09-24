@@ -9,6 +9,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "customers")
 public class Customer {
+
 	@Id
 	@Column(name = "customerid", length = 5)
 	private String customerId;

@@ -74,5 +74,4 @@ public class Category {
 				", description='" + description + '\'' +
 				'}';
 	}
-
 }
