@@ -263,6 +263,21 @@ class DbServiceDaoTest {
 	}
 
 	@Test
+	void getProductByCategory() {
+		List<Product> expected = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(2L, "name2", 5L, 3L, "8")
+				.build();
+		when(productDao.getAllProductsByCategoryId(anyLong()))
+				.thenReturn(expected);
+
+		Iterable<Product> actual = serviceDao.getProductsByCategoryId(3L);
+
+		assertEquals(expected, actual);
+		verify(productDao, times(1)).getAllProductsByCategoryId(anyLong());
+	}
+
+	@Test
 	void getAllProductsTest() {
 		List<Product> expectedList = new ProductBuilder()
 				.w(1L, "name", 2L, 3L, "4")
@@ -325,6 +340,7 @@ class DbServiceDaoTest {
 		assertEquals(2, actual.size());
 		verify(supplierDao, times(1)).getAllSuppliers();
 	}
+
 
 	@Test
 	void getAllSuppliersTest_empty() {

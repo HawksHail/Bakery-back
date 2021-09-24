@@ -292,6 +292,26 @@ class ControllerTest {
 	}
 
 	@Test
+	public void getProductByCategory(){
+		List<Product> expected = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(2L, "name2", 5L, 3L, "8")
+				.build();
+		when(service.getProductsByCategoryId(anyLong()))
+				.thenReturn(expected);
+
+		String json = controller.getProductByCategory(3L);
+		Product[] actual = gson.fromJson(json, Product[].class);
+
+		assertEquals("[" +
+						"{\"productId\":1,\"productName\":\"name\",\"supplierId\":2,\"categoryId\":3,\"unitPrice\":4}," +
+						"{\"productId\":2,\"productName\":\"name2\",\"supplierId\":5,\"categoryId\":3,\"unitPrice\":8}" +
+						"]"
+				, json);
+		assertEquals(expected, List.of(actual));
+	}
+
+	@Test
 	public void getProductList() {
 		List<Product> list = new ProductBuilder()
 				.w(1, "productName", 2, 3, "4")

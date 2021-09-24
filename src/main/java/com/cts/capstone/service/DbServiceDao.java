@@ -101,6 +101,11 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public Iterable<Product> getProductsByCategoryId(long categoryId) {
+		return productDao.getAllProductsByCategoryId(categoryId);
+	}
+
+	@Override
 	public Supplier getSupplier(long supplierId) {
 		return supplierDao.getSupplier(supplierId);
 	}

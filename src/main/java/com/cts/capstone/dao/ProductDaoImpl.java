@@ -37,4 +37,9 @@ public class ProductDaoImpl implements ProductDao {
 	public List<Product> getAllProducts() {
 		return jdbcTemplate.query("SELECT * FROM products", rowMapper);
 	}
+
+	@Override
+	public List<Product> getAllProductsByCategoryId(long categoryId) {
+		return jdbcTemplate.query("SELECT * FROM products WHERE categoryid=?", rowMapper, categoryId);
+	}
 }

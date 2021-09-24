@@ -272,6 +272,21 @@ class DbServiceRepositoryTest {
 	}
 
 	@Test
+	void getProductByCategory() {
+		List<Product> expected = new ProductBuilder()
+				.w(1L, "name", 2L, 3L, "4")
+				.w(2L, "name2", 5L, 3L, "8")
+				.build();
+		when(productRepository.findByCategoryId(anyLong()))
+				.thenReturn(expected);
+
+		Iterable<Product> actual = serviceDao.getProductsByCategoryId(3L);
+
+		assertEquals(expected, actual);
+		verify(productRepository, times(1)).findByCategoryId(anyLong());
+	}
+
+	@Test
 	void getAllProductsTest() {
 		List<Product> expectedList = new ProductBuilder()
 				.w(1L, "name", 2L, 3L, "4")

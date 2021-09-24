@@ -9,4 +9,6 @@ public interface ProductDao {
 	Product getProduct(long productId);
 
 	List<Product> getAllProducts();
+
+	List<Product> getAllProductsByCategoryId(long CategoryId);
 }

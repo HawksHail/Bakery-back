@@ -93,6 +93,11 @@ public class DbServiceRepository implements DbService {
 	}
 
 	@Override
+	public Iterable<Product> getProductsByCategoryId(long categoryId) {
+		return productRepository.findByCategoryId(categoryId);
+	}
+
+	@Override
 	public Supplier getSupplier(long supplierId) {
 		return supplierRepository.findById(supplierId).orElse(null);
 	}

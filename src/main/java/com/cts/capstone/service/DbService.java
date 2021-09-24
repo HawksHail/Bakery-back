@@ -24,6 +24,8 @@ public interface DbService {
 
 	Iterable<Product> getAllProducts();
 
+	Iterable<Product> getProductsByCategoryId(long categoryId);
+
 	Supplier getSupplier(long supplierId);
 
 	Iterable<Supplier> getAllSuppliers();

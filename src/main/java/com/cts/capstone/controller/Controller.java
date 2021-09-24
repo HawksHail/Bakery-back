@@ -44,6 +44,17 @@ public class Controller {
 	}
 
 	/**
+	 * Get all products in a specific category
+	 *
+	 * @param id CategoryID to get products from
+	 * @return Json of all products in specified category
+	 */
+	@GetMapping(value = "product/category/{id}", produces = "application/json")
+	public String getProductByCategory(@PathVariable Long id) {
+		return gson.toJson(service.getProductsByCategoryId(id));
+	}
+
+	/**
 	 * Get all categories
 	 *
 	 * @return Json of all categories
