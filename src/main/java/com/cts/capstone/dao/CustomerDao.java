@@ -6,7 +6,13 @@ import java.util.List;
 
 public interface CustomerDao {
 
+	boolean createCustomer(Customer c);
+
 	Customer getCustomer(String customerId);
 
 	List<Customer> getAllCustomers();
+
+	boolean updateCustomer(Customer c);
+
+	boolean deleteCustomer(String id);
 }

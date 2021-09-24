@@ -51,6 +51,11 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public boolean createCategory(Category c) {
+		return categoryDao.createCategory(c);
+	}
+
+	@Override
 	public Category getCategory(long categoryId) {
 		return categoryDao.getCategory(categoryId);
 	}
@@ -58,6 +63,21 @@ public class DbServiceDao implements DbService {
 	@Override
 	public List<Category> getAllCategories() {
 		return categoryDao.getAllCategories();
+	}
+
+	@Override
+	public boolean updateCategory(Category c) {
+		return categoryDao.updateCategory(c);
+	}
+
+	@Override
+	public boolean deleteCategory(long categoryId) {
+		return categoryDao.deleteCategory(categoryId);
+	}
+
+	@Override
+	public boolean createCustomer(Customer c) {
+		return customerDao.createCustomer(c);
 	}
 
 	@Override
@@ -71,6 +91,21 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public boolean updateCustomer(Customer c) {
+		return customerDao.updateCustomer(c);
+	}
+
+	@Override
+	public boolean deleteCustomer(String id) {
+		return customerDao.deleteCustomer(id);
+	}
+
+	@Override
+	public boolean createOrder(Order o) {
+		return orderDao.createOrder(o);
+	}
+
+	@Override
 	public Order getOrder(long orderId) {
 		return orderDao.getOrder(orderId);
 	}
@@ -78,6 +113,21 @@ public class DbServiceDao implements DbService {
 	@Override
 	public List<Order> getAllOrders() {
 		return orderDao.getAllOrders();
+	}
+
+	@Override
+	public boolean updateOrder(Order o) {
+		return orderDao.updateOrder(o);
+	}
+
+	@Override
+	public boolean deleteOrder(long id) {
+		return orderDao.deleteOrder(id);
+	}
+
+	@Override
+	public boolean createOrderDetails(OrderDetails od) {
+		return orderDetailsDao.createOrderDetails(od);
 	}
 
 	@Override
@@ -91,6 +141,21 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public boolean updateOrderDetails(OrderDetails od) {
+		return orderDetailsDao.updateOrderDetails(od);
+	}
+
+	@Override
+	public boolean deleteOrderDetails(long id) {
+		return orderDetailsDao.deleteOrderDetails(id);
+	}
+
+	@Override
+	public boolean createProduct(Product p) {
+		return productDao.createProduct(p);
+	}
+
+	@Override
 	public Product getProduct(long productId) {
 		return productDao.getProduct(productId);
 	}
@@ -101,8 +166,23 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public boolean updateProduct(Product p) {
+		return productDao.updateProduct(p);
+	}
+
+	@Override
+	public boolean deleteProduct(long id) {
+		return productDao.deleteProduct(id);
+	}
+
+	@Override
 	public Iterable<Product> getProductsByCategoryId(long categoryId) {
 		return productDao.getAllProductsByCategoryId(categoryId);
+	}
+
+	@Override
+	public boolean createSupplier(Supplier s) {
+		return supplierDao.createSupplier(s);
 	}
 
 	@Override
@@ -113,5 +193,15 @@ public class DbServiceDao implements DbService {
 	@Override
 	public List<Supplier> getAllSuppliers() {
 		return supplierDao.getAllSuppliers();
+	}
+
+	@Override
+	public boolean updateSupplier(Supplier s) {
+		return supplierDao.updateSupplier(s);
+	}
+
+	@Override
+	public boolean deleteSupplier(long id) {
+		return supplierDao.deleteSupplier(id);
 	}
 }

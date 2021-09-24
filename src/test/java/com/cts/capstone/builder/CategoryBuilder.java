@@ -22,7 +22,7 @@ public class CategoryBuilder {
 		return this;
 	}
 
-	public static Category of(int id, String name, String description) {
+	public static Category of(long id, String name, String description) {
 		return new Category(id, name, description);
 	}
 

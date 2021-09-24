@@ -2,9 +2,12 @@ package com.cts.capstone.dao;
 
 import com.cts.capstone.bean.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,11 +20,33 @@ public class ProductDaoImpl implements ProductDao {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	NamedParameterJdbcTemplate nJdbcTemplate;
+
 	public ProductDaoImpl() {
 	}
 
 	public ProductDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+	}
+
+	public ProductDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+		this.nJdbcTemplate = nJdbcTemplate;
+	}
+
+	@Override
+	public boolean createProduct(Product p) {
+		int i;
+		try {
+			i = nJdbcTemplate.update(
+					"INSERT INTO products(productId, productName, supplierId, categoryId, unitPrice) " +
+							"VALUES(:productId, :productName, :supplierId, :categoryId, :unitPrice)",
+					new BeanPropertySqlParameterSource(p));
+		} catch (DuplicateKeyException e) {
+			return false;
+		}
+		return i == 1;
 	}
 
 	@Override
@@ -41,5 +66,26 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public List<Product> getAllProductsByCategoryId(long categoryId) {
 		return jdbcTemplate.query("SELECT * FROM products WHERE categoryid=?", rowMapper, categoryId);
+	}
+
+	@Override
+	public boolean updateProduct(Product p) {
+		int i = nJdbcTemplate.update(
+				"UPDATE products " +
+						"SET productName=:productName, supplierId=:supplierId, categoryId=:categoryId, unitPrice=:unitPrice " +
+						"WHERE productId=:productId",
+				new BeanPropertySqlParameterSource(p)
+		);
+		return i == 1;
+	}
+
+	@Override
+	public boolean deleteProduct(long id) {
+		int i = jdbcTemplate.update(
+				"DELETE FROM products " +
+						"WHERE productId=?",
+				ps -> ps.setLong(1, id)
+		);
+		return i == 1;
 	}
 }

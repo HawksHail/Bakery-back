@@ -7,14 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -26,10 +29,13 @@ class OrderDaoTest {
 	@Mock
 	JdbcTemplate jdbcTemplate;
 
+	@Mock
+	NamedParameterJdbcTemplate nJdbcTemplate;
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		orderDao = new OrderDaoImpl(jdbcTemplate);
+		orderDao = new OrderDaoImpl(jdbcTemplate, nJdbcTemplate);
 	}
 
 	@Test
@@ -70,5 +76,81 @@ class OrderDaoTest {
 		assertEquals(2, list.size());
 		verify(jdbcTemplate, times(1))
 				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any());
+	}
+
+	@Test
+	void createOrder() {
+		Order expected = OrderBuilder.of(1L, "id1");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(1);
+
+		boolean b = orderDao.createOrder(expected);
+
+		assertTrue(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void createOrder_duplicateID() {
+		Order expected = OrderBuilder.of(1L, "id1");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
+
+		boolean b = orderDao.createOrder(expected);
+
+		assertFalse(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void updateOrder() {
+		Order expected = OrderBuilder.of(1L, "id1");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(1);
+
+		boolean b = orderDao.updateOrder(expected);
+
+		assertTrue(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void updateOrder_IdNotFound() {
+		Order expected = OrderBuilder.of(1L, "id1");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(0);
+
+		boolean b = orderDao.updateOrder(expected);
+
+		assertFalse(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void deleteOrder() {
+		when(jdbcTemplate.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any()))
+				.thenReturn(1);
+
+		boolean b = orderDao.deleteOrder(1);
+
+		assertTrue(b);
+		verify(jdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
+	}
+
+	@Test
+	void deleteOrder_IdNotFound() {
+		when(jdbcTemplate.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any()))
+				.thenReturn(0);
+
+		boolean b = orderDao.deleteOrder(1);
+
+		assertFalse(b);
+		verify(jdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
 	}
 }

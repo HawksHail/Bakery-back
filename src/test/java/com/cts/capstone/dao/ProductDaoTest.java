@@ -7,14 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -26,10 +29,13 @@ class ProductDaoTest {
 	@Mock
 	JdbcTemplate jdbcTemplate;
 
+	@Mock
+	NamedParameterJdbcTemplate nJdbcTemplate;
+
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		productDao = new ProductDaoImpl(jdbcTemplate);
+		productDao = new ProductDaoImpl(jdbcTemplate, nJdbcTemplate);
 	}
 
 	@Test
@@ -71,5 +77,81 @@ class ProductDaoTest {
 		assertEquals(2, list.size());
 		verify(jdbcTemplate, times(1))
 				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any());
+	}
+
+	@Test
+	void createProduct() {
+		Product expected = ProductBuilder.of(1L, "name", 2L, 3L, "4");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(1);
+
+		boolean b = productDao.createProduct(expected);
+
+		assertTrue(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void createProduct_duplicateID() {
+		Product expected = ProductBuilder.of(1L, "name", 2L, 3L, "4");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
+
+		boolean b = productDao.createProduct(expected);
+
+		assertFalse(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void updateProduct() {
+		Product expected = ProductBuilder.of(1L, "name", 2L, 3L, "4");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(1);
+
+		boolean b = productDao.updateProduct(expected);
+
+		assertTrue(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void updateProduct_IdNotFound() {
+		Product expected = ProductBuilder.of(1L, "name", 2L, 3L, "4");
+		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
+				.thenReturn(0);
+
+		boolean b = productDao.updateProduct(expected);
+
+		assertFalse(b);
+		verify(nJdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
+	}
+
+	@Test
+	void deleteProduct() {
+		when(jdbcTemplate.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any()))
+				.thenReturn(1);
+
+		boolean b = productDao.deleteProduct(1);
+
+		assertTrue(b);
+		verify(jdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
+	}
+
+	@Test
+	void deleteProduct_IdNotFound() {
+		when(jdbcTemplate.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any()))
+				.thenReturn(0);
+
+		boolean b = productDao.deleteProduct(1);
+
+		assertFalse(b);
+		verify(jdbcTemplate, times(1))
+				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
 	}
 }
