@@ -55,7 +55,7 @@ class CustomerTest {
 	}
 
 	@Test
-	public void hashcodeAndEquals() {
+	void hashcodeAndEquals() {
 		Customer x = CustomerBuilder.of("cm1234", "Cognizant", "Bob", "street", "city", "state");
 		Customer y = CustomerBuilder.of("cm1234", "Cognizant", "Bob", "street", "city", "state");
 		Customer a = CustomerBuilder.of();
@@ -68,7 +68,7 @@ class CustomerTest {
 	}
 
 	@Test
-	public void toStringTest() {
+	void toStringTest() {
 		ToStringVerifier.forClass(Customer.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
 				.verify();

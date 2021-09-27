@@ -57,7 +57,7 @@ class ProductTest {
 	}
 
 	@Test
-	public void hashcodeAndEquals() {
+	void hashcodeAndEquals() {
 		Product x = ProductBuilder.of(123L, "name", 456L, 789L, "765");
 		Product y = ProductBuilder.of(123L, "name", 456L, 789L, "765");
 		Product a = ProductBuilder.of();
@@ -70,7 +70,7 @@ class ProductTest {
 	}
 
 	@Test
-	public void toStringTest() {
+	void toStringTest() {
 		ToStringVerifier.forClass(Product.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
 				.verify();

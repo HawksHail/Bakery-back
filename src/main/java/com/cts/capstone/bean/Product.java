@@ -28,6 +28,7 @@ public class Product {
 	private BigDecimal unitPrice;
 
 	public Product() {
+		//Empty
 	}
 
 	public Product(long productId, String productName, long supplierId, long categoryId, BigDecimal unitPrice) {

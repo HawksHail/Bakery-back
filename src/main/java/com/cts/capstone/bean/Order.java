@@ -22,6 +22,7 @@ public class Order {
 	private LocalDate orderDate;
 
 	public Order() {
+		//Empty
 	}
 
 	public Order(long orderId, String customerId, LocalDate orderDate) {

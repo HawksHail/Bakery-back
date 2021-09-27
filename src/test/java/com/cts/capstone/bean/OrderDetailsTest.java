@@ -37,7 +37,7 @@ class OrderDetailsTest {
 	}
 
 	@Test
-	public void hashcodeAndEquals() {
+	void hashcodeAndEquals() {
 		OrderDetails x = OrderDetailsBuilder.of(123L, 456L, 100);
 		OrderDetails y = OrderDetailsBuilder.of(123L, 456L, 100);
 		OrderDetails a = OrderDetailsBuilder.of();
@@ -50,7 +50,7 @@ class OrderDetailsTest {
 	}
 
 	@Test
-	public void toStringTest() {
+	void toStringTest() {
 		ToStringVerifier.forClass(OrderDetails.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
 				.verify();

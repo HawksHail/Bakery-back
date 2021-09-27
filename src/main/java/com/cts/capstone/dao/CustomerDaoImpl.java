@@ -24,6 +24,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public CustomerDaoImpl() {
+		//Empty
 	}
 
 	public CustomerDaoImpl(JdbcTemplate jdbcTemplate) {

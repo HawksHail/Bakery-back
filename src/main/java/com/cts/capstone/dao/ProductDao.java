@@ -12,7 +12,7 @@ public interface ProductDao {
 
 	List<Product> getAllProducts();
 
-	List<Product> getAllProductsByCategoryId(long CategoryId);
+	List<Product> getAllProductsByCategoryId(long categoryId);
 
 	boolean updateProduct(Product p);
 

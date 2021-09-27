@@ -37,7 +37,7 @@ class SupplierTest {
 	}
 
 	@Test
-	public void hashcodeAndEquals() {
+	void hashcodeAndEquals() {
 		Supplier x = SupplierBuilder.of(123L, "company", "contact");
 		Supplier y = SupplierBuilder.of(123L, "company", "contact");
 		Supplier a = SupplierBuilder.of();
@@ -50,7 +50,7 @@ class SupplierTest {
 	}
 
 	@Test
-	public void toStringTest() {
+	void toStringTest() {
 		ToStringVerifier.forClass(Supplier.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
 				.verify();

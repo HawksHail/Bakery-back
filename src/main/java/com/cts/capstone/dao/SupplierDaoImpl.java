@@ -24,10 +24,12 @@ public class SupplierDaoImpl implements SupplierDao {
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public SupplierDaoImpl() {
+		//Empty
 	}
 
 	public SupplierDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
 	public SupplierDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {

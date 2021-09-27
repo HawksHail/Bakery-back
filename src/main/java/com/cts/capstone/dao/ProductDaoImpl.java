@@ -24,10 +24,12 @@ public class ProductDaoImpl implements ProductDao {
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public ProductDaoImpl() {
+		//Empty
 	}
 
 	public ProductDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
 	public ProductDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {

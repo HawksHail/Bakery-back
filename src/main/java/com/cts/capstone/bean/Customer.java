@@ -30,6 +30,7 @@ public class Customer {
 	private String state;
 
 	public Customer() {
+		//Empty
 	}
 
 	public Customer(String customerId, String companyName, String contactName, String street, String city, String state) {

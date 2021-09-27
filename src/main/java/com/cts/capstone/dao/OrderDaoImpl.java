@@ -24,10 +24,12 @@ public class OrderDaoImpl implements OrderDao {
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public OrderDaoImpl() {
+		//Empty
 	}
 
 	public OrderDaoImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
+		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
 	public OrderDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {

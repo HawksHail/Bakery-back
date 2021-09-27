@@ -21,6 +21,7 @@ public class Supplier {
 	private String contactName;
 
 	public Supplier() {
+		//Empty
 	}
 
 	public Supplier(long supplierId, String companyName, String contactName) {

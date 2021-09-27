@@ -37,7 +37,7 @@ class CategoryTest {
 	}
 
 	@Test
-	public void hashcodeAndEquals() {
+	void hashcodeAndEquals() {
 		Category x = CategoryBuilder.of(1, "name", "desc");
 		Category y = CategoryBuilder.of(1, "name", "desc");
 		Category a = CategoryBuilder.of();
@@ -50,7 +50,7 @@ class CategoryTest {
 	}
 
 	@Test
-	public void toStringTest() {
+	void toStringTest() {
 		ToStringVerifier.forClass(Category.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
 				.verify();

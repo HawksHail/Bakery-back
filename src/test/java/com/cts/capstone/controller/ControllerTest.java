@@ -33,7 +33,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCategory() {
+	void getCategory() {
 		Category expected = CategoryBuilder.of(1, "name", "description");
 		when(service.getCategory(anyLong()))
 				.thenReturn(expected);
@@ -46,7 +46,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCategory_notFound() {
+	void getCategory_notFound() {
 		when(service.getCategory(anyLong()))
 				.thenReturn(null);
 
@@ -58,7 +58,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCategoryList() {
+	void getCategoryList() {
 		List<Category> list = new CategoryBuilder()
 				.w(1, "name", "description")
 				.w(2, "name2", "description2")
@@ -78,7 +78,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCategoryList_none() {
+	void getCategoryList_none() {
 		when(service.getAllCategories())
 				.thenReturn(List.of());
 
@@ -90,7 +90,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCustomer() {
+	void getCustomer() {
 		Customer expected = CustomerBuilder.of("id123", "companyName", "contactName", "street", "city", "state");
 		when(service.getCustomer(anyString()))
 				.thenReturn(expected);
@@ -103,7 +103,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCustomer_notFound() {
+	void getCustomer_notFound() {
 		when(service.getCustomer(anyString()))
 				.thenReturn(null);
 
@@ -115,7 +115,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCustomerList() {
+	void getCustomerList() {
 		List<Customer> list = new CustomerBuilder()
 				.w("id123", "companyName", "contactName", "street", "city", "state")
 				.w("id124", "companyName2", "contactName2", "street2", "city2", "state2")
@@ -136,7 +136,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getCustomerList_none() {
+	void getCustomerList_none() {
 		when(service.getAllCustomers())
 				.thenReturn(List.of());
 
@@ -149,7 +149,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderDetails() {
+	void getOrderDetails() {
 		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
 		when(service.getOrderDetails(anyLong()))
 				.thenReturn(expected);
@@ -163,7 +163,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderDetails_notFound() {
+	void getOrderDetails_notFound() {
 		when(service.getOrderDetails(anyLong()))
 				.thenReturn(null);
 
@@ -176,7 +176,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderDetailsList() {
+	void getOrderDetailsList() {
 		List<OrderDetails> list = new OrderDetailsBuilder()
 				.w(1, 2, 3)
 				.w(4, 5, 6)
@@ -197,7 +197,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderDetailsList_none() {
+	void getOrderDetailsList_none() {
 		when(service.getAllOrderDetails())
 				.thenReturn(List.of());
 
@@ -209,7 +209,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrder() {
+	void getOrder() {
 		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
 		when(service.getOrder(anyLong()))
 				.thenReturn(expected);
@@ -222,7 +222,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrder_notFound() {
+	void getOrder_notFound() {
 		when(service.getOrder(anyLong()))
 				.thenReturn(null);
 
@@ -234,7 +234,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderList() {
+	void getOrderList() {
 		List<Order> list = new OrderBuilder()
 				.w(1, "id123", 2021, 9, 1)
 				.w(2, "id124", 2020, 10, 2)
@@ -254,7 +254,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getOrderList_none() {
+	void getOrderList_none() {
 		when(service.getAllOrders())
 				.thenReturn(List.of());
 
@@ -267,7 +267,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getProduct() {
+	void getProduct() {
 		Product expected = ProductBuilder.of(1, "productName", 2, 3, "4");
 		when(service.getProduct(anyLong()))
 				.thenReturn(expected);
@@ -280,7 +280,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getProduct_notFound() {
+	void getProduct_notFound() {
 		when(service.getProduct(anyLong()))
 				.thenReturn(null);
 
@@ -292,7 +292,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getProductByCategory(){
+	void getProductByCategory() {
 		List<Product> expected = new ProductBuilder()
 				.w(1L, "name", 2L, 3L, "4")
 				.w(2L, "name2", 5L, 3L, "8")
@@ -312,7 +312,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getProductList() {
+	void getProductList() {
 		List<Product> list = new ProductBuilder()
 				.w(1, "productName", 2, 3, "4")
 				.w(5, "productName2", 6, 7, "8")
@@ -332,7 +332,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getProductList_none() {
+	void getProductList_none() {
 		when(service.getAllProducts())
 				.thenReturn(List.of());
 
@@ -344,7 +344,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getSupplier() {
+	void getSupplier() {
 		Supplier expected = SupplierBuilder.of(1, "companyName", "contactName");
 		when(service.getSupplier(anyLong()))
 				.thenReturn(expected);
@@ -357,7 +357,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getSupplier_notFound() {
+	void getSupplier_notFound() {
 		when(service.getSupplier(anyLong()))
 				.thenReturn(null);
 
@@ -369,7 +369,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getSupplierList() {
+	void getSupplierList() {
 		List<Supplier> expected = new SupplierBuilder()
 				.w(1, "companyName", "contactName")
 				.w(2, "companyName2", "contactName2")
@@ -389,7 +389,7 @@ class ControllerTest {
 	}
 
 	@Test
-	public void getSupplierList_none() {
+	void getSupplierList_none() {
 		when(service.getAllSuppliers())
 				.thenReturn(List.of());
 
@@ -398,10 +398,5 @@ class ControllerTest {
 
 		assertEquals("[]", json);
 		assertEquals(List.of(), List.of(actual));
-	}
-
-	@Test
-	public void coverage() {
-		new Controller();
 	}
 }

@@ -30,6 +30,7 @@ public class DbServiceDao implements DbService {
 	SupplierDao supplierDao;
 
 	public DbServiceDao() {
+		//Empty
 	}
 
 	public DbServiceDao(CategoryDao categoryDao, CustomerDao customerDao, OrderDao orderDao, OrderDetailsDao orderDetailsDao, ProductDao productDao, SupplierDao supplierDao) {

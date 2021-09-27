@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
 	private static final Gson gson = new Gson();
+
 	@Autowired
-//	@Qualifier("DbServiceDao")
 	DbService service;
 
 	public Controller() {
+		//Empty
 	}
 
 	public Controller(DbService service) {
@@ -49,7 +50,7 @@ public class Controller {
 	 * @param id CategoryID to get products from
 	 * @return Json of all products in specified category
 	 */
-	@GetMapping(value = "product/category/{id}", produces = "application/json")
+	@GetMapping(value = {"product/category/{id}", "category/product/{id}"}, produces = "application/json")
 	public String getProductByCategory(@PathVariable Long id) {
 		return gson.toJson(service.getProductsByCategoryId(id));
 	}

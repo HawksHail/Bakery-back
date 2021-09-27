@@ -21,6 +21,7 @@ public class OrderDetails {
 	private int quantity;
 
 	public OrderDetails() {
+		//Empty
 	}
 
 	public OrderDetails(long orderId, long productId, int quantity) {

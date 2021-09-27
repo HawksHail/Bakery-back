@@ -24,6 +24,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public CategoryDaoImpl() {
+		//Empty
 	}
 
 	public CategoryDaoImpl(JdbcTemplate jdbcTemplate) {
