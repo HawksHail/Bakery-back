@@ -35,7 +35,8 @@ class ProductDaoTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		productDao = new ProductDaoImpl(jdbcTemplate, nJdbcTemplate);
+		productDao = new ProductDaoImpl(nJdbcTemplate);
+		when(nJdbcTemplate.getJdbcTemplate()).thenReturn(jdbcTemplate);
 	}
 
 	@Test

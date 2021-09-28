@@ -36,7 +36,8 @@ class CategoryDaoTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		categoryDao = new CategoryDaoImpl(jdbcTemplate, nJdbcTemplate);
+		categoryDao = new CategoryDaoImpl(nJdbcTemplate);
+		when(nJdbcTemplate.getJdbcTemplate()).thenReturn(jdbcTemplate);
 	}
 
 	@Test

@@ -18,9 +18,6 @@ public class CategoryDaoImpl implements CategoryDao {
 	private static final BeanPropertyRowMapper<Category> rowMapper = new BeanPropertyRowMapper<>(Category.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public CategoryDaoImpl() {
@@ -28,12 +25,10 @@ public class CategoryDaoImpl implements CategoryDao {
 	}
 
 	public CategoryDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public CategoryDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public CategoryDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -55,7 +50,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	@Override
 	public Category getCategory(long categoryId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -63,7 +58,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public List<Category> getAllCategories() {
-		return jdbcTemplate.query("SELECT * FROM categories", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM categories", rowMapper);
 	}
 
 	@Override
@@ -79,7 +74,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public boolean deleteCategory(long id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM categories " +
 						"WHERE categoryid=?",
 				ps -> ps.setLong(1, id)

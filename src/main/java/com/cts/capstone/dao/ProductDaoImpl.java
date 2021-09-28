@@ -18,9 +18,6 @@ public class ProductDaoImpl implements ProductDao {
 	private static final BeanPropertyRowMapper<Product> rowMapper = new BeanPropertyRowMapper<>(Product.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public ProductDaoImpl() {
@@ -28,12 +25,10 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	public ProductDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public ProductDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public ProductDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -54,7 +49,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public Product getProduct(long productId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -62,12 +57,12 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public List<Product> getAllProducts() {
-		return jdbcTemplate.query("SELECT * FROM products", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM products", rowMapper);
 	}
 
 	@Override
 	public List<Product> getAllProductsByCategoryId(long categoryId) {
-		return jdbcTemplate.query("SELECT * FROM products WHERE categoryid=?", rowMapper, categoryId);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM products WHERE categoryid=?", rowMapper, categoryId);
 	}
 
 	@Override
@@ -83,7 +78,7 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	public boolean deleteProduct(long id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM products " +
 						"WHERE productId=?",
 				ps -> ps.setLong(1, id)

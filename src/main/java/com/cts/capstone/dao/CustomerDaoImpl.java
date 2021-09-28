@@ -18,9 +18,6 @@ public class CustomerDaoImpl implements CustomerDao {
 	private static final BeanPropertyRowMapper<Customer> rowMapper = new BeanPropertyRowMapper<>(Customer.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public CustomerDaoImpl() {
@@ -28,12 +25,10 @@ public class CustomerDaoImpl implements CustomerDao {
 	}
 
 	public CustomerDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public CustomerDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public CustomerDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -54,7 +49,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public Customer getCustomer(String customerId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -62,7 +57,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public List<Customer> getAllCustomers() {
-		return jdbcTemplate.query("SELECT * FROM customers", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM customers", rowMapper);
 	}
 
 	@Override
@@ -78,7 +73,7 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	@Override
 	public boolean deleteCustomer(String id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM customers " +
 						"WHERE customerId=?",
 				ps -> ps.setString(1, id)

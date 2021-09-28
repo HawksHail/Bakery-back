@@ -35,7 +35,9 @@ class SupplierDaoImplTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		supplierDao = new SupplierDaoImpl(jdbcTemplate, nJdbcTemplate);
+		supplierDao = new SupplierDaoImpl(nJdbcTemplate);
+		when(nJdbcTemplate.getJdbcTemplate()).thenReturn(jdbcTemplate);
+
 	}
 
 	@Test

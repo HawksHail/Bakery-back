@@ -35,7 +35,8 @@ class OrderDetailsDaoTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		orderDetailsDao = new OrderDetailsDaoImpl(jdbcTemplate, nJdbcTemplate);
+		orderDetailsDao = new OrderDetailsDaoImpl(nJdbcTemplate);
+		when(nJdbcTemplate.getJdbcTemplate()).thenReturn(jdbcTemplate);
 	}
 
 	@Test

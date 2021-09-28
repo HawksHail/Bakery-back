@@ -18,9 +18,6 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	private static final BeanPropertyRowMapper<OrderDetails> rowMapper = new BeanPropertyRowMapper<>(OrderDetails.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public OrderDetailsDaoImpl() {
@@ -28,12 +25,10 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	}
 
 	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public OrderDetailsDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public OrderDetailsDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -54,7 +49,7 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	@Override
 	public OrderDetails getOrderDetails(long orderId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -62,7 +57,7 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public List<OrderDetails> getAllOrderDetails() {
-		return jdbcTemplate.query("SELECT * FROM orderdetails", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM orderdetails", rowMapper);
 	}
 
 	@Override
@@ -78,7 +73,7 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 
 	@Override
 	public boolean deleteOrderDetails(long id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM orderdetails " +
 						"WHERE orderId=?",
 				ps -> ps.setLong(1, id)

@@ -18,9 +18,6 @@ public class OrderDaoImpl implements OrderDao {
 	private static final BeanPropertyRowMapper<Order> rowMapper = new BeanPropertyRowMapper<>(Order.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public OrderDaoImpl() {
@@ -28,12 +25,10 @@ public class OrderDaoImpl implements OrderDao {
 	}
 
 	public OrderDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public OrderDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public OrderDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -54,7 +49,7 @@ public class OrderDaoImpl implements OrderDao {
 	@Override
 	public Order getOrder(long orderId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM orders WHERE orderid=?", rowMapper, orderId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orders WHERE orderid=?", rowMapper, orderId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -62,7 +57,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public List<Order> getAllOrders() {
-		return jdbcTemplate.query("SELECT * FROM orders", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM orders", rowMapper);
 	}
 
 	@Override
@@ -78,7 +73,7 @@ public class OrderDaoImpl implements OrderDao {
 
 	@Override
 	public boolean deleteOrder(long id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM orders " +
 						"WHERE orderId=?",
 				ps -> ps.setLong(1, id)

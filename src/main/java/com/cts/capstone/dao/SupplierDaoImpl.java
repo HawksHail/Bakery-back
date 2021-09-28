@@ -18,9 +18,6 @@ public class SupplierDaoImpl implements SupplierDao {
 	private static final BeanPropertyRowMapper<Supplier> rowMapper = new BeanPropertyRowMapper<>(Supplier.class);
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
-
-	@Autowired
 	NamedParameterJdbcTemplate nJdbcTemplate;
 
 	public SupplierDaoImpl() {
@@ -28,12 +25,10 @@ public class SupplierDaoImpl implements SupplierDao {
 	}
 
 	public SupplierDaoImpl(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
 		this.nJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
 	}
 
-	public SupplierDaoImpl(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate nJdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
+	public SupplierDaoImpl(NamedParameterJdbcTemplate nJdbcTemplate) {
 		this.nJdbcTemplate = nJdbcTemplate;
 	}
 
@@ -54,7 +49,7 @@ public class SupplierDaoImpl implements SupplierDao {
 	@Override
 	public Supplier getSupplier(long supplierId) {
 		try {
-			return jdbcTemplate.queryForObject("SELECT * FROM suppliers WHERE supplierid=?", rowMapper, supplierId);
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM suppliers WHERE supplierid=?", rowMapper, supplierId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -62,7 +57,7 @@ public class SupplierDaoImpl implements SupplierDao {
 
 	@Override
 	public List<Supplier> getAllSuppliers() {
-		return jdbcTemplate.query("SELECT * FROM suppliers", rowMapper);
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM suppliers", rowMapper);
 	}
 
 	@Override
@@ -78,7 +73,7 @@ public class SupplierDaoImpl implements SupplierDao {
 
 	@Override
 	public boolean deleteSupplier(long id) {
-		int i = jdbcTemplate.update(
+		int i = nJdbcTemplate.getJdbcTemplate().update(
 				"DELETE FROM suppliers " +
 						"WHERE supplierId=?",
 				ps -> ps.setLong(1, id)
