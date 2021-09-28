@@ -1,5 +1,7 @@
 package com.cts.capstone.dao;
 
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -41,7 +43,7 @@ public class OrderDaoImpl implements OrderDao {
 							"VALUES(:orderId, :customerId, :orderDate)",
 					new BeanPropertySqlParameterSource(o));
 		} catch (DuplicateKeyException e) {
-			return false;
+			throw new CreationException("order", o.getOrderId(), e);
 		}
 		return i == 1;
 	}
@@ -51,7 +53,7 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orders WHERE orderid=?", rowMapper, orderId);
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			throw new NotFoundException("order", orderId, e);
 		}
 	}
 

@@ -1,6 +1,8 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.builder.SupplierBuilder;
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,10 +59,8 @@ class SupplierDaoImplTest {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any(), anyLong()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
+		assertThrows(NotFoundException.class, () -> supplierDao.getSupplier(1L));
 
-		Supplier s = supplierDao.getSupplier(1L);
-
-		assertNull(s);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Supplier>>any(), anyLong());
 	}
@@ -100,9 +100,8 @@ class SupplierDaoImplTest {
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
 				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
 
-		boolean b = supplierDao.createSupplier(expected);
+		assertThrows(CreationException.class, () -> supplierDao.createSupplier(expected));
 
-		assertFalse(b);
 		verify(nJdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
 	}

@@ -1,6 +1,8 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.builder.CategoryBuilder;
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,9 +59,8 @@ class CategoryDaoTest {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any(), anyLong()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
-		Category c = categoryDao.getCategory(1);
+		assertThrows(NotFoundException.class, () -> categoryDao.getCategory(1));
 
-		assertNull(c);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Category>>any(), anyLong());
 	}
@@ -112,9 +113,8 @@ class CategoryDaoTest {
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
 				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
 
-		boolean b = categoryDao.createCategory(expected);
+		assertThrows(CreationException.class, () -> categoryDao.createCategory(expected));
 
-		assertFalse(b);
 		verify(nJdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
 	}

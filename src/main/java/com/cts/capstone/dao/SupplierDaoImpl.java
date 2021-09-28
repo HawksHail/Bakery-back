@@ -1,5 +1,7 @@
 package com.cts.capstone.dao;
 
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -41,7 +43,7 @@ public class SupplierDaoImpl implements SupplierDao {
 							"VALUES(:supplierId, :companyName, :contactName)",
 					new BeanPropertySqlParameterSource(s));
 		} catch (DuplicateKeyException e) {
-			return false;
+			throw new CreationException("supplier", s.getSupplierId(), e);
 		}
 		return i == 1;
 	}
@@ -51,7 +53,7 @@ public class SupplierDaoImpl implements SupplierDao {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM suppliers WHERE supplierid=?", rowMapper, supplierId);
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			throw new NotFoundException("supplier", supplierId, e);
 		}
 	}
 

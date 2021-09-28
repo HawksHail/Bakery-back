@@ -1,6 +1,8 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.builder.ProductBuilder;
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,10 +58,8 @@ class ProductDaoTest {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any(), anyLong()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
+		assertThrows(NotFoundException.class, () -> productDao.getProduct(1L));
 
-		Product p = productDao.getProduct(1L);
-
-		assertNull(p);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any(), anyLong());
 	}
@@ -99,9 +99,8 @@ class ProductDaoTest {
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
 				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
 
-		boolean b = productDao.createProduct(expected);
+		assertThrows(CreationException.class, () -> productDao.createProduct(expected));
 
-		assertFalse(b);
 		verify(nJdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
 	}

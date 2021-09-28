@@ -1,6 +1,8 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.OrderDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,9 +58,8 @@ class OrderDetailsDaoTest {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
-		OrderDetails od = orderDetailsDao.getOrderDetails(1L);
+		assertThrows(NotFoundException.class, () -> orderDetailsDao.getOrderDetails(1L));
 
-		assertNull(od);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
 	}
@@ -98,9 +99,8 @@ class OrderDetailsDaoTest {
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
 				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
 
-		boolean b = orderDetailsDao.createOrderDetails(expected);
+		assertThrows(CreationException.class, () -> orderDetailsDao.createOrderDetails(expected));
 
-		assertFalse(b);
 		verify(nJdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
 	}

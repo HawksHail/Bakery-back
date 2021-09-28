@@ -17,7 +17,6 @@ public class Main {
 				SpringApplication.run(Main.class, args);
 
 		DbServiceDao serviceDao = context.getBean(DbServiceDao.class);
-
 		testDB(serviceDao);
 	}
 
@@ -90,22 +89,16 @@ public class Main {
 		System.out.println(service.getOrderDetails(orderDetails.getOrderId()));
 
 
-		System.out.println("Delete: " + service.deleteOrderDetails(orderDetails.getOrderId()));
-		System.out.println(service.getOrderDetails(orderDetails.getOrderId()));
+		System.out.println("\n\nDelete order details: " + service.deleteOrderDetails(orderDetails.getOrderId()));
 
-		System.out.println("Delete: " + service.deleteOrder(order.getOrderId()));
-		System.out.println(service.getOrder(order.getOrderId()));
+		System.out.println("Delete order: " + service.deleteOrder(order.getOrderId()));
 
-		System.out.println("Delete: " + service.deleteCustomer(customer.getCustomerId()));
-		System.out.println(service.getCustomer(customer.getCustomerId()));
+		System.out.println("Delete customer: " + service.deleteCustomer(customer.getCustomerId()));
 
-		System.out.println("Delete: " + service.deleteProduct(product.getProductId()));
-		System.out.println(service.getProduct(product.getProductId()));
+		System.out.println("Delete product: " + service.deleteProduct(product.getProductId()));
 
-		System.out.println("Delete: " + service.deleteCategory(category.getCategoryId()));
-		System.out.println(service.getCategory(category.getCategoryId()));
+		System.out.println("Delete category: " + service.deleteCategory(category.getCategoryId()));
 
-		System.out.println("Delete: " + service.deleteSupplier(supplier.getSupplierId()));
-		System.out.println(service.getSupplier(supplier.getSupplierId()));
+		System.out.println("Delete supplier: " + service.deleteSupplier(supplier.getSupplierId()));
 	}
 }

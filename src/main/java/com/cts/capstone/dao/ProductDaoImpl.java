@@ -1,5 +1,7 @@
 package com.cts.capstone.dao;
 
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -41,7 +43,7 @@ public class ProductDaoImpl implements ProductDao {
 							"VALUES(:productId, :productName, :supplierId, :categoryId, :unitPrice)",
 					new BeanPropertySqlParameterSource(p));
 		} catch (DuplicateKeyException e) {
-			return false;
+			throw new CreationException("product", p.getProductId(), e);
 		}
 		return i == 1;
 	}
@@ -51,7 +53,7 @@ public class ProductDaoImpl implements ProductDao {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM products WHERE productid=?", rowMapper, productId);
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			throw new NotFoundException("product", productId, e);
 		}
 	}
 

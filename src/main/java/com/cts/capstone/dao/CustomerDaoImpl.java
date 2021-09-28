@@ -1,5 +1,7 @@
 package com.cts.capstone.dao;
 
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -41,7 +43,7 @@ public class CustomerDaoImpl implements CustomerDao {
 							"VALUES(:customerId, :companyName, :contactName, :street, :city, :state)",
 					new BeanPropertySqlParameterSource(c));
 		} catch (DuplicateKeyException e) {
-			return false;
+			throw new CreationException("customer", c.getCustomerId(), e);
 		}
 		return i == 1;
 	}
@@ -51,7 +53,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM customers WHERE customerid=?", rowMapper, customerId);
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			throw new NotFoundException("customer", customerId, e);
 		}
 	}
 

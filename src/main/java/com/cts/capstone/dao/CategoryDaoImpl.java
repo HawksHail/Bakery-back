@@ -1,5 +1,7 @@
 package com.cts.capstone.dao;
 
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -42,7 +44,7 @@ public class CategoryDaoImpl implements CategoryDao {
 							"VALUES(:categoryId, :categoryName, :description)",
 					new BeanPropertySqlParameterSource(c));
 		} catch (DuplicateKeyException e) {
-			return false;
+			throw new CreationException("category", c.getCategoryId(), e);
 		}
 		return i == 1;
 	}
@@ -52,7 +54,7 @@ public class CategoryDaoImpl implements CategoryDao {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM categories WHERE categoryid=?", rowMapper, categoryId);
 		} catch (EmptyResultDataAccessException e) {
-			return null;
+			throw new NotFoundException("category", categoryId, e);
 		}
 	}
 

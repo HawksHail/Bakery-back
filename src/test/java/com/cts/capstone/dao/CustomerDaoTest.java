@@ -1,6 +1,8 @@
 package com.cts.capstone.dao;
 
 import com.cts.capstone.builder.CustomerBuilder;
+import com.cts.capstone.exception.CreationException;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Customer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,9 +58,8 @@ class CustomerDaoTest {
 		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Customer>>any(), anyString()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
-		Customer c = customerDao.getCustomer("id1");
+		assertThrows(NotFoundException.class, () -> customerDao.getCustomer("id1"));
 
-		assertNull(c);
 		verify(jdbcTemplate, times(1))
 				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Customer>>any(), anyString());
 	}
@@ -111,9 +112,8 @@ class CustomerDaoTest {
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))
 				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
 
-		boolean b = customerDao.createCustomer(expected);
+		assertThrows(CreationException.class, () -> customerDao.createCustomer(expected));
 
-		assertFalse(b);
 		verify(nJdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any());
 	}
