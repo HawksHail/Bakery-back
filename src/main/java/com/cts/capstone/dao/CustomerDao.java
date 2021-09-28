@@ -1,6 +1,6 @@
 package com.cts.capstone.dao;
 
-import com.cts.capstone.bean.Customer;
+import com.cts.capstone.model.Customer;
 
 import java.util.List;
 

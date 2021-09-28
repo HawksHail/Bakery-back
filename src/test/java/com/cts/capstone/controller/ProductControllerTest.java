@@ -1,7 +1,13 @@
 package com.cts.capstone.controller;
 
-import com.cts.capstone.bean.*;
-import com.cts.capstone.builder.*;
+import com.cts.capstone.builder.CategoryBuilder;
+import com.cts.capstone.builder.CustomerBuilder;
+import com.cts.capstone.builder.ProductBuilder;
+import com.cts.capstone.builder.SupplierBuilder;
+import com.cts.capstone.model.Category;
+import com.cts.capstone.model.Customer;
+import com.cts.capstone.model.Product;
+import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.DbService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.cts.capstone.builder;
 
-import com.cts.capstone.bean.Supplier;
+import com.cts.capstone.model.Supplier;
 
 import java.util.ArrayList;
 import java.util.List;

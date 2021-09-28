@@ -1,4 +1,4 @@
-package com.cts.capstone.bean;
+package com.cts.capstone.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

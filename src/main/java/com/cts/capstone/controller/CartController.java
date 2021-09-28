@@ -1,7 +1,7 @@
 package com.cts.capstone.controller;
 
-import com.cts.capstone.bean.Order;
-import com.cts.capstone.bean.OrderDetails;
+import com.cts.capstone.model.Order;
+import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.service.DbService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;

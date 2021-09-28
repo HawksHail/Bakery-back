@@ -1,7 +1,7 @@
 package com.cts.capstone.dao;
 
-import com.cts.capstone.bean.Supplier;
 import com.cts.capstone.builder.SupplierBuilder;
+import com.cts.capstone.model.Supplier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;

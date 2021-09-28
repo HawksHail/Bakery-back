@@ -1,4 +1,4 @@
-package com.cts.capstone.bean;
+package com.cts.capstone.model;
 
 import com.cts.capstone.builder.ProductBuilder;
 import com.jparams.verifier.tostring.NameStyle;

@@ -1,8 +1,8 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.bean.*;
 import com.cts.capstone.builder.*;
 import com.cts.capstone.dao.*;
+import com.cts.capstone.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

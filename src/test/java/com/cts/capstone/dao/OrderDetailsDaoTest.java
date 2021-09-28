@@ -1,7 +1,7 @@
 package com.cts.capstone.dao;
 
-import com.cts.capstone.bean.OrderDetails;
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.model.OrderDetails;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;

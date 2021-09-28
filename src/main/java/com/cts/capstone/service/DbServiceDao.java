@@ -1,7 +1,7 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.bean.*;
 import com.cts.capstone.dao.*;
+import com.cts.capstone.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;

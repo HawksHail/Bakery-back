@@ -1,6 +1,6 @@
 package com.cts.capstone.dao;
 
-import com.cts.capstone.bean.Product;
+import com.cts.capstone.model.Product;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.cts.capstone.dao;
 
-import com.cts.capstone.bean.Category;
+import com.cts.capstone.model.Category;
 
 import java.util.List;
 

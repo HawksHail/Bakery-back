@@ -1,6 +1,6 @@
 package com.cts.capstone.builder;
 
-import com.cts.capstone.bean.Product;
+import com.cts.capstone.model.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package com.cts.capstone;
 
-import com.cts.capstone.bean.*;
+import com.cts.capstone.model.*;
 import com.cts.capstone.service.DbService;
 import com.cts.capstone.service.DbServiceDao;
 import org.springframework.boot.SpringApplication;

@@ -1,6 +1,6 @@
 package com.cts.capstone.builder;
 
-import com.cts.capstone.bean.Order;
+import com.cts.capstone.model.Order;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

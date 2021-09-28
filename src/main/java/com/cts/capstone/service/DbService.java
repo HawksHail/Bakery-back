@@ -1,6 +1,6 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.bean.*;
+import com.cts.capstone.model.*;
 
 import java.util.List;
 
