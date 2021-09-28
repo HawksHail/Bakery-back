@@ -17,19 +17,19 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-class ControllerTest {
+class ProductControllerTest {
 
 	private final static Gson gson = new Gson();
 
 	@Mock
 	DbService service;
 
-	Controller controller;
+	ProductController productController;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		controller = new Controller(service);
+		productController = new ProductController(service);
 	}
 
 	@Test
@@ -38,7 +38,7 @@ class ControllerTest {
 		when(service.getCategory(anyLong()))
 				.thenReturn(expected);
 
-		String json = controller.getCategory(1L);
+		String json = productController.getCategory(1L);
 		Category actual = gson.fromJson(json, Category.class);
 
 		assertEquals("{\"categoryId\":1,\"categoryName\":\"name\",\"description\":\"description\"}", json);
@@ -50,7 +50,7 @@ class ControllerTest {
 		when(service.getCategory(anyLong()))
 				.thenReturn(null);
 
-		String json = controller.getCategory(1L);
+		String json = productController.getCategory(1L);
 		Category actual = gson.fromJson(json, Category.class);
 
 		assertEquals("null", json);
@@ -66,7 +66,7 @@ class ControllerTest {
 		when(service.getAllCategories())
 				.thenReturn(list);
 
-		String json = controller.getCategory();
+		String json = productController.getCategory();
 		Category[] actual = gson.fromJson(json, Category[].class);
 
 		assertEquals("[" +
@@ -82,7 +82,7 @@ class ControllerTest {
 		when(service.getAllCategories())
 				.thenReturn(List.of());
 
-		String json = controller.getCategory();
+		String json = productController.getCategory();
 		Category[] actual = gson.fromJson(json, Category[].class);
 
 		assertEquals("[]", json);
@@ -95,7 +95,7 @@ class ControllerTest {
 		when(service.getCustomer(anyString()))
 				.thenReturn(expected);
 
-		String json = controller.getCustomer("id123");
+		String json = productController.getCustomer("id123");
 		Customer actual = gson.fromJson(json, Customer.class);
 
 		assertEquals("{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}", json);
@@ -107,7 +107,7 @@ class ControllerTest {
 		when(service.getCustomer(anyString()))
 				.thenReturn(null);
 
-		String json = controller.getCustomer("id123");
+		String json = productController.getCustomer("id123");
 		Customer actual = gson.fromJson(json, Customer.class);
 
 		assertEquals("null", json);
@@ -123,7 +123,7 @@ class ControllerTest {
 		when(service.getAllCustomers())
 				.thenReturn(list);
 
-		String json = controller.getCustomer();
+		String json = productController.getCustomer();
 		Customer[] actual = gson.fromJson(json, Customer[].class);
 
 
@@ -140,7 +140,7 @@ class ControllerTest {
 		when(service.getAllCustomers())
 				.thenReturn(List.of());
 
-		String json = controller.getCustomer();
+		String json = productController.getCustomer();
 		Customer[] actual = gson.fromJson(json, Customer[].class);
 
 
@@ -149,130 +149,12 @@ class ControllerTest {
 	}
 
 	@Test
-	void getOrderDetails() {
-		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
-		when(service.getOrderDetails(anyLong()))
-				.thenReturn(expected);
-
-		String json = controller.getOrderDetails(1L);
-		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
-
-
-		assertEquals("{\"orderId\":1,\"productId\":2,\"quantity\":3}", json);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	void getOrderDetails_notFound() {
-		when(service.getOrderDetails(anyLong()))
-				.thenReturn(null);
-
-		String json = controller.getOrderDetails(1L);
-		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
-
-
-		assertEquals("null", json);
-		assertNull(actual);
-	}
-
-	@Test
-	void getOrderDetailsList() {
-		List<OrderDetails> list = new OrderDetailsBuilder()
-				.w(1, 2, 3)
-				.w(4, 5, 6)
-				.build();
-		when(service.getAllOrderDetails())
-				.thenReturn(list);
-
-		String json = controller.getOrderDetails();
-		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
-
-
-		assertEquals("[" +
-						"{\"orderId\":1,\"productId\":2,\"quantity\":3}," +
-						"{\"orderId\":4,\"productId\":5,\"quantity\":6}" +
-						"]"
-				, json);
-		assertEquals(list, List.of(actual));
-	}
-
-	@Test
-	void getOrderDetailsList_none() {
-		when(service.getAllOrderDetails())
-				.thenReturn(List.of());
-
-		String json = controller.getOrderDetails();
-		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
-
-		assertEquals("[]", json);
-		assertEquals(List.of(), List.of(actual));
-	}
-
-	@Test
-	void getOrder() {
-		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
-		when(service.getOrder(anyLong()))
-				.thenReturn(expected);
-
-		String json = controller.getOrder(1L);
-		Order actual = gson.fromJson(json, Order.class);
-
-		assertEquals("{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}", json);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	void getOrder_notFound() {
-		when(service.getOrder(anyLong()))
-				.thenReturn(null);
-
-		String json = controller.getOrder(1L);
-		Order actual = gson.fromJson(json, Order.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
-	}
-
-	@Test
-	void getOrderList() {
-		List<Order> list = new OrderBuilder()
-				.w(1, "id123", 2021, 9, 1)
-				.w(2, "id124", 2020, 10, 2)
-				.build();
-		when(service.getAllOrders())
-				.thenReturn(list);
-
-		String json = controller.getOrder();
-		Order[] actual = gson.fromJson(json, Order[].class);
-
-		assertEquals("[" +
-						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}," +
-						"{\"orderId\":2,\"customerId\":\"id124\",\"orderDate\":{\"year\":2020,\"month\":10,\"day\":2}}" +
-						"]"
-				, json);
-		assertEquals(list, List.of(actual));
-	}
-
-	@Test
-	void getOrderList_none() {
-		when(service.getAllOrders())
-				.thenReturn(List.of());
-
-		String json = controller.getOrder();
-		Order[] actual = gson.fromJson(json, Order[].class);
-
-		assertEquals("[]", json);
-		assertEquals(List.of(), List.of(actual));
-
-	}
-
-	@Test
 	void getProduct() {
 		Product expected = ProductBuilder.of(1, "productName", 2, 3, "4");
 		when(service.getProduct(anyLong()))
 				.thenReturn(expected);
 
-		String json = controller.getProduct(1L);
+		String json = productController.getProduct(1L);
 		Product actual = gson.fromJson(json, Product.class);
 
 		assertEquals("{\"productId\":1,\"productName\":\"productName\",\"supplierId\":2,\"categoryId\":3,\"unitPrice\":4}", json);
@@ -284,7 +166,7 @@ class ControllerTest {
 		when(service.getProduct(anyLong()))
 				.thenReturn(null);
 
-		String json = controller.getProduct(1L);
+		String json = productController.getProduct(1L);
 		Product actual = gson.fromJson(json, Product.class);
 
 		assertEquals("null", json);
@@ -300,7 +182,7 @@ class ControllerTest {
 		when(service.getProductsByCategoryId(anyLong()))
 				.thenReturn(expected);
 
-		String json = controller.getProductByCategory(3L);
+		String json = productController.getProductByCategory(3L);
 		Product[] actual = gson.fromJson(json, Product[].class);
 
 		assertEquals("[" +
@@ -320,7 +202,7 @@ class ControllerTest {
 		when(service.getAllProducts())
 				.thenReturn(list);
 
-		String json = controller.getProduct();
+		String json = productController.getProduct();
 		Product[] actual = gson.fromJson(json, Product[].class);
 
 		assertEquals("[" +
@@ -336,7 +218,7 @@ class ControllerTest {
 		when(service.getAllProducts())
 				.thenReturn(List.of());
 
-		String json = controller.getProduct();
+		String json = productController.getProduct();
 		Product[] actual = gson.fromJson(json, Product[].class);
 
 		assertEquals("[]", json);
@@ -349,7 +231,7 @@ class ControllerTest {
 		when(service.getSupplier(anyLong()))
 				.thenReturn(expected);
 
-		String json = controller.getSupplier(1L);
+		String json = productController.getSupplier(1L);
 		Supplier actual = gson.fromJson(json, Supplier.class);
 
 		assertEquals("{\"supplierId\":1,\"companyName\":\"companyName\",\"contactName\":\"contactName\"}", json);
@@ -361,7 +243,7 @@ class ControllerTest {
 		when(service.getSupplier(anyLong()))
 				.thenReturn(null);
 
-		String json = controller.getSupplier(1L);
+		String json = productController.getSupplier(1L);
 		Supplier actual = gson.fromJson(json, Supplier.class);
 
 		assertEquals("null", json);
@@ -377,7 +259,7 @@ class ControllerTest {
 		when(service.getAllSuppliers())
 				.thenReturn(expected);
 
-		String json = controller.getSupplier();
+		String json = productController.getSupplier();
 		Supplier[] actual = gson.fromJson(json, Supplier[].class);
 
 		assertEquals("[" +
@@ -393,7 +275,7 @@ class ControllerTest {
 		when(service.getAllSuppliers())
 				.thenReturn(List.of());
 
-		String json = controller.getSupplier();
+		String json = productController.getSupplier();
 		Supplier[] actual = gson.fromJson(json, Supplier[].class);
 
 		assertEquals("[]", json);
