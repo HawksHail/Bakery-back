@@ -15,4 +15,6 @@ public interface OrderDetailsDao {
 	boolean updateOrderDetails(OrderDetails od);
 
 	boolean deleteOrderDetails(long id);
+
+	List<OrderDetails> getOrderDetailsForOrder(long orderId);
 }

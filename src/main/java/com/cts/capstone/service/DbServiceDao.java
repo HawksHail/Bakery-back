@@ -177,11 +177,6 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
-	public Iterable<Product> getProductsByCategoryId(long categoryId) {
-		return productDao.getAllProductsByCategoryId(categoryId);
-	}
-
-	@Override
 	public boolean createSupplier(Supplier s) {
 		return supplierDao.createSupplier(s);
 	}
@@ -204,5 +199,20 @@ public class DbServiceDao implements DbService {
 	@Override
 	public boolean deleteSupplier(long id) {
 		return supplierDao.deleteSupplier(id);
+	}
+
+	@Override
+	public List<Product> getProductsByCategoryId(long categoryId) {
+		return productDao.getAllProductsByCategoryId(categoryId);
+	}
+
+	@Override
+	public List<Order> getOrdersForCustomer(String userId) {
+		return orderDao.getOrdersForCustomer(userId);
+	}
+
+	@Override
+	public List<OrderDetails> getDetailsForOrder(long orderId) {
+		return orderDetailsDao.getOrderDetailsForOrder(orderId);
 	}
 }

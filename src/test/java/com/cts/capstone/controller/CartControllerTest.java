@@ -12,11 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -150,6 +151,146 @@ class CartControllerTest {
 
 		assertEquals("[]", json);
 		assertEquals(List.of(), List.of(actual));
+	}
 
+	@Test
+	void createOrder() {
+		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
+		when(service.createOrder(any(Order.class)))
+				.thenReturn(true);
+
+		Order actual = cartController.createOrder(expected);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void createOrder_NoDate() {
+		Order expected = OrderBuilder.of(1, "id123");
+		when(service.createOrder(any(Order.class)))
+				.thenReturn(true);
+
+		Order actual = cartController.createOrder(expected);
+
+		expected.setOrderDate(LocalDate.now());
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void createOrder_AlreadyExists() {
+		Order expected = OrderBuilder.of(1, "id123");
+		when(service.createOrder(any(Order.class)))
+				.thenReturn(false);
+
+		Order actual = cartController.createOrder(expected);
+
+		assertNull(actual);
+	}
+
+	@Test
+	void updateOrder() {
+		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
+		when(service.updateOrder(any(Order.class)))
+				.thenReturn(true);
+
+		Order actual = cartController.updateOrder(expected);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void updateOrder_failed() {
+		Order expected = OrderBuilder.of(1, "id123", 2021, 9, 1);
+		when(service.updateOrder(any(Order.class)))
+				.thenReturn(false);
+
+		Order actual = cartController.createOrder(expected);
+
+		assertNull(actual);
+	}
+
+	@Test
+	void createOrderDetails() {
+		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		when(service.createOrderDetails(any(OrderDetails.class)))
+				.thenReturn(true);
+
+		OrderDetails actual = cartController.createOrderDetails(expected);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void createOrderDetails_AlreadyExists() {
+		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		when(service.createOrderDetails(any(OrderDetails.class)))
+				.thenReturn(false);
+
+		OrderDetails actual = cartController.createOrderDetails(expected);
+
+		assertNull(actual);
+	}
+
+	@Test
+	void updateOrderDetails() {
+		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		when(service.updateOrderDetails(any(OrderDetails.class)))
+				.thenReturn(true);
+
+		OrderDetails actual = cartController.updateOrderDetails(expected);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void updateOrderDetails_failed() {
+		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		when(service.updateOrderDetails(any(OrderDetails.class)))
+				.thenReturn(false);
+
+		OrderDetails actual = cartController.createOrderDetails(expected);
+
+		assertNull(actual);
+	}
+
+	@Test
+	void getUserOrders() {
+		List<Order> expected = new OrderBuilder()
+				.w(1, "id123", 2021, 9, 1)
+				.w(2, "id123", 2020, 10, 2)
+				.build();
+		when(service.getOrdersForCustomer(anyString()))
+				.thenReturn(expected);
+
+		String json = cartController.getUserOrders("id123");
+		Order[] actual = gson.fromJson(json, Order[].class);
+
+		assertEquals("[" +
+						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}," +
+						"{\"orderId\":2,\"customerId\":\"id123\",\"orderDate\":{\"year\":2020,\"month\":10,\"day\":2}}" +
+						"]"
+				, json);
+		assertEquals(expected, List.of(actual));
+	}
+
+	@Test
+	void getOrderDetailsForOrder() {
+		List<OrderDetails> list = new OrderDetailsBuilder()
+				.w(1, 2, 3)
+				.w(1, 5, 6)
+				.build();
+		when(service.getDetailsForOrder(anyLong()))
+				.thenReturn(list);
+
+		String json = cartController.getOrderDetailsForOrder(1L);
+		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
+
+
+		assertEquals("[" +
+						"{\"orderId\":1,\"productId\":2,\"quantity\":3}," +
+						"{\"orderId\":1,\"productId\":5,\"quantity\":6}" +
+						"]"
+				, json);
+		assertEquals(list, List.of(actual));
 	}
 }

@@ -31,6 +31,11 @@ public class Order {
 		this.orderDate = orderDate;
 	}
 
+	public Order(long orderId, String customerId) {
+		this.orderId = orderId;
+		this.customerId = customerId;
+	}
+
 	public long getOrderId() {
 		return orderId;
 	}

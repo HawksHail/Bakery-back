@@ -80,4 +80,9 @@ public class OrderDaoImpl implements OrderDao {
 		);
 		return i == 1;
 	}
+
+	@Override
+	public List<Order> getOrdersForCustomer(String userId) {
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM orders WHERE customerid=?", rowMapper, userId);
+	}
 }

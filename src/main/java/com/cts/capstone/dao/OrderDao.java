@@ -14,4 +14,6 @@ public interface OrderDao {
 	boolean updateOrder(Order o);
 
 	boolean deleteOrder(long id);
+
+	List<Order> getOrdersForCustomer(String userId);
 }

@@ -353,4 +353,34 @@ class DbServiceDaoTest {
 		assertEquals(0, actual.size());
 		verify(supplierDao, times(1)).getAllSuppliers();
 	}
+
+	@Test
+	void getOrdersForCustomer() {
+		List<Order> expectedList = new OrderBuilder()
+				.w(1L, "id123")
+				.w(2L, "id123")
+				.build();
+		when(orderDao.getAllOrders())
+				.thenReturn(expectedList);
+
+		List<Order> actual = serviceDao.getAllOrders();
+
+		assertEquals(2, actual.size());
+		verify(orderDao, times(1)).getAllOrders();
+	}
+
+	@Test
+	void getDetailsForOrder() {
+		List<OrderDetails> expectedList = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(1L, 4L, 7)
+				.build();
+		when(orderDetailsDao.getAllOrderDetails())
+				.thenReturn(expectedList);
+
+		List<OrderDetails> actual = serviceDao.getAllOrderDetails();
+
+		assertEquals(2, actual.size());
+		verify(orderDetailsDao, times(1)).getAllOrderDetails();
+	}
 }

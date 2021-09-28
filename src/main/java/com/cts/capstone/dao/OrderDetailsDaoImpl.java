@@ -80,4 +80,9 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 		);
 		return i == 1;
 	}
+
+	@Override
+	public List<OrderDetails> getOrderDetailsForOrder(long orderId) {
+		return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM orderdetails WHERE orderId=?", rowMapper, orderId);
+	}
 }

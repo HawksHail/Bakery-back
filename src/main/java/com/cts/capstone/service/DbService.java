@@ -2,13 +2,15 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.bean.*;
 
+import java.util.List;
+
 public interface DbService {
 
 	boolean createCategory(Category c);
 
 	Category getCategory(long categoryId);
 
-	Iterable<Category> getAllCategories();
+	List<Category> getAllCategories();
 
 	boolean updateCategory(Category c);
 
@@ -18,7 +20,7 @@ public interface DbService {
 
 	Customer getCustomer(String customerId);
 
-	Iterable<Customer> getAllCustomers();
+	List<Customer> getAllCustomers();
 
 	boolean updateCustomer(Customer c);
 
@@ -28,7 +30,7 @@ public interface DbService {
 
 	Order getOrder(long orderId);
 
-	Iterable<Order> getAllOrders();
+	List<Order> getAllOrders();
 
 	boolean updateOrder(Order o);
 
@@ -38,7 +40,7 @@ public interface DbService {
 
 	OrderDetails getOrderDetails(long orderDetailsId);
 
-	Iterable<OrderDetails> getAllOrderDetails();
+	List<OrderDetails> getAllOrderDetails();
 
 	boolean updateOrderDetails(OrderDetails od);
 
@@ -48,22 +50,25 @@ public interface DbService {
 
 	Product getProduct(long productId);
 
-	Iterable<Product> getAllProducts();
+	List<Product> getAllProducts();
 
 	boolean updateProduct(Product p);
 
 	boolean deleteProduct(long id);
 
-
-	Iterable<Product> getProductsByCategoryId(long categoryId);
-
 	boolean createSupplier(Supplier s);
 
 	Supplier getSupplier(long supplierId);
 
-	Iterable<Supplier> getAllSuppliers();
+	List<Supplier> getAllSuppliers();
 
 	boolean updateSupplier(Supplier s);
 
 	boolean deleteSupplier(long id);
+
+	List<Product> getProductsByCategoryId(long categoryId);
+
+	List<Order> getOrdersForCustomer(String userId);
+
+	List<OrderDetails> getDetailsForOrder(long orderId);
 }

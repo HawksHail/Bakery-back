@@ -24,7 +24,7 @@ public class OrderBuilder {
 	}
 
 	public static Order of(long orderId, String customerId) {
-		return of(orderId, customerId, 2020, 1, 1);
+		return new Order(orderId, customerId);
 	}
 
 	public static Order of(long orderId, String customerId, int year, int month, int day) {

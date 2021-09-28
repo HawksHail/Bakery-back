@@ -154,4 +154,20 @@ class OrderDetailsDaoTest {
 		verify(jdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
 	}
+
+	@Test
+	void getOrderDetailsForOrder() {
+		List<OrderDetails> expectedList = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(1L, 4L, 7)
+				.build();
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any()))
+				.thenReturn(expectedList);
+
+		List<OrderDetails> list = orderDetailsDao.getAllOrderDetails();
+
+		assertEquals(2, list.size());
+		verify(jdbcTemplate, times(1))
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any());
+	}
 }
