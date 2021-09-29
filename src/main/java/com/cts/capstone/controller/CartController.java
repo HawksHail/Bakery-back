@@ -25,8 +25,30 @@ public class CartController {
 		this.service = service;
 	}
 
+
 	/**
 	 * Get all customers
+	 *
+	 * @return Json of all customers
+	 */
+	@GetMapping(value = "customer", produces = "application/json")
+	public String getCustomer() {
+		return gson.toJson(service.getAllCustomers());
+	}
+
+	/**
+	 * Get customer with specified ID
+	 *
+	 * @param id Customer ID to retrieve
+	 * @return Json of specified customer
+	 */
+	@GetMapping(value = "customer/{id}", produces = "application/json")
+	public String getCustomer(@PathVariable String id) {
+		return gson.toJson(service.getCustomer(id));
+	}
+
+	/**
+	 * Get all orders
 	 *
 	 * @return Json of all orders
 	 */

@@ -27,13 +27,13 @@ public class OrderBuilder {
 		return new Order(orderId, customerId);
 	}
 
-	public static Order of(long orderId, String customerId, int year, int month, int day) {
-		return new Order(orderId, customerId, LocalDate.of(year, month, day));
-	}
-
 	public OrderBuilder w(long orderId, String customerId, int year, int month, int day) {
 		list.add(of(orderId, customerId, year, month, day));
 		return this;
+	}
+
+	public static Order of(long orderId, String customerId, int year, int month, int day) {
+		return new Order(orderId, customerId, LocalDate.of(year, month, day));
 	}
 
 	public List<Order> build() {

@@ -1,11 +1,9 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.CategoryBuilder;
-import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.builder.SupplierBuilder;
 import com.cts.capstone.model.Category;
-import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.DbService;
@@ -20,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class ProductControllerTest {
@@ -90,65 +87,6 @@ class ProductControllerTest {
 
 		String json = productController.getCategory();
 		Category[] actual = gson.fromJson(json, Category[].class);
-
-		assertEquals("[]", json);
-		assertEquals(List.of(), List.of(actual));
-	}
-
-	@Test
-	void getCustomer() {
-		Customer expected = CustomerBuilder.of("id123", "companyName", "contactName", "street", "city", "state");
-		when(service.getCustomer(anyString()))
-				.thenReturn(expected);
-
-		String json = productController.getCustomer("id123");
-		Customer actual = gson.fromJson(json, Customer.class);
-
-		assertEquals("{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}", json);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	void getCustomer_notFound() {
-		when(service.getCustomer(anyString()))
-				.thenReturn(null);
-
-		String json = productController.getCustomer("id123");
-		Customer actual = gson.fromJson(json, Customer.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
-	}
-
-	@Test
-	void getCustomerList() {
-		List<Customer> list = new CustomerBuilder()
-				.w("id123", "companyName", "contactName", "street", "city", "state")
-				.w("id124", "companyName2", "contactName2", "street2", "city2", "state2")
-				.build();
-		when(service.getAllCustomers())
-				.thenReturn(list);
-
-		String json = productController.getCustomer();
-		Customer[] actual = gson.fromJson(json, Customer[].class);
-
-
-		assertEquals("[" +
-						"{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}," +
-						"{\"customerId\":\"id124\",\"companyName\":\"companyName2\",\"contactName\":\"contactName2\",\"street\":\"street2\",\"city\":\"city2\",\"state\":\"state2\"}" +
-						"]"
-				, json);
-		assertEquals(list, List.of(actual));
-	}
-
-	@Test
-	void getCustomerList_none() {
-		when(service.getAllCustomers())
-				.thenReturn(List.of());
-
-		String json = productController.getCustomer();
-		Customer[] actual = gson.fromJson(json, Customer[].class);
-
 
 		assertEquals("[]", json);
 		assertEquals(List.of(), List.of(actual));

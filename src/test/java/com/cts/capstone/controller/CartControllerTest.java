@@ -1,8 +1,10 @@
 package com.cts.capstone.controller;
 
 
+import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.service.DbService;
@@ -36,6 +38,64 @@ class CartControllerTest {
 		cartController = new CartController(service);
 	}
 
+
+	@Test
+	void getCustomer() {
+		Customer expected = CustomerBuilder.of("id123", "companyName", "contactName", "street", "city", "state");
+		when(service.getCustomer(anyString()))
+				.thenReturn(expected);
+
+		String json = cartController.getCustomer("id123");
+		Customer actual = gson.fromJson(json, Customer.class);
+
+		assertEquals("{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}", json);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void getCustomer_notFound() {
+		when(service.getCustomer(anyString()))
+				.thenReturn(null);
+
+		String json = cartController.getCustomer("id123");
+		Customer actual = gson.fromJson(json, Customer.class);
+
+		assertEquals("null", json);
+		assertNull(actual);
+	}
+
+	@Test
+	void getCustomerList() {
+		List<Customer> list = new CustomerBuilder()
+				.w("id123", "companyName", "contactName", "street", "city", "state")
+				.w("id124", "companyName2", "contactName2", "street2", "city2", "state2")
+				.build();
+		when(service.getAllCustomers())
+				.thenReturn(list);
+
+		String json = cartController.getCustomer();
+		Customer[] actual = gson.fromJson(json, Customer[].class);
+
+		assertEquals("[" +
+						"{\"customerId\":\"id123\",\"companyName\":\"companyName\",\"contactName\":\"contactName\",\"street\":\"street\",\"city\":\"city\",\"state\":\"state\"}," +
+						"{\"customerId\":\"id124\",\"companyName\":\"companyName2\",\"contactName\":\"contactName2\",\"street\":\"street2\",\"city\":\"city2\",\"state\":\"state2\"}" +
+						"]"
+				, json);
+		assertEquals(list, List.of(actual));
+	}
+
+	@Test
+	void getCustomerList_none() {
+		when(service.getAllCustomers())
+				.thenReturn(List.of());
+
+		String json = cartController.getCustomer();
+		Customer[] actual = gson.fromJson(json, Customer[].class);
+
+		assertEquals("[]", json);
+		assertEquals(List.of(), List.of(actual));
+	}
+
 	@Test
 	void getOrderDetails() {
 		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
@@ -44,7 +104,6 @@ class CartControllerTest {
 
 		String json = cartController.getOrderDetails(1L);
 		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
-
 
 		assertEquals("{\"orderId\":1,\"productId\":2,\"quantity\":3}", json);
 		assertEquals(expected, actual);
@@ -57,7 +116,6 @@ class CartControllerTest {
 
 		String json = cartController.getOrderDetails(1L);
 		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
-
 
 		assertEquals("null", json);
 		assertNull(actual);
@@ -74,7 +132,6 @@ class CartControllerTest {
 
 		String json = cartController.getOrderDetails();
 		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
-
 
 		assertEquals("[" +
 						"{\"orderId\":1,\"productId\":2,\"quantity\":3}," +
@@ -284,7 +341,6 @@ class CartControllerTest {
 
 		String json = cartController.getOrderDetailsForOrder(1L);
 		OrderDetails[] actual = gson.fromJson(json, OrderDetails[].class);
-
 
 		assertEquals("[" +
 						"{\"orderId\":1,\"productId\":2,\"quantity\":3}," +
