@@ -8,7 +8,9 @@ import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.service.DbService;
+import com.cts.capstone.util.LocalDateAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -25,8 +27,9 @@ import static org.mockito.Mockito.when;
 
 class CartControllerTest {
 
-	private final static Gson gson = new Gson();
-
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+			.create();
 	@Mock
 	DbService service;
 
@@ -36,6 +39,7 @@ class CartControllerTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		cartController = new CartController(service);
+		cartController.setGson(gson);
 	}
 
 
@@ -162,7 +166,7 @@ class CartControllerTest {
 		String json = cartController.getOrder(1L);
 		Order actual = gson.fromJson(json, Order.class);
 
-		assertEquals("{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}", json);
+		assertEquals("{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":\"2021-09-01\"}", json);
 		assertEquals(expected, actual);
 	}
 
@@ -191,8 +195,8 @@ class CartControllerTest {
 		Order[] actual = gson.fromJson(json, Order[].class);
 
 		assertEquals("[" +
-						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}," +
-						"{\"orderId\":2,\"customerId\":\"id124\",\"orderDate\":{\"year\":2020,\"month\":10,\"day\":2}}" +
+						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":\"2021-09-01\"}," +
+						"{\"orderId\":2,\"customerId\":\"id124\",\"orderDate\":\"2020-10-02\"}" +
 						"]"
 				, json);
 		assertEquals(list, List.of(actual));
@@ -323,8 +327,8 @@ class CartControllerTest {
 		Order[] actual = gson.fromJson(json, Order[].class);
 
 		assertEquals("[" +
-						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":{\"year\":2021,\"month\":9,\"day\":1}}," +
-						"{\"orderId\":2,\"customerId\":\"id123\",\"orderDate\":{\"year\":2020,\"month\":10,\"day\":2}}" +
+						"{\"orderId\":1,\"customerId\":\"id123\",\"orderDate\":\"2021-09-01\"}," +
+						"{\"orderId\":2,\"customerId\":\"id123\",\"orderDate\":\"2020-10-02\"}" +
 						"]"
 				, json);
 		assertEquals(expected, List.of(actual));

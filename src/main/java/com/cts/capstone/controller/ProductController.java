@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ProductController {
 
-	private static final Gson gson = new Gson();
-
 	@Autowired
 	DbService service;
+
+	@Autowired
+	private Gson gson;
 
 	public ProductController() {
 		//Empty
@@ -21,6 +22,10 @@ public class ProductController {
 
 	public ProductController(DbService service) {
 		this.service = service;
+	}
+
+	public void setGson(Gson gson) {
+		this.gson = gson;
 	}
 
 	/**

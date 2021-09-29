@@ -12,7 +12,12 @@ import java.util.List;
 @RestController
 public class CartController {
 
-	private static final Gson gson = new Gson();
+	@Autowired
+	private Gson gson;
+
+	public void setGson(Gson gson) {
+		this.gson = gson;
+	}
 
 	@Autowired
 	DbService service;

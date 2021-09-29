@@ -7,12 +7,15 @@ import com.cts.capstone.model.Category;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.DbService;
+import com.cts.capstone.util.LocalDateAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +25,9 @@ import static org.mockito.Mockito.when;
 
 class ProductControllerTest {
 
-	private final static Gson gson = new Gson();
+	private final Gson gson = new GsonBuilder()
+			.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+			.create();
 
 	@Mock
 	DbService service;
@@ -33,6 +38,7 @@ class ProductControllerTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		productController = new ProductController(service);
+		productController.setGson(gson);
 	}
 
 	@Test
