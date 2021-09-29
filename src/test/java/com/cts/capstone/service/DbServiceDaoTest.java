@@ -2,6 +2,7 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.builder.*;
 import com.cts.capstone.dao.*;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,11 +59,10 @@ class DbServiceDaoTest {
 	@Test
 	void getCategoryTest_notFound() {
 		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		Category category = serviceDao.getCategory(100);
+		assertThrows(NotFoundException.class, () -> serviceDao.getCategory(100));
 
-		assertNull(category);
 		verify(categoryDao, times(1)).getCategory(anyLong());
 	}
 
@@ -191,24 +191,23 @@ class DbServiceDaoTest {
 
 	@Test
 	void getOrderDetailsTest() {
-		when(orderDetailsDao.getOrderDetails(anyLong()))
+		when(orderDetailsDao.getOrderDetails(anyLong(), anyLong()))
 				.thenReturn(OrderDetailsBuilder.of(1L, 2L, 5));
 
-		OrderDetails orderDetails = serviceDao.getOrderDetails(1L);
+		OrderDetails orderDetails = serviceDao.getOrderDetails(1L, 2L);
 
 		assertEquals(1L, orderDetails.getOrderId());
-		verify(orderDetailsDao, times(1)).getOrderDetails(anyLong());
+		verify(orderDetailsDao, times(1)).getOrderDetails(anyLong(), anyLong());
 	}
 
 	@Test
 	void getOrderDetailsTest_notFound() {
-		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+		when(orderDetailsDao.getOrderDetails(anyLong(), anyLong()))
+				.thenThrow(new NotFoundException());
 
-		OrderDetails orderDetails = serviceDao.getOrderDetails(1L);
+		assertThrows(NotFoundException.class, () -> serviceDao.getOrderDetails(1L, 2L));
 
-		assertNull(orderDetails);
-		verify(orderDetailsDao, times(1)).getOrderDetails(anyLong());
+		verify(orderDetailsDao, times(1)).getOrderDetails(anyLong(), anyLong());
 	}
 
 	@Test

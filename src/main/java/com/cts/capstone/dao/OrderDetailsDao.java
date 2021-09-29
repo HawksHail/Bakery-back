@@ -10,7 +10,9 @@ public interface OrderDetailsDao {
 
 	boolean createOrderDetailsList(OrderDetails[] details);
 
-	OrderDetails getOrderDetails(long orderId);
+	List<OrderDetails> getOrderDetails(long orderId);
+
+	OrderDetails getOrderDetails(long orderId, long productId);
 
 	List<OrderDetails> getAllOrderDetails();
 

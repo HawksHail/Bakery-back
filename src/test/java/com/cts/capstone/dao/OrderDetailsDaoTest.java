@@ -42,26 +42,54 @@ class OrderDetailsDaoTest {
 	}
 
 	@Test
-	void getOrderDetailsTest() {
-		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
-				.thenReturn(OrderDetailsBuilder.of(1L, 2L, 5));
+	void getOrderDetails() {
+		List<OrderDetails> expected = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(1L, 3L, 3)
+				.build();
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
+				.thenReturn(expected);
 
-		OrderDetails od = orderDetailsDao.getOrderDetails(1L);
+		List<OrderDetails> actual = orderDetailsDao.getOrderDetails(1L);
 
-		assertEquals(1L, od.getOrderId());
+		assertEquals(expected, actual);
 		verify(jdbcTemplate, times(1))
-				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
 	}
 
 	@Test
-	void getOrderDetailsTest_notFound() {
-		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
+	void getOrderDetails_notFound() {
+		List<OrderDetails> expected = new OrderDetailsBuilder().build();
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
 				.thenThrow(new EmptyResultDataAccessException(1));
 
 		assertThrows(NotFoundException.class, () -> orderDetailsDao.getOrderDetails(1L));
 
 		verify(jdbcTemplate, times(1))
-				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
+	}
+
+	@Test
+	void getOrderDetailsTest() {
+		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong(), anyLong()))
+				.thenReturn(OrderDetailsBuilder.of(1L, 2L, 5));
+
+		OrderDetails od = orderDetailsDao.getOrderDetails(1L, 2L);
+
+		assertEquals(1L, od.getOrderId());
+		verify(jdbcTemplate, times(1))
+				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong(), anyLong());
+	}
+
+	@Test
+	void getOrderDetailsTest_notFound() {
+		when(jdbcTemplate.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong(), anyLong()))
+				.thenThrow(new EmptyResultDataAccessException(1));
+
+		assertThrows(NotFoundException.class, () -> orderDetailsDao.getOrderDetails(1L, 2L));
+
+		verify(jdbcTemplate, times(1))
+				.queryForObject(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong(), anyLong());
 	}
 
 	@Test

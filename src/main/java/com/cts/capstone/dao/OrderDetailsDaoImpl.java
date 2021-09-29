@@ -65,12 +65,20 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	}
 
 	@Override
-	public OrderDetails getOrderDetails(long orderId) {
+	public List<OrderDetails> getOrderDetails(long orderId) {
 		try {
-			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
+			return nJdbcTemplate.getJdbcTemplate().query("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);
 		} catch (EmptyResultDataAccessException e) {
 			throw new NotFoundException("order details", orderId, e);
+		}
+	}
 
+	@Override
+	public OrderDetails getOrderDetails(long orderId, long productId) {
+		try {
+			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orderdetails WHERE orderid=? AND productid=?", rowMapper, orderId, productId);
+		} catch (EmptyResultDataAccessException e) {
+			throw new NotFoundException("order details", orderId, e);
 		}
 	}
 

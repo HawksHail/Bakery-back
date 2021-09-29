@@ -99,10 +99,10 @@ class CartControllerTest {
 	@Test
 	void getOrderDetails() {
 		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
-		when(service.getOrderDetails(anyLong()))
+		when(service.getOrderDetails(anyLong(), anyLong()))
 				.thenReturn(expected);
 
-		String json = cartController.getOrderDetails(1L);
+		String json = cartController.getOrderDetailsProduct(1L, 2L);
 		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
 
 		assertEquals("{\"orderId\":1,\"productId\":2,\"quantity\":3}", json);
@@ -165,13 +165,9 @@ class CartControllerTest {
 	@Test
 	void getOrder_notFound() {
 		when(service.getOrder(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = cartController.getOrder(1L);
-		Order actual = gson.fromJson(json, Order.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> cartController.getOrder(1L));
 	}
 
 	@Test
@@ -309,7 +305,7 @@ class CartControllerTest {
 	}
 
 	@Test
-	void getUserOrders() {
+	void getCustomerOrders() {
 		List<Order> expected = new OrderBuilder()
 				.w(1, "id123", 2021, 9, 1)
 				.w(2, "id123", 2020, 10, 2)
@@ -317,7 +313,7 @@ class CartControllerTest {
 		when(service.getOrdersForCustomer(anyString()))
 				.thenReturn(expected);
 
-		String json = cartController.getUserOrders("id123");
+		String json = cartController.getCustomerOrders("id123");
 		Order[] actual = gson.fromJson(json, Order[].class);
 
 		assertEquals("[" +

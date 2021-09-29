@@ -82,11 +82,11 @@ public class Main {
 		OrderDetails orderDetails = new OrderDetails(12345, 12345, 2);
 
 		System.out.println("\nInsert: " + service.createOrderDetails(orderDetails));
-		System.out.println(service.getOrderDetails(orderDetails.getOrderId()));
+		System.out.println(service.getOrderDetails(orderDetails.getOrderId(), orderDetails.getProductId()));
 
 		orderDetails.setQuantity(90);
 		System.out.println("Update: " + service.updateOrderDetails(orderDetails));
-		System.out.println(service.getOrderDetails(orderDetails.getOrderId()));
+		System.out.println(service.getOrderDetails(orderDetails.getOrderId(), product.getProductId()));
 
 
 		System.out.println("\n\nDelete order details: " + service.deleteOrderDetails(orderDetails.getOrderId()));

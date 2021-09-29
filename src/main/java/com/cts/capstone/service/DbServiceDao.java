@@ -137,8 +137,13 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
-	public OrderDetails getOrderDetails(long orderDetailsId) {
+	public List<OrderDetails> getOrderDetails(long orderDetailsId) {
 		return orderDetailsDao.getOrderDetails(orderDetailsId);
+	}
+
+	@Override
+	public OrderDetails getOrderDetails(long orderDetailsId, long productId) {
+		return orderDetailsDao.getOrderDetails(orderDetailsId, productId);
 	}
 
 	@Override

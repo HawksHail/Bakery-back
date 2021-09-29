@@ -103,20 +103,32 @@ public class CartController {
 	 *
 	 * @return Json of all order details
 	 */
-	@GetMapping(value = {"orderdetails", "orderDetails"}, produces = "application/json")
+	@GetMapping(value = "order/details", produces = "application/json")
 	public String getOrderDetails() {
 		return gson.toJson(service.getAllOrderDetails());
 	}
 
 	/**
-	 * Get order details for specified ID
+	 * Get all order details for specified order ID
 	 *
 	 * @param id Order details ID to retrieve
-	 * @return Json of specified order detail
+	 * @return Json of all order details for specified order
 	 */
-	@GetMapping(value = {"orderdetails/{id}", "orderDetails/{id}"}, produces = "application/json")
+	@GetMapping(value = "order/details/{id}", produces = "application/json")
 	public String getOrderDetails(@PathVariable Long id) {
 		return gson.toJson(service.getOrderDetails(id));
+	}
+
+	/**
+	 * Get all order details for specified order ID
+	 *
+	 * @param orderId   Order ID to retrieve
+	 * @param productId product ID to retrieve
+	 * @return Json of all order details for specified order
+	 */
+	@GetMapping(value = "order/details/{orderId}/product/{productId}", produces = "application/json")
+	public String getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
+		return gson.toJson(service.getOrderDetails(orderId, productId));
 	}
 
 	/**
@@ -125,7 +137,7 @@ public class CartController {
 	 * @param details array of details to create
 	 * @return details if successful, else null
 	 */
-	@PostMapping(value = {"orderdetails", "orderDetails"})
+	@PostMapping(value = "order/details")
 	public OrderDetails[] createOrderDetails(@RequestBody OrderDetails[] details) {
 		if (!service.createOrderDetailsList(details)) {
 			return null;
@@ -139,7 +151,7 @@ public class CartController {
 	 * @param details details to update
 	 * @return details if successful, else null
 	 */
-	@PatchMapping(value = {"orderdetails", "orderDetails"})
+	@PatchMapping(value = "order/details")
 	public OrderDetails updateOrderDetails(@RequestBody OrderDetails details) {
 		if (!service.updateOrderDetails(details)) {
 			return null;
@@ -150,12 +162,12 @@ public class CartController {
 	/**
 	 * Get all orders for a specific user
 	 *
-	 * @param userId user to get orders for
+	 * @param customerId user to get orders for
 	 * @return list of orders from specified user
 	 */
-	@GetMapping(value = "order/user/{userId}", produces = "application/json")
-	public String getUserOrders(@PathVariable String userId) {
-		List<Order> list = service.getOrdersForCustomer(userId);
+	@GetMapping(value = "order/customer/{customerId}", produces = "application/json")
+	public String getCustomerOrders(@PathVariable String customerId) {
+		List<Order> list = service.getOrdersForCustomer(customerId);
 		return gson.toJson(list);
 	}
 
@@ -165,7 +177,7 @@ public class CartController {
 	 * @param orderId order to get details for
 	 * @return list of orderDetails for specified order
 	 */
-	@GetMapping(value = {"orderdetails/order/{orderId}", "orderDetails/order/{orderId}"}, produces = "application/json")
+	@GetMapping(value = "order/{orderId}/details", produces = "application/json")
 	public String getOrderDetailsForOrder(@PathVariable Long orderId) {
 		List<OrderDetails> list = service.getDetailsForOrder(orderId);
 		return gson.toJson(list);
