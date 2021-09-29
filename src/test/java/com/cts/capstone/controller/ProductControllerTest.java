@@ -3,6 +3,7 @@ package com.cts.capstone.controller;
 import com.cts.capstone.builder.CategoryBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.builder.SupplierBuilder;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.model.Supplier;
@@ -19,7 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -57,13 +58,9 @@ class ProductControllerTest {
 	@Test
 	void getCategory_notFound() {
 		when(service.getCategory(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = productController.getCategory(1L);
-		Category actual = gson.fromJson(json, Category.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> productController.getCategory(1L));
 	}
 
 	@Test
@@ -114,13 +111,9 @@ class ProductControllerTest {
 	@Test
 	void getProduct_notFound() {
 		when(service.getProduct(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = productController.getProduct(1L);
-		Product actual = gson.fromJson(json, Product.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> productController.getProduct(1L));
 	}
 
 	@Test
@@ -191,13 +184,9 @@ class ProductControllerTest {
 	@Test
 	void getSupplier_notFound() {
 		when(service.getSupplier(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = productController.getSupplier(1L);
-		Supplier actual = gson.fromJson(json, Supplier.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> productController.getSupplier(1L));
 	}
 
 	@Test

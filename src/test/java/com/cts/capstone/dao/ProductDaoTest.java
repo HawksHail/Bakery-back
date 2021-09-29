@@ -154,4 +154,20 @@ class ProductDaoTest {
 		verify(jdbcTemplate, times(1))
 				.update(anyString(), ArgumentMatchers.<PreparedStatementSetter>any());
 	}
+
+	@Test
+	void getAllProductsByCategoryId() {
+		List<Product> expected = new ProductBuilder()
+				.w(1, "name", 1, 1, "1")
+				.w(2, "name2", 4, 1, "4")
+				.build();
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any(), anyLong()))
+				.thenReturn(expected);
+
+		List<Product> actual = productDao.getAllProductsByCategoryId(1);
+
+		assertEquals(expected, actual);
+		verify(jdbcTemplate, times(1))
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Product>>any(), anyLong());
+	}
 }

@@ -157,17 +157,17 @@ class OrderDaoTest {
 
 	@Test
 	void getOrdersForCustomer() {
-		List<Order> expectedList = new OrderBuilder()
+		List<Order> expected = new OrderBuilder()
 				.w(1L, "id123")
 				.w(2L, "id123")
 				.build();
-		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any()))
-				.thenReturn(expectedList);
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any(), anyString()))
+				.thenReturn(expected);
 
-		List<Order> list = orderDao.getAllOrders();
+		List<Order> actual = orderDao.getOrdersForCustomer("id123");
 
-		assertEquals(2, list.size());
+		assertEquals(2, actual.size());
 		verify(jdbcTemplate, times(1))
-				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any());
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<Order>>any(), anyString());
 	}
 }

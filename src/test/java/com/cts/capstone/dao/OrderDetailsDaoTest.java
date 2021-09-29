@@ -192,13 +192,13 @@ class OrderDetailsDaoTest {
 				.w(1L, 2L, 5)
 				.w(1L, 4L, 7)
 				.build();
-		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any()))
+		when(jdbcTemplate.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong()))
 				.thenReturn(expectedList);
 
-		List<OrderDetails> list = orderDetailsDao.getAllOrderDetails();
+		List<OrderDetails> actual = orderDetailsDao.getOrderDetailsForOrder(1L);
 
-		assertEquals(2, list.size());
+		assertEquals(expectedList, actual);
 		verify(jdbcTemplate, times(1))
-				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any());
+				.query(anyString(), ArgumentMatchers.<BeanPropertyRowMapper<OrderDetails>>any(), anyLong());
 	}
 }

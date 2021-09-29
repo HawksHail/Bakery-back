@@ -2,6 +2,10 @@ package com.cts.capstone.exception;
 
 public class CreationException extends RuntimeException {
 
+	public CreationException() {
+		super();
+	}
+
 	public CreationException(String type, long id, Throwable cause) {
 		this(type, String.valueOf(id), cause);
 	}

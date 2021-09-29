@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
@@ -106,12 +106,11 @@ class DbServiceDaoTest {
 
 	@Test
 	void getCustomerTest_notFound() {
-		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+		when(customerDao.getCustomer(anyString()))
+				.thenThrow(new NotFoundException());
 
-		Customer customer = serviceDao.getCustomer("id1");
+		assertThrows(NotFoundException.class, () -> serviceDao.getCustomer("id1"));
 
-		assertNull(customer);
 		verify(customerDao, times(1)).getCustomer(anyString());
 	}
 
@@ -155,12 +154,11 @@ class DbServiceDaoTest {
 
 	@Test
 	void getOrderTest_notFound() {
-		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+		when(orderDao.getOrder(anyLong()))
+				.thenThrow(new NotFoundException());
 
-		Order order = serviceDao.getOrder(1L);
+		assertThrows(NotFoundException.class, () -> serviceDao.getOrder(1L));
 
-		assertNull(order);
 		verify(orderDao, times(1)).getOrder(anyLong());
 	}
 
@@ -253,12 +251,11 @@ class DbServiceDaoTest {
 
 	@Test
 	void getProductTest_notFound() {
-		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+		when(productDao.getProduct(anyLong()))
+				.thenThrow(new NotFoundException());
 
-		Product product = serviceDao.getProduct(1L);
+		assertThrows(NotFoundException.class, () -> serviceDao.getProduct(1L));
 
-		assertNull(product);
 		verify(productDao, times(1)).getProduct(anyLong());
 	}
 
@@ -317,12 +314,11 @@ class DbServiceDaoTest {
 
 	@Test
 	void getSupplierTest_notFound() {
-		when(categoryDao.getCategory(anyLong()))
-				.thenReturn(null);
+		when(supplierDao.getSupplier(anyLong()))
+				.thenThrow(new NotFoundException());
 
-		Supplier supplier = serviceDao.getSupplier(1L);
+		assertThrows(NotFoundException.class, () -> serviceDao.getSupplier(1L));
 
-		assertNull(supplier);
 		verify(supplierDao, times(1)).getSupplier(anyLong());
 	}
 

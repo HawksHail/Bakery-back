@@ -4,6 +4,7 @@ package com.cts.capstone.controller;
 import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.exception.NotFoundException;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.model.OrderDetails;
@@ -19,8 +20,7 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
@@ -59,13 +59,9 @@ class CartControllerTest {
 	@Test
 	void getCustomer_notFound() {
 		when(service.getCustomer(anyString()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = cartController.getCustomer("id123");
-		Customer actual = gson.fromJson(json, Customer.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> cartController.getCustomer("id123"));
 	}
 
 	@Test
@@ -116,13 +112,9 @@ class CartControllerTest {
 	@Test
 	void getOrderDetails_notFound() {
 		when(service.getOrderDetails(anyLong()))
-				.thenReturn(null);
+				.thenThrow(new NotFoundException());
 
-		String json = cartController.getOrderDetails(1L);
-		OrderDetails actual = gson.fromJson(json, OrderDetails.class);
-
-		assertEquals("null", json);
-		assertNull(actual);
+		assertThrows(NotFoundException.class, () -> cartController.getOrderDetails(1L));
 	}
 
 	@Test
