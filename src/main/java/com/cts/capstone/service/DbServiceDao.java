@@ -132,6 +132,11 @@ public class DbServiceDao implements DbService {
 	}
 
 	@Override
+	public boolean createOrderDetailsList(OrderDetails[] details) {
+		return orderDetailsDao.createOrderDetailsList(details);
+	}
+
+	@Override
 	public OrderDetails getOrderDetails(long orderDetailsId) {
 		return orderDetailsDao.getOrderDetails(orderDetailsId);
 	}
@@ -215,4 +220,5 @@ public class DbServiceDao implements DbService {
 	public List<OrderDetails> getDetailsForOrder(long orderId) {
 		return orderDetailsDao.getOrderDetailsForOrder(orderId);
 	}
+
 }

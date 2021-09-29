@@ -106,6 +106,37 @@ class OrderDetailsDaoTest {
 	}
 
 	@Test
+	void createOrderDetailsList() {
+		OrderDetails[] expected = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(1L, 3L, 4)
+				.build().toArray(new OrderDetails[0]);
+		when(nJdbcTemplate.batchUpdate(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource[]>any()))
+				.thenReturn(new int[expected.length]);
+
+		boolean b = orderDetailsDao.createOrderDetailsList(expected);
+
+		assertTrue(b);
+		verify(nJdbcTemplate, times(1))
+				.batchUpdate(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource[]>any());
+	}
+
+	@Test
+	void createOrderDetailsList_duplicateID() {
+		OrderDetails[] expected = new OrderDetailsBuilder()
+				.w(1L, 2L, 5)
+				.w(1L, 3L, 4)
+				.build().toArray(new OrderDetails[0]);
+		when(nJdbcTemplate.batchUpdate(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource[]>any()))
+				.thenThrow(new DuplicateKeyException("Duplicate primary key"));
+
+		assertThrows(CreationException.class, () -> orderDetailsDao.createOrderDetailsList(expected));
+
+		verify(nJdbcTemplate, times(1))
+				.batchUpdate(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource[]>any());
+	}
+
+	@Test
 	void updateOrderDetails() {
 		OrderDetails expected = OrderDetailsBuilder.of(1L, 2L, 5);
 		when(nJdbcTemplate.update(anyString(), ArgumentMatchers.<BeanPropertySqlParameterSource>any()))

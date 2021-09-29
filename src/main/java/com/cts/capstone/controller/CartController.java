@@ -13,14 +13,9 @@ import java.util.List;
 public class CartController {
 
 	@Autowired
-	private Gson gson;
-
-	public void setGson(Gson gson) {
-		this.gson = gson;
-	}
-
-	@Autowired
 	DbService service;
+	@Autowired
+	private Gson gson;
 
 	public CartController() {
 	}
@@ -29,6 +24,9 @@ public class CartController {
 		this.service = service;
 	}
 
+	public void setGson(Gson gson) {
+		this.gson = gson;
+	}
 
 	/**
 	 * Get all customers
@@ -122,21 +120,21 @@ public class CartController {
 	}
 
 	/**
-	 * Create a order details
+	 * Create order details with an array
 	 *
-	 * @param details details to create
+	 * @param details array of details to create
 	 * @return details if successful, else null
 	 */
 	@PostMapping(value = {"orderdetails", "orderDetails"})
-	public OrderDetails createOrderDetails(@RequestBody OrderDetails details) {
-		if (!service.createOrderDetails(details)) {
+	public OrderDetails[] createOrderDetails(@RequestBody OrderDetails[] details) {
+		if (!service.createOrderDetailsList(details)) {
 			return null;
 		}
 		return details;
 	}
 
 	/**
-	 * Update a order details
+	 * Update an order details
 	 *
 	 * @param details details to update
 	 * @return details if successful, else null

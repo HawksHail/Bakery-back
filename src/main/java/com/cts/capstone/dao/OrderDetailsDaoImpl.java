@@ -49,6 +49,22 @@ public class OrderDetailsDaoImpl implements OrderDetailsDao {
 	}
 
 	@Override
+	public boolean createOrderDetailsList(OrderDetails[] details) {
+		int[] i;
+		try {
+			BeanPropertySqlParameterSource[] arr = new BeanPropertySqlParameterSource[details.length];
+			for (int j = 0; j < details.length; j++) {
+				arr[j] = new BeanPropertySqlParameterSource(details[j]);
+			}
+			i = nJdbcTemplate.batchUpdate("INSERT INTO orderdetails(orderId, productId, quantity) " +
+					"VALUES(:orderId, :productId, :quantity)", arr);
+		} catch (DuplicateKeyException e) {
+			throw new CreationException("order details list", details[0].getOrderId(), e);
+		}
+		return i.length == details.length;
+	}
+
+	@Override
 	public OrderDetails getOrderDetails(long orderId) {
 		try {
 			return nJdbcTemplate.getJdbcTemplate().queryForObject("SELECT * FROM orderdetails WHERE orderid=?", rowMapper, orderId);

@@ -38,6 +38,8 @@ public interface DbService {
 
 	boolean createOrderDetails(OrderDetails od);
 
+	boolean createOrderDetailsList(OrderDetails[] details);
+
 	OrderDetails getOrderDetails(long orderDetailsId);
 
 	List<OrderDetails> getAllOrderDetails();

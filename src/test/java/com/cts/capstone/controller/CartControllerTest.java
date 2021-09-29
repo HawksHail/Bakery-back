@@ -272,22 +272,24 @@ class CartControllerTest {
 
 	@Test
 	void createOrderDetails() {
-		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
-		when(service.createOrderDetails(any(OrderDetails.class)))
+		OrderDetails[] expected = new OrderDetailsBuilder()
+				.w(1, 2, 3)
+				.build().toArray(new OrderDetails[0]);
+		when(service.createOrderDetailsList(any(OrderDetails[].class)))
 				.thenReturn(true);
 
-		OrderDetails actual = cartController.createOrderDetails(expected);
+		OrderDetails[] actual = cartController.createOrderDetails(expected);
 
 		assertEquals(expected, actual);
 	}
 
 	@Test
 	void createOrderDetails_AlreadyExists() {
-		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		OrderDetails[] expected = new OrderDetailsBuilder().w(1, 2, 3).build().toArray(new OrderDetails[0]);
 		when(service.createOrderDetails(any(OrderDetails.class)))
 				.thenReturn(false);
 
-		OrderDetails actual = cartController.createOrderDetails(expected);
+		OrderDetails[] actual = cartController.createOrderDetails(expected);
 
 		assertNull(actual);
 	}
@@ -305,11 +307,11 @@ class CartControllerTest {
 
 	@Test
 	void updateOrderDetails_failed() {
-		OrderDetails expected = OrderDetailsBuilder.of(1, 2, 3);
+		OrderDetails[] expected = new OrderDetailsBuilder().w(1, 2, 3).build().toArray(new OrderDetails[0]);
 		when(service.updateOrderDetails(any(OrderDetails.class)))
 				.thenReturn(false);
 
-		OrderDetails actual = cartController.createOrderDetails(expected);
+		OrderDetails[] actual = cartController.createOrderDetails(expected);
 
 		assertNull(actual);
 	}
