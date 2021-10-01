@@ -18,12 +18,8 @@ public class OrderDetailsService {
 		this.orderDetailsRepository = orderDetailsRepository;
 	}
 
-	public OrderDetailsRepository getOrderDetailsRepository() {
-		return orderDetailsRepository;
-	}
-
-	public void setOrderDetailsService(OrderDetailsRepository categoryRepository) {
-		this.orderDetailsRepository = categoryRepository;
+	public void setOrderDetailsService(OrderDetailsRepository orderDetailsRepository) {
+		this.orderDetailsRepository = orderDetailsRepository;
 	}
 
 	public List<OrderDetails> findAll() {
@@ -34,8 +30,12 @@ public class OrderDetailsService {
 		return orderDetailsRepository.findById(id).orElseThrow(() -> new OrderDetailsNotFoundException(id));
 	}
 
-	public OrderDetails add(OrderDetails category) {
-		return orderDetailsRepository.save(category);
+	public OrderDetails add(OrderDetails orderDetails) {
+		return orderDetailsRepository.save(orderDetails);
+	}
+
+	public List<OrderDetails> addList(List<OrderDetails> list) {
+		return orderDetailsRepository.saveAll(list);
 	}
 
 	public OrderDetails findByOrderIdAndProductId(Long orderId, Long productId) {

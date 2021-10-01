@@ -18,10 +18,6 @@ public class SupplierController {
 		this.supplierService = supplierService;
 	}
 
-	public SupplierService getSupplierService() {
-		return supplierService;
-	}
-
 	public void setSupplierService(SupplierService categoryService) {
 		this.supplierService = categoryService;
 	}

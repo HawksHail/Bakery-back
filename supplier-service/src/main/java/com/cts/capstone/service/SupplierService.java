@@ -18,10 +18,6 @@ public class SupplierService {
 		this.supplierRepository = supplierRepository;
 	}
 
-	public SupplierRepository getSupplierRepository() {
-		return supplierRepository;
-	}
-
 	public void setSupplierService(SupplierRepository categoryRepository) {
 		this.supplierRepository = categoryRepository;
 	}

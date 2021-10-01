@@ -17,10 +17,6 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
-	public ProductRepository getProductRepository() {
-		return productRepository;
-	}
-
 	public void setProductService(ProductRepository categoryRepository) {
 		this.productRepository = categoryRepository;
 	}

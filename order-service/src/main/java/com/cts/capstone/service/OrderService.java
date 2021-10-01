@@ -18,12 +18,8 @@ public class OrderService {
 		this.orderRepository = orderRepository;
 	}
 
-	public OrderRepository getOrderRepository() {
-		return orderRepository;
-	}
-
-	public void setOrderService(OrderRepository categoryRepository) {
-		this.orderRepository = categoryRepository;
+	public void setOrderService(OrderRepository orderRepository) {
+		this.orderRepository = orderRepository;
 	}
 
 	public List<Order> findAll() {
@@ -34,8 +30,8 @@ public class OrderService {
 		return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
 	}
 
-	public Order add(Order category) {
-		return orderRepository.save(category);
+	public Order add(Order order) {
+		return orderRepository.save(order);
 	}
 
 	public List<Order> findByCustomerId(String customerId) {

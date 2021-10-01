@@ -18,10 +18,6 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	public ProductService getProductService() {
-		return productService;
-	}
-
 	public void setProductService(ProductService categoryService) {
 		this.productService = categoryService;
 	}

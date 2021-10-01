@@ -21,6 +21,14 @@ class OrderTest {
 	}
 
 	@Test
+	void order() {
+		Order order = OrderBuilder.of(1234, "id123", 2020, 9, 2);
+		assertEquals(1234, order.getOrderId());
+		assertEquals("id123", order.getCustomerId());
+		assertEquals(LocalDate.of(2020, 9, 2), order.getOrderDate());
+	}
+
+	@Test
 	void setOrderId() {
 		order.setOrderId(567L);
 		assertEquals(567L, order.getOrderId());

@@ -18,10 +18,6 @@ public class CustomerService {
 		this.categoryRepository = categoryRepository;
 	}
 
-	public CustomerRepository getCustomerRepository() {
-		return categoryRepository;
-	}
-
 	public void setCustomerService(CustomerRepository categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}

@@ -18,10 +18,6 @@ public class OrderDetailsController {
 		this.orderDetailsService = orderDetailsService;
 	}
 
-	public OrderDetailsService getOrderDetailsService() {
-		return orderDetailsService;
-	}
-
 	public void setOrderDetailsService(OrderDetailsService orderDetailsService) {
 		this.orderDetailsService = orderDetailsService;
 	}
@@ -37,8 +33,8 @@ public class OrderDetailsController {
 	}
 
 	@PostMapping()
-	public OrderDetails addOrder(@RequestBody OrderDetails orderDetails) {
-		return orderDetailsService.add(orderDetails);
+	public List<OrderDetails> addOrderDetailsList(@RequestBody List<OrderDetails> list) {
+		return orderDetailsService.addList(list);
 	}
 
 	@GetMapping(value = "{orderId}/product/{productId}")
