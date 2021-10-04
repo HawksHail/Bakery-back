@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class SupplierControllerTest {
 
 	@Mock
@@ -35,7 +37,7 @@ class SupplierControllerTest {
 		when(service.findAll())
 				.thenReturn(expected);
 
-		List<Supplier> actual = controller.getAllCategories();
+		List<Supplier> actual = controller.getAllSuppliers();
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).findAll();
@@ -59,7 +61,7 @@ class SupplierControllerTest {
 		when(service.add(any(Supplier.class)))
 				.thenReturn(expected);
 
-		Supplier actual = controller.addSupplier(expected);
+		Supplier actual = controller.addSupplier(expected).getBody();
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).add(any(Supplier.class));

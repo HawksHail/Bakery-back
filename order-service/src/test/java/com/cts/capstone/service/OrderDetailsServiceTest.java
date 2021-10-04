@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.builder.OrderDetailsBuilder;
-import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.repository.OrderDetailsRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
@@ -62,8 +61,9 @@ class OrderDetailsServiceTest {
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(OrderDetailsNotFoundException.class, () -> service.findById(123L));
+		OrderDetails actual = service.findById(123L);
 
+		assertNull(actual);
 		verify(repository, times(1)).findById(anyLong());
 	}
 
@@ -111,8 +111,9 @@ class OrderDetailsServiceTest {
 		when(repository.findByOrderIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(OrderDetailsNotFoundException.class, () -> service.findByOrderIdAndProductId(1234L, 1234L));
+		OrderDetails actual = service.findByOrderIdAndProductId(1234L, 1234L);
 
+		assertNull(actual);
 		verify(repository, times(1)).findByOrderIdAndProductId(anyLong(), anyLong());
 	}
 

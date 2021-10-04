@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class CustomerControllerTest {
 
 	@Mock
@@ -59,7 +61,7 @@ class CustomerControllerTest {
 		when(service.add(any(Customer.class)))
 				.thenReturn(expected);
 
-		Customer actual = controller.addCustomer(expected);
+		Customer actual = controller.addCustomer(expected).getBody();
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).add(any(Customer.class));

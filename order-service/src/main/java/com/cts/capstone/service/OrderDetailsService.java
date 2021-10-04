@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.repository.OrderDetailsRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class OrderDetailsService {
 	}
 
 	public OrderDetails findById(Long id) {
-		return orderDetailsRepository.findById(id).orElseThrow(() -> new OrderDetailsNotFoundException(id));
+		return orderDetailsRepository.findById(id).orElse(null);
 	}
 
 	public OrderDetails add(OrderDetails orderDetails) {
@@ -39,7 +38,7 @@ public class OrderDetailsService {
 	}
 
 	public OrderDetails findByOrderIdAndProductId(Long orderId, Long productId) {
-		return orderDetailsRepository.findByOrderIdAndProductId(orderId, productId).orElseThrow(() -> new OrderDetailsNotFoundException(orderId, productId));
+		return orderDetailsRepository.findByOrderIdAndProductId(orderId, productId).orElse(null);
 	}
 
 	public List<OrderDetails> findAllById(Long id) {

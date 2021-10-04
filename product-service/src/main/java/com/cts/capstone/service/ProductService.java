@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class ProductService {
 	}
 
 	public Product findById(Long id) {
-		return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+		return productRepository.findById(id).orElse(null);
 	}
 
 	public Product add(Product category) {

@@ -1,9 +1,13 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.service.OrderDetailsService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -33,12 +37,21 @@ public class OrderDetailsController {
 	}
 
 	@PostMapping()
-	public List<OrderDetails> addOrderDetailsList(@RequestBody List<OrderDetails> list) {
-		return orderDetailsService.addList(list);
+	public ResponseEntity<List<OrderDetails>> addOrderDetailsList(@RequestBody List<OrderDetails> list) {
+		List<OrderDetails> added = orderDetailsService.addList(list);
+		if (added == null) {
+			throw new OrderDetailsNotFoundException();
+		}
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.get(0).getOrderId()).toUri();
+		return ResponseEntity.created(location).body(added);
 	}
 
 	@GetMapping(value = "{orderId}/product/{productId}")
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
-		return orderDetailsService.findByOrderIdAndProductId(orderId, productId);
+		OrderDetails find = orderDetailsService.findByOrderIdAndProductId(orderId, productId);
+		if (find == null) {
+			throw new OrderDetailsNotFoundException(orderId, productId);
+		}
+		return find;
 	}
 }

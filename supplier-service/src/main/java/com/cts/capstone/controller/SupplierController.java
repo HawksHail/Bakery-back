@@ -1,14 +1,18 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.exception.SupplierNotFoundException;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.SupplierService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("category")
+@RequestMapping("supplier")
 public class SupplierController {
 
 	private SupplierService supplierService;
@@ -18,22 +22,31 @@ public class SupplierController {
 		this.supplierService = supplierService;
 	}
 
-	public void setSupplierService(SupplierService categoryService) {
-		this.supplierService = categoryService;
+	public void setSupplierService(SupplierService supplierService) {
+		this.supplierService = supplierService;
 	}
 
 	@GetMapping()
-	public List<Supplier> getAllCategories() {
+	public List<Supplier> getAllSuppliers() {
 		return supplierService.findAll();
 	}
 
 	@GetMapping("{id}")
 	public Supplier getSupplier(@PathVariable Long id) {
-		return supplierService.findById(id);
+		Supplier find = supplierService.findById(id);
+		if (find == null) {
+			throw new SupplierNotFoundException(id);
+		}
+		return find;
 	}
 
 	@PostMapping()
-	public Supplier addSupplier(@RequestBody Supplier category) {
-		return supplierService.add(category);
+	public ResponseEntity<Supplier> addSupplier(@RequestBody Supplier supplier) {
+		Supplier added = supplierService.add(supplier);
+		if (added == null) {
+			throw new SupplierNotFoundException(supplier.getSupplierId());
+		}
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getSupplierId()).toUri();
+		return ResponseEntity.created(location).body(added);
 	}
 }

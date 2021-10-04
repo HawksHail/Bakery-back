@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.builder.SupplierBuilder;
-import com.cts.capstone.exception.SupplierNotFoundException;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.repository.SupplierRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
@@ -61,8 +60,9 @@ class SupplierServiceTest {
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(SupplierNotFoundException.class, () -> service.findById(123L));
+		Supplier actual = service.findById(123L);
 
+		assertNull(actual);
 		verify(repository, times(1)).findById(anyLong());
 	}
 

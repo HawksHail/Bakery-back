@@ -1,9 +1,13 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.exception.CategoryNotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.service.CategoryService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -29,11 +33,20 @@ public class CategoryController {
 
 	@GetMapping("{id}")
 	public Category getCategory(@PathVariable Long id) {
-		return categoryService.findById(id);
+		Category find = categoryService.findById(id);
+		if (find == null) {
+			throw new CategoryNotFoundException(id);
+		}
+		return find;
 	}
 
 	@PostMapping()
-	public Category addCategory(@RequestBody Category category) {
-		return categoryService.add(category);
+	public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+		Category added = categoryService.add(category);
+		if (added == null) {
+			throw new CategoryNotFoundException(category.getCategoryId());
+		}
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCategoryId()).toUri();
+		return ResponseEntity.created(location).body(added);
 	}
 }

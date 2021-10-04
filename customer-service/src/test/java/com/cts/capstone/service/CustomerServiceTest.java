@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.builder.CustomerBuilder;
-import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
@@ -61,8 +60,9 @@ class CustomerServiceTest {
 		when(repository.findByCustomerId(anyString()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(CustomerNotFoundException.class, () -> service.findById("id123"));
+		Customer actual = service.findById("id123");
 
+		assertNull(actual);
 		verify(repository, times(1)).findByCustomerId(anyString());
 	}
 

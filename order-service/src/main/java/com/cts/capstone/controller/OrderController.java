@@ -1,9 +1,13 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.exception.OrderNotFoundException;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.service.OrderService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 
@@ -29,12 +33,21 @@ public class OrderController {
 
 	@GetMapping("{id}")
 	public Order getOrder(@PathVariable Long id) {
-		return orderService.findById(id);
+		Order find = orderService.findById(id);
+		if (find == null) {
+			throw new OrderNotFoundException(id);
+		}
+		return find;
 	}
 
 	@PostMapping()
-	public Order addOrder(@RequestBody Order order) {
-		return orderService.add(order);
+	public ResponseEntity<Order> addOrder(@RequestBody Order order) {
+		Order added = orderService.add(order);
+		if (added == null) {
+			throw new OrderNotFoundException(order.getOrderId());
+		}
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();
+		return ResponseEntity.created(location).body(added);
 	}
 
 	@GetMapping("customer/{customerId}")

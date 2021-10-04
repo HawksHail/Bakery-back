@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class OrderDetailsControllerTest {
 
 	@Mock
@@ -62,7 +64,7 @@ class OrderDetailsControllerTest {
 		when(service.addList(any()))
 				.thenReturn(expected);
 
-		List<OrderDetails> actual = controller.addOrderDetailsList(expected);
+		List<OrderDetails> actual = controller.addOrderDetailsList(expected).getBody();
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).addList(any());

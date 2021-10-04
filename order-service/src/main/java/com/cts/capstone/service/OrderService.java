@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.OrderNotFoundException;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.repository.OrderRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class OrderService {
 	}
 
 	public Order findById(Long id) {
-		return orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+		return orderRepository.findById(id).orElse(null);
 	}
 
 	public Order add(Order order) {

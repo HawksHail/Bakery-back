@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -11,26 +10,26 @@ import java.util.List;
 @Service
 public class CustomerService {
 
-	private CustomerRepository categoryRepository;
+	private CustomerRepository customerRepository;
 
-	public CustomerService(CustomerRepository categoryRepository) {
+	public CustomerService(CustomerRepository customerRepository) {
 		super();
-		this.categoryRepository = categoryRepository;
+		this.customerRepository = customerRepository;
 	}
 
-	public void setCustomerService(CustomerRepository categoryRepository) {
-		this.categoryRepository = categoryRepository;
+	public void setCustomerService(CustomerRepository customerRepository) {
+		this.customerRepository = customerRepository;
 	}
 
 	public List<Customer> findAll() {
-		return categoryRepository.findAll();
+		return customerRepository.findAll();
 	}
 
 	public Customer findById(String id) {
-		return categoryRepository.findByCustomerId(id).orElseThrow(() -> new CustomerNotFoundException(id));
+		return customerRepository.findByCustomerId(id).orElse(null);
 	}
 
-	public Customer add(Customer category) {
-		return categoryRepository.save(category);
+	public Customer add(Customer customer) {
+		return customerRepository.save(customer);
 	}
 }

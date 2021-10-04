@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.builder.CategoryBuilder;
-import com.cts.capstone.exception.CategoryNotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
@@ -61,8 +60,9 @@ class CategoryServiceTest {
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(CategoryNotFoundException.class, () -> service.findById(123L));
+		Category actual = service.findById(123L);
 
+		assertNull(actual);
 		verify(repository, times(1)).findById(anyLong());
 	}
 

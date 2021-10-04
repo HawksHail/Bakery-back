@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.SupplierNotFoundException;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.repository.SupplierRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class SupplierService {
 	}
 
 	public Supplier findById(Long id) {
-		return supplierRepository.findById(id).orElseThrow(() -> new SupplierNotFoundException(id));
+		return supplierRepository.findById(id).orElse(null);
 	}
 
 	public Supplier add(Supplier category) {

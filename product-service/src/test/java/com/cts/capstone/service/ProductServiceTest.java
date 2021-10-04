@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.builder.ProductBuilder;
-import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 
@@ -61,8 +60,9 @@ class ProductServiceTest {
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		assertThrows(ProductNotFoundException.class, () -> service.findById(123L));
+		Product actual = service.findById(123L);
 
+		assertNull(actual);
 		verify(repository, times(1)).findById(anyLong());
 	}
 

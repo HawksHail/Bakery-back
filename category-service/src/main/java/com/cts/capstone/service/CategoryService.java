@@ -1,6 +1,5 @@
 package com.cts.capstone.service;
 
-import com.cts.capstone.exception.CategoryNotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class CategoryService {
 	}
 
 	public Category findById(Long id) {
-		return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+		return categoryRepository.findById(id).orElse(null);
 	}
 
 	public Category add(Category category) {

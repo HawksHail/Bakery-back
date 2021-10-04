@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 class CategoryControllerTest {
 
 	@Mock
@@ -59,7 +61,7 @@ class CategoryControllerTest {
 		when(service.add(any(Category.class)))
 				.thenReturn(expected);
 
-		Category actual = controller.addCategory(expected);
+		Category actual = controller.addCategory(expected).getBody();
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).add(any(Category.class));
