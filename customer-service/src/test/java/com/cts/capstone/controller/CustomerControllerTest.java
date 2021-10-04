@@ -29,7 +29,7 @@ class CustomerControllerTest {
 	}
 
 	@Test
-	void getAllCategories() {
+	void getAllCustomers() {
 		List<Customer> expected = new CustomerBuilder()
 				.w("id123", "name", "description", "street", "city", "state")
 				.w("id124", "name2", "description2", "street2", "city2", "state2")
