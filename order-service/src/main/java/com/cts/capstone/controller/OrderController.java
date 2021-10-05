@@ -47,7 +47,7 @@ public class OrderController {
 		if (added == null) {
 			throw new OrderNotFoundException(order.getOrderId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getOrderId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 

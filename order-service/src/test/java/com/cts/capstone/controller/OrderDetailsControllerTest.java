@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -64,9 +68,11 @@ class OrderDetailsControllerTest {
 		when(service.addList(any()))
 				.thenReturn(expected);
 
-		List<OrderDetails> actual = controller.addOrderDetailsList(expected).getBody();
+		ResponseEntity<List<OrderDetails>> actual = controller.addOrderDetailsList(expected);
 
-		assertEquals(expected, actual);
+		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+		assertEquals(expected, actual.getBody());
+		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.get(0).getOrderId())));
 		verify(service, times(1)).addList(any());
 	}
 

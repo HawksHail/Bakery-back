@@ -8,10 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -61,9 +65,11 @@ class SupplierControllerTest {
 		when(service.add(any(Supplier.class)))
 				.thenReturn(expected);
 
-		Supplier actual = controller.addSupplier(expected).getBody();
+		ResponseEntity<Supplier> actual = controller.addSupplier(expected);
 
-		assertEquals(expected, actual);
+		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+		assertEquals(expected, actual.getBody());
+		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getSupplierId())));
 		verify(service, times(1)).add(any(Supplier.class));
 	}
 }
