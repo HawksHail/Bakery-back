@@ -1,5 +1,7 @@
 package com.cts.capstone.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ public class Product {
 	private long productId;
 
 	@Column(name = "productname", nullable = false, length = 40)
+	@Length(max = 40, message = "Product name max length 40")
 	private String productName;
 
 	@Column(name = "supplierid")
@@ -25,6 +28,7 @@ public class Product {
 	private long categoryId;
 
 	@Column(name = "unitprice", precision = 7, scale = 2)
+
 	private BigDecimal unitPrice;
 
 	public Product() {

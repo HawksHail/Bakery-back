@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -41,12 +42,12 @@ public class ProductController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
 		if (added == null) {
 			throw new ProductNotFoundException(product.getProductId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCategoryId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getProductId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 

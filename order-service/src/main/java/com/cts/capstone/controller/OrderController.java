@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class OrderController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Order> addOrder(@RequestBody Order order) {
+	public ResponseEntity<Order> addOrder(@Valid @RequestBody Order order) {
 		Order added = orderService.add(order);
 		if (added == null) {
 			throw new OrderNotFoundException(order.getOrderId());

@@ -1,5 +1,7 @@
 package com.cts.capstone.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +18,7 @@ public class Order {
 	private long orderId;
 
 	@Column(name = "customerid", length = 5)
+	@Length(max = 5, message = "Customer ID max length 40")
 	private String customerId;
 
 	@Column(name = "orderdate")

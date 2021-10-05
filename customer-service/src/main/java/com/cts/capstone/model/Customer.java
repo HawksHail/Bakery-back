@@ -1,5 +1,7 @@
 package com.cts.capstone.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,21 +14,27 @@ public class Customer {
 
 	@Id
 	@Column(name = "customerid", length = 5)
+	@Length(max = 5, min = 5, message = "Customer ID must be length 5")
 	private String customerId;
 
 	@Column(name = "companyname", nullable = false, length = 40)
+	@Length(max = 40, message = "Company name max length 40")
 	private String companyName;
 
 	@Column(name = "contactname", length = 30)
+	@Length(max = 30, message = "Contact name max length 40")
 	private String contactName;
 
 	@Column(name = "street", length = 60)
+	@Length(max = 60, message = "Street max length 40")
 	private String street;
 
 	@Column(name = "city", length = 15)
+	@Length(max = 15, message = "City max length 40")
 	private String city;
 
 	@Column(name = "state", length = 15)
+	@Length(max = 15, message = "State max length 40")
 	private String state;
 
 	public Customer() {

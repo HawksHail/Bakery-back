@@ -1,7 +1,7 @@
 package com.cts.capstone.advice;
 
+import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ExceptionResponse;
-import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 @RestController
-class OrderDetailsResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+class CustomerResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(OrderDetailsNotFoundException.class)
-	public final ResponseEntity<ExceptionResponse> handleNotFoundException(OrderDetailsNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(CustomerNotFoundException.class)
+	public final ResponseEntity<ExceptionResponse> handleNotFoundException(CustomerNotFoundException ex, WebRequest request) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(),
 				HttpStatus.NOT_FOUND,
 				"Not Found",

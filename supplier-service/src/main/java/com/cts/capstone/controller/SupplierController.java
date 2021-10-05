@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class SupplierController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Supplier> addSupplier(@RequestBody Supplier supplier) {
+	public ResponseEntity<Supplier> addSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
 		if (added == null) {
 			throw new SupplierNotFoundException(supplier.getSupplierId());

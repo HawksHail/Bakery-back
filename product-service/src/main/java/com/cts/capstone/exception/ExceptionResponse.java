@@ -1,17 +1,20 @@
 package com.cts.capstone.exception;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.http.HttpStatus;
+
 import java.time.LocalDateTime;
 
 public class ExceptionResponse {
 
 	private LocalDateTime timestamp;
-	private int status;
+	private HttpStatus status;
 	private String error;
 	private String message;
 	private String path;
 
-	public ExceptionResponse(LocalDateTime timestamp, int status, String error, String message, String path) {
+	public ExceptionResponse(LocalDateTime timestamp, HttpStatus status, String error, String message, String path) {
 		this.timestamp = timestamp;
 		this.status = status;
 		this.error = error;
@@ -27,12 +30,17 @@ public class ExceptionResponse {
 		this.timestamp = timestamp;
 	}
 
-	public int getStatus() {
-		return status;
+	public String getStatus() {
+		return status.getReasonPhrase();
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(HttpStatus status) {
 		this.status = status;
+	}
+
+	@JsonIgnore
+	public HttpStatus getStatusObj() {
+		return status;
 	}
 
 	public String getError() {

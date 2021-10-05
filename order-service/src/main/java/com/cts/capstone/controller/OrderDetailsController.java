@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class OrderDetailsController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<List<OrderDetails>> addOrderDetailsList(@RequestBody List<OrderDetails> list) {
+	public ResponseEntity<List<OrderDetails>> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
 		List<OrderDetails> added = orderDetailsService.addList(list);
 		if (added == null) {
 			throw new OrderDetailsNotFoundException();
