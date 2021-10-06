@@ -68,7 +68,7 @@ class OrderDetailsControllerTest {
 		when(service.addList(any()))
 				.thenReturn(expected);
 
-		ResponseEntity<List<OrderDetails>> actual = controller.addOrderDetailsList(expected);
+		ResponseEntity<Object> actual = controller.addOrderDetailsList(expected);
 
 		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
 		assertEquals(expected, actual.getBody());

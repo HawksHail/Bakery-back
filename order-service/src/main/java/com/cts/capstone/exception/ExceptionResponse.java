@@ -22,6 +22,10 @@ public class ExceptionResponse {
 		this.path = path;
 	}
 
+	public static ExceptionResponse of(HttpStatus status, String error, String message, String path) {
+		return new ExceptionResponse(LocalDateTime.now(), status, error, message, path);
+	}
+
 	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}

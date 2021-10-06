@@ -1,8 +1,10 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.service.OrderDetailsService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,7 +40,10 @@ public class OrderDetailsController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<List<OrderDetails>> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
+	public ResponseEntity<Object> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
+		if (list.size() < 1) {
+			return ResponseEntity.badRequest().body(ExceptionResponse.of(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), "Empty list", "order/details"));
+		}
 		List<OrderDetails> added = orderDetailsService.addList(list);
 		if (added == null) {
 			throw new OrderDetailsNotFoundException();
