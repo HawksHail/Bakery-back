@@ -23,4 +23,4 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Test with Maven
-        run: mvn -B -U verify --file pom.xml
+        run: ./backend/mvn -B -U verify --file pom.xml
