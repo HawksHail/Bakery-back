@@ -20,6 +20,10 @@ public class ProductBuilder {
 		return new Product();
 	}
 
+	public static Product of(int id, String name, String unitPrice) {
+		return of(id, name, new Supplier(), new Category(), unitPrice);
+	}
+
 	public ProductBuilder w(long id, String name, Supplier supplier, Category category, String unitPrice) {
 		list.add(of(id, name, supplier, category, unitPrice));
 		return this;
@@ -31,5 +35,10 @@ public class ProductBuilder {
 
 	public List<Product> build() {
 		return this.list;
+	}
+
+	public ProductBuilder w(int id, String name, String unitPrice) {
+		list.add(of(id, name, new Supplier(), new Category(), unitPrice));
+		return this;
 	}
 }
