@@ -19,8 +19,10 @@ public class Product {
 	@Length(max = 40, message = "Product name max length 40")
 	private String productName;
 
-	@Column(name = "supplierid")
-	private long supplierId;
+	@ManyToOne
+	@JoinColumn(name = "supplierid")
+	@JsonIgnoreProperties("productList")
+	private Supplier supplier;
 
 	@ManyToOne
 	@JoinColumn(name = "categoryid")
@@ -34,12 +36,20 @@ public class Product {
 		//Empty
 	}
 
-	public Product(long id, String productName, long supplierId, Category category, BigDecimal unitPrice) {
+	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice) {
 		this.id = id;
 		this.productName = productName;
-		this.supplierId = supplierId;
+		this.supplier = supplier;
 		this.category = category;
 		this.unitPrice = unitPrice;
+	}
+
+	public Supplier getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
 	}
 
 	public long getId() {
@@ -56,14 +66,6 @@ public class Product {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
-	}
-
-	public long getSupplierId() {
-		return supplierId;
-	}
-
-	public void setSupplierId(long supplierId) {
-		this.supplierId = supplierId;
 	}
 
 	public Category getCategory() {
@@ -88,7 +90,7 @@ public class Product {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, productName, supplierId, category, unitPrice);
+		return Objects.hash(id, productName, supplier, category, unitPrice);
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return id == product.id && supplierId == product.supplierId && Objects.equals(productName, product.productName) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice);
+		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice);
 	}
 
 	@Override
@@ -104,7 +106,7 @@ public class Product {
 		return "Product{" +
 				"id=" + id +
 				", productName='" + productName + '\'' +
-				", supplierId=" + supplierId +
+				", supplier=" + supplier +
 				", category=" + category +
 				", unitPrice=" + unitPrice +
 				'}';

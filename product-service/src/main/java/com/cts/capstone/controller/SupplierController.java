@@ -46,9 +46,9 @@ public class SupplierController {
 	public ResponseEntity<Supplier> addSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
 		if (added == null) {
-			throw new SupplierNotFoundException(supplier.getSupplierId());
+			throw new SupplierNotFoundException(supplier.getId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getSupplierId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 }

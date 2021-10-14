@@ -2,6 +2,7 @@ package com.cts.capstone.model;
 
 import com.cts.capstone.builder.CategoryBuilder;
 import com.cts.capstone.builder.ProductBuilder;
+import com.cts.capstone.builder.SupplierBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,7 @@ class ProductTest {
 
 	@BeforeEach
 	void setUp() {
-		product = ProductBuilder.of(123L, "name", 456L, new Category(), "765");
+		product = ProductBuilder.of(123L, "name", new Supplier(), new Category(), "765");
 	}
 
 	@Test
@@ -34,9 +35,17 @@ class ProductTest {
 	}
 
 	@Test
-	void setSupplierId() {
-		product.setSupplierId(654L);
-		assertEquals(654L, product.getSupplierId());
+	void setSupplier() {
+		Supplier s = SupplierBuilder.of(654L, "company name", "contact name");
+		product.setSupplier(s);
+		assertEquals(s, product.getSupplier());
+	}
+
+	@Test
+	void setCategory() {
+		Category c = CategoryBuilder.of(654L, "category name", "description");
+		product.setCategory(c);
+		assertEquals(c, product.getCategory());
 	}
 
 	@Test
@@ -53,9 +62,10 @@ class ProductTest {
 
 	@Test
 	void hashcodeAndEquals() {
+		Supplier s = SupplierBuilder.of(456L, "company name", "contact name");
 		Category c = CategoryBuilder.of(789L, "name", "description");
-		Product x = ProductBuilder.of(123L, "name", 456L, c, "765");
-		Product y = ProductBuilder.of(123L, "name", 456L, c, "765");
+		Product x = ProductBuilder.of(123L, "name", s, c, "765");
+		Product y = ProductBuilder.of(123L, "name", s, c, "765");
 		Product a = ProductBuilder.of();
 		Product b = ProductBuilder.of();
 

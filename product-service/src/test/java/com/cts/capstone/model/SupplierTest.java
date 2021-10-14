@@ -20,8 +20,8 @@ class SupplierTest {
 
 	@Test
 	void setSupplierId() {
-		supplier.setSupplierId(987L);
-		assertEquals(987L, supplier.getSupplierId());
+		supplier.setId(987L);
+		assertEquals(987L, supplier.getId());
 	}
 
 	@Test

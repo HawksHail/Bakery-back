@@ -1,11 +1,10 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +13,7 @@ public class Supplier {
 
 	@Id
 	@Column(name = "supplierid")
-	private long supplierId;
+	private long id;
 
 	@Column(name = "companyname", nullable = false, length = 40)
 	@Length(max = 40, message = "Company name max length 40")
@@ -24,22 +23,26 @@ public class Supplier {
 	@Length(max = 40, message = "Contact name max length 30")
 	private String contactName;
 
+	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("supplier")
+	private List<Product> productList;
+
 	public Supplier() {
 		//Empty
 	}
 
-	public Supplier(long supplierId, String companyName, String contactName) {
-		this.supplierId = supplierId;
+	public Supplier(long id, String companyName, String contactName) {
+		this.id = id;
 		this.companyName = companyName;
 		this.contactName = contactName;
 	}
 
-	public long getSupplierId() {
-		return supplierId;
+	public long getId() {
+		return id;
 	}
 
-	public void setSupplierId(long supplierId) {
-		this.supplierId = supplierId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getCompanyName() {
@@ -58,9 +61,17 @@ public class Supplier {
 		this.contactName = contactName;
 	}
 
+	public List<Product> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<Product> productList) {
+		this.productList = productList;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(supplierId, companyName, contactName);
+		return Objects.hash(id, companyName, contactName, productList);
 	}
 
 	@Override
@@ -68,15 +79,16 @@ public class Supplier {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Supplier supplier = (Supplier) o;
-		return supplierId == supplier.supplierId && Objects.equals(companyName, supplier.companyName) && Objects.equals(contactName, supplier.contactName);
+		return id == supplier.id && Objects.equals(companyName, supplier.companyName) && Objects.equals(contactName, supplier.contactName) && Objects.equals(productList, supplier.productList);
 	}
 
 	@Override
 	public String toString() {
 		return "Supplier{" +
-				"supplierId=" + supplierId +
+				"id=" + id +
 				", companyName='" + companyName + '\'' +
 				", contactName='" + contactName + '\'' +
+				", productList=" + productList +
 				'}';
 	}
 }

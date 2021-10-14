@@ -2,6 +2,7 @@ package com.cts.capstone.builder;
 
 import com.cts.capstone.model.Category;
 import com.cts.capstone.model.Product;
+import com.cts.capstone.model.Supplier;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,13 +20,13 @@ public class ProductBuilder {
 		return new Product();
 	}
 
-	public ProductBuilder w(long id, String name, long supplierId, Category category, String unitPrice) {
-		list.add(of(id, name, supplierId, category, unitPrice));
+	public ProductBuilder w(long id, String name, Supplier supplier, Category category, String unitPrice) {
+		list.add(of(id, name, supplier, category, unitPrice));
 		return this;
 	}
 
-	public static Product of(long id, String name, long supplierId, Category category, String unitPrice) {
-		return new Product(id, name, supplierId, category, new BigDecimal(unitPrice));
+	public static Product of(long id, String name, Supplier supplier, Category category, String unitPrice) {
+		return new Product(id, name, supplier, category, new BigDecimal(unitPrice));
 	}
 
 	public List<Product> build() {
