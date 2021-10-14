@@ -1,11 +1,9 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -15,7 +13,7 @@ public class Product {
 
 	@Id
 	@Column(name = "productid")
-	private long productId;
+	private long id;
 
 	@Column(name = "productname", nullable = false, length = 40)
 	@Length(max = 40, message = "Product name max length 40")
@@ -24,31 +22,32 @@ public class Product {
 	@Column(name = "supplierid")
 	private long supplierId;
 
-	@Column(name = "categoryid")
-	private long categoryId;
+	@ManyToOne
+	@JoinColumn(name = "categoryid")
+	@JsonIgnoreProperties("productList")
+	private Category category;
 
 	@Column(name = "unitprice", precision = 7, scale = 2)
-
 	private BigDecimal unitPrice;
 
 	public Product() {
 		//Empty
 	}
 
-	public Product(long productId, String productName, long supplierId, long categoryId, BigDecimal unitPrice) {
-		this.productId = productId;
+	public Product(long id, String productName, long supplierId, Category category, BigDecimal unitPrice) {
+		this.id = id;
 		this.productName = productName;
 		this.supplierId = supplierId;
-		this.categoryId = categoryId;
+		this.category = category;
 		this.unitPrice = unitPrice;
 	}
 
-	public long getProductId() {
-		return productId;
+	public long getId() {
+		return id;
 	}
 
-	public void setProductId(long productId) {
-		this.productId = productId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getProductName() {
@@ -67,12 +66,12 @@ public class Product {
 		this.supplierId = supplierId;
 	}
 
-	public long getCategoryId() {
-		return categoryId;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public BigDecimal getUnitPrice() {
@@ -89,7 +88,7 @@ public class Product {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(productId, productName, supplierId, categoryId, unitPrice);
+		return Objects.hash(id, productName, supplierId, category, unitPrice);
 	}
 
 	@Override
@@ -97,16 +96,16 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return productId == product.productId && supplierId == product.supplierId && categoryId == product.categoryId && Objects.equals(productName, product.productName) && Objects.equals(unitPrice, product.unitPrice);
+		return id == product.id && supplierId == product.supplierId && Objects.equals(productName, product.productName) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice);
 	}
 
 	@Override
 	public String toString() {
 		return "Product{" +
-				"productId=" + productId +
+				"id=" + id +
 				", productName='" + productName + '\'' +
 				", supplierId=" + supplierId +
-				", categoryId=" + categoryId +
+				", category=" + category +
 				", unitPrice=" + unitPrice +
 				'}';
 	}

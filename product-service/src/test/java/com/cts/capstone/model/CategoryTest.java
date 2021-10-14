@@ -20,8 +20,8 @@ class CategoryTest {
 
 	@Test
 	void setCategoryId() {
-		category.setCategoryId(123L);
-		assertEquals(123L, category.getCategoryId());
+		category.setId(123L);
+		assertEquals(123L, category.getId());
 	}
 
 	@Test

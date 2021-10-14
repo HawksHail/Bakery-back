@@ -1,11 +1,10 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,7 +13,7 @@ public class Category {
 
 	@Id
 	@Column(name = "categoryid")
-	private long categoryId;
+	private long id;
 
 	@Column(name = "categoryname", nullable = false, length = 15)
 	@Length(max = 15, message = "Category name max length of 15")
@@ -24,22 +23,26 @@ public class Category {
 	@Length(max = 255, message = "Description max length of 255")
 	private String description;
 
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("category")
+	private List<Product> productList;
+
 	public Category() {
 		//Empty
 	}
 
-	public Category(long categoryId, String categoryName, String description) {
-		this.categoryId = categoryId;
+	public Category(long id, String categoryName, String description) {
+		this.id = id;
 		this.categoryName = categoryName;
 		this.description = description;
 	}
 
-	public long getCategoryId() {
-		return categoryId;
+	public long getId() {
+		return id;
 	}
 
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getCategoryName() {
@@ -58,9 +61,17 @@ public class Category {
 		this.description = description;
 	}
 
+	public List<Product> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<Product> productList) {
+		this.productList = productList;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(categoryId, categoryName, description);
+		return Objects.hash(id, categoryName, description, productList);
 	}
 
 	@Override
@@ -68,15 +79,16 @@ public class Category {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Category category = (Category) o;
-		return categoryId == category.categoryId && Objects.equals(categoryName, category.categoryName) && Objects.equals(description, category.description);
+		return id == category.id && Objects.equals(categoryName, category.categoryName) && Objects.equals(description, category.description) && Objects.equals(productList, category.productList);
 	}
 
 	@Override
 	public String toString() {
 		return "Category{" +
-				"categoryId=" + categoryId +
+				"id=" + id +
 				", categoryName='" + categoryName + '\'' +
 				", description='" + description + '\'' +
+				", productList=" + productList +
 				'}';
 	}
 }

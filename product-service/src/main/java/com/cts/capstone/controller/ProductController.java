@@ -46,9 +46,9 @@ public class ProductController {
 	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
 		if (added == null) {
-			throw new ProductNotFoundException(product.getProductId());
+			throw new ProductNotFoundException(product.getId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getProductId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 

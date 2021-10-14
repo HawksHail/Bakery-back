@@ -46,9 +46,9 @@ public class CategoryController {
 	public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category) {
 		Category added = categoryService.add(category);
 		if (added == null) {
-			throw new CategoryNotFoundException(category.getCategoryId());
+			throw new CategoryNotFoundException(category.getId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCategoryId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 }

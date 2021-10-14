@@ -1,5 +1,6 @@
 package com.cts.capstone.model;
 
+import com.cts.capstone.builder.CategoryBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
@@ -17,13 +18,13 @@ class ProductTest {
 
 	@BeforeEach
 	void setUp() {
-		product = ProductBuilder.of(123L, "name", 456L, 789L, "765");
+		product = ProductBuilder.of(123L, "name", 456L, new Category(), "765");
 	}
 
 	@Test
 	void setProductId() {
-		product.setProductId(654L);
-		assertEquals(654L, product.getProductId());
+		product.setId(654L);
+		assertEquals(654L, product.getId());
 	}
 
 	@Test
@@ -36,12 +37,6 @@ class ProductTest {
 	void setSupplierId() {
 		product.setSupplierId(654L);
 		assertEquals(654L, product.getSupplierId());
-	}
-
-	@Test
-	void setCategoryId() {
-		product.setCategoryId(654L);
-		assertEquals(654L, product.getCategoryId());
 	}
 
 	@Test
@@ -58,8 +53,9 @@ class ProductTest {
 
 	@Test
 	void hashcodeAndEquals() {
-		Product x = ProductBuilder.of(123L, "name", 456L, 789L, "765");
-		Product y = ProductBuilder.of(123L, "name", 456L, 789L, "765");
+		Category c = CategoryBuilder.of(789L, "name", "description");
+		Product x = ProductBuilder.of(123L, "name", 456L, c, "765");
+		Product y = ProductBuilder.of(123L, "name", 456L, c, "765");
 		Product a = ProductBuilder.of();
 		Product b = ProductBuilder.of();
 
