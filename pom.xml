@@ -8,7 +8,6 @@
         <module>customer-service</module>
         <module>order-service</module>
         <module>product-service</module>
-        <module>supplier-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
