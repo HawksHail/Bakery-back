@@ -51,9 +51,4 @@ public class ProductController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
-
-	@GetMapping("category/{categoryId}")
-	public List<Product> getAllProductsInCategory(@PathVariable Long categoryId) {
-		return productService.findAllByCategoryId(categoryId);
-	}
 }

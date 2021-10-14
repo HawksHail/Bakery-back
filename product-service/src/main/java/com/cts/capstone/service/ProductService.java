@@ -31,8 +31,4 @@ public class ProductService {
 	public Product add(Product category) {
 		return productRepository.save(category);
 	}
-
-	public List<Product> findAllByCategoryId(Long categoryId) {
-		return productRepository.findAllByCategoryId(categoryId);
-	}
 }
