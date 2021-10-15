@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,15 +24,25 @@ class OrderTest {
 	@Test
 	void order() {
 		Order order = OrderBuilder.of(1234, "id123", 2020, 9, 2);
-		assertEquals(1234, order.getOrderId());
+		assertEquals(1234, order.getId());
 		assertEquals("id123", order.getCustomerId());
 		assertEquals(LocalDate.of(2020, 9, 2), order.getOrderDate());
 	}
 
 	@Test
 	void setOrderId() {
-		order.setOrderId(567L);
-		assertEquals(567L, order.getOrderId());
+		order.setId(567L);
+		assertEquals(567L, order.getId());
+	}
+
+	@Test
+	void setDetailsList() {
+		ArrayList<OrderDetails> expected = new ArrayList<>();
+		expected.add(new OrderDetails(1, 2, 3));
+		expected.add(new OrderDetails(1, 5, 1));
+		order.setDetailsList(expected);
+
+		assertEquals(expected, order.getDetailsList());
 	}
 
 	@Test

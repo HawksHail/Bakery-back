@@ -1,6 +1,7 @@
 package com.cts.capstone.builder;
 
 import com.cts.capstone.model.OrderDetails;
+import com.cts.capstone.model.OrderDetailsKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class OrderDetailsBuilder {
 	}
 
 	public static OrderDetails of(long orderId, long productId, int quantity) {
-		return new OrderDetails(orderId, productId, quantity);
+		return new OrderDetails(new OrderDetailsKey(orderId, productId), quantity);
 	}
 
 	public List<OrderDetails> build() {

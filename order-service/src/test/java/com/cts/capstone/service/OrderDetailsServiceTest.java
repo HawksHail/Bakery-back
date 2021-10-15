@@ -97,24 +97,24 @@ class OrderDetailsServiceTest {
 	@Test
 	void findByOrderIdAndProductId() {
 		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
-		when(repository.findByOrderIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByIdOrderIdAndIdProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(expected));
 
-		OrderDetails actual = service.findByOrderIdAndProductId(expected.getOrderId(), expected.getProductId());
+		OrderDetails actual = service.findByOrderIdAndProductId(expected.getId().getOrderId(), expected.getId().getProductId());
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findByOrderIdAndProductId(anyLong(), anyLong());
+		verify(repository, times(1)).findByIdOrderIdAndIdProductId(anyLong(), anyLong());
 	}
 
 	@Test
 	void findByOrderIdAndProductIdNotFound() {
-		when(repository.findByOrderIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByIdOrderIdAndIdProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
 		OrderDetails actual = service.findByOrderIdAndProductId(1234L, 1234L);
 
 		assertNull(actual);
-		verify(repository, times(1)).findByOrderIdAndProductId(anyLong(), anyLong());
+		verify(repository, times(1)).findByIdOrderIdAndIdProductId(anyLong(), anyLong());
 	}
 
 	@Test
@@ -123,12 +123,12 @@ class OrderDetailsServiceTest {
 				.w(1234, 1234, 2)
 				.w(1234, 1234, 4)
 				.build();
-		when(repository.findAllByOrderId(anyLong()))
+		when(repository.findAllByIdOrderId(anyLong()))
 				.thenReturn(expected);
 
 		List<OrderDetails> actual = service.findAllById(1234L);
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findAllByOrderId(anyLong());
+		verify(repository, times(1)).findAllByIdOrderId(anyLong());
 	}
 }

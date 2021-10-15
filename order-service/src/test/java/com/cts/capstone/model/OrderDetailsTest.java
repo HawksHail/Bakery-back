@@ -1,5 +1,6 @@
 package com.cts.capstone.model;
 
+import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
@@ -19,15 +20,16 @@ class OrderDetailsTest {
 	}
 
 	@Test
-	void setOrderId() {
-		orderDetails.setOrderId(987L);
-		assertEquals(987L, orderDetails.getOrderId());
+	void setId() {
+		orderDetails.setId(new OrderDetailsKey(987L, 123L));
+		assertEquals(new OrderDetailsKey(987L, 123L), orderDetails.getId());
 	}
 
 	@Test
-	void setProductId() {
-		orderDetails.setProductId(987L);
-		assertEquals(987L, orderDetails.getProductId());
+	void setOrder() {
+		Order expected = OrderBuilder.of(123, "id123");
+		orderDetails.setOrder(expected);
+		assertEquals(expected, orderDetails.getOrder());
 	}
 
 	@Test

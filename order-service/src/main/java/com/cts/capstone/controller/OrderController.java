@@ -46,9 +46,9 @@ public class OrderController {
 	public ResponseEntity<Order> addOrder(@Valid @RequestBody Order order) {
 		Order added = orderService.add(order);
 		if (added == null) {
-			throw new OrderNotFoundException(order.getOrderId());
+			throw new OrderNotFoundException(order.getId());
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getOrderId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 

@@ -38,10 +38,10 @@ public class OrderDetailsService {
 	}
 
 	public OrderDetails findByOrderIdAndProductId(Long orderId, Long productId) {
-		return orderDetailsRepository.findByOrderIdAndProductId(orderId, productId).orElse(null);
+		return orderDetailsRepository.findByIdOrderIdAndIdProductId(orderId, productId).orElse(null);
 	}
 
 	public List<OrderDetails> findAllById(Long id) {
-		return orderDetailsRepository.findAllByOrderId(id);
+		return orderDetailsRepository.findAllByIdOrderId(id);
 	}
 }

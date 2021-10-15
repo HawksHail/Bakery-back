@@ -1,21 +1,22 @@
 package com.cts.capstone.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "orderdetails")
 public class OrderDetails {
 
-	@Id
-	@Column(name = "orderid", nullable = false)
-	private long orderId;
+	@EmbeddedId
+	private OrderDetailsKey id;
 
-	@Column(name = "productid", nullable = false)
-	private long productId;
+	@ManyToOne
+	@MapsId("orderId")
+	@JoinColumn(name = "orderid")
+	@JsonIgnoreProperties("detailsList")
+	private Order order;
 
 	@Column(name = "quantity", nullable = false)
 	private int quantity;
@@ -24,26 +25,30 @@ public class OrderDetails {
 		//Empty
 	}
 
-	public OrderDetails(long orderId, long productId, int quantity) {
-		this.orderId = orderId;
-		this.productId = productId;
+	public OrderDetails(OrderDetailsKey id, int quantity) {
+		this.id = id;
 		this.quantity = quantity;
 	}
 
-	public long getOrderId() {
-		return orderId;
+	public OrderDetails(long orderId, long productId, int quantity) {
+		this.id = new OrderDetailsKey(orderId, productId);
+		this.quantity = quantity;
 	}
 
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+	public OrderDetailsKey getId() {
+		return id;
 	}
 
-	public long getProductId() {
-		return productId;
+	public void setId(OrderDetailsKey id) {
+		this.id = id;
 	}
 
-	public void setProductId(long productId) {
-		this.productId = productId;
+	public Order getOrder() {
+		return order;
+	}
+
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 
 	public int getQuantity() {
@@ -56,7 +61,7 @@ public class OrderDetails {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderId, productId, quantity);
+		return Objects.hash(id, order, quantity);
 	}
 
 	@Override
@@ -64,14 +69,14 @@ public class OrderDetails {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		OrderDetails that = (OrderDetails) o;
-		return orderId == that.orderId && productId == that.productId && quantity == that.quantity;
+		return quantity == that.quantity && Objects.equals(id, that.id) && Objects.equals(order, that.order);
 	}
 
 	@Override
 	public String toString() {
 		return "OrderDetails{" +
-				"orderId=" + orderId +
-				", productId=" + productId +
+				"id=" + id +
+				", order=" + order +
 				", quantity=" + quantity +
 				'}';
 	}

@@ -72,7 +72,7 @@ class OrderDetailsControllerTest {
 
 		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
 		assertEquals(expected, actual.getBody());
-		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.get(0).getOrderId())));
+		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.get(0).getId().getOrderId())));
 		verify(service, times(1)).addList(any());
 	}
 

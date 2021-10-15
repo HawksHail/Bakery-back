@@ -1,12 +1,11 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,7 +14,7 @@ public class Order {
 
 	@Id
 	@Column(name = "orderid")
-	private long orderId;
+	private long id;
 
 	@Column(name = "customerid", length = 5)
 	@Length(max = 5, message = "Customer ID max length 40")
@@ -24,27 +23,39 @@ public class Order {
 	@Column(name = "orderdate")
 	private LocalDate orderDate;
 
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("order")
+	private List<OrderDetails> detailsList;
+
 	public Order() {
 		//Empty
 	}
 
-	public Order(long orderId, String customerId, LocalDate orderDate) {
-		this.orderId = orderId;
+	public Order(long id, String customerId, LocalDate orderDate) {
+		this.id = id;
 		this.customerId = customerId;
 		this.orderDate = orderDate;
 	}
 
-	public Order(long orderId, String customerId) {
-		this.orderId = orderId;
+	public Order(long id, String customerId) {
+		this.id = id;
 		this.customerId = customerId;
 	}
 
-	public long getOrderId() {
-		return orderId;
+	public List<OrderDetails> getDetailsList() {
+		return detailsList;
 	}
 
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+	public void setDetailsList(List<OrderDetails> detailsList) {
+		this.detailsList = detailsList;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getCustomerId() {
@@ -69,7 +80,7 @@ public class Order {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(orderId, customerId, orderDate);
+		return Objects.hash(id, customerId, orderDate);
 	}
 
 	@Override
@@ -77,15 +88,16 @@ public class Order {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Order order = (Order) o;
-		return orderId == order.orderId && Objects.equals(customerId, order.customerId) && Objects.equals(orderDate, order.orderDate);
+		return id == order.id && Objects.equals(customerId, order.customerId) && Objects.equals(orderDate, order.orderDate);
 	}
 
 	@Override
 	public String toString() {
 		return "Order{" +
-				"orderId=" + orderId +
+				"id=" + id +
 				", customerId='" + customerId + '\'' +
 				", orderDate=" + orderDate +
+				", detailsList=" + detailsList +
 				'}';
 	}
 }

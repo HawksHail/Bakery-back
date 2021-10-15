@@ -49,7 +49,7 @@ public class OrderDetailsController {
 		if (added == null) {
 			throw new OrderDetailsNotFoundException();
 		}
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.get(0).getOrderId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.get(0).getId().getOrderId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 
