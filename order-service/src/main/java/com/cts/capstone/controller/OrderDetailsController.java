@@ -35,11 +35,6 @@ public class OrderDetailsController {
 		return orderDetailsService.findAll();
 	}
 
-	@GetMapping("{id}")
-	public List<OrderDetails> getAllOrderDetailsForOrder(@PathVariable Long id) {
-		return orderDetailsService.findAllById(id);
-	}
-
 	@PostMapping()
 	public ResponseEntity<Object> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
 		if (list.size() < 1) {

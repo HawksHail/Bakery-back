@@ -75,19 +75,4 @@ class OrderDetailsControllerTest {
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.get(0).getId().getOrderId())));
 		verify(service, times(1)).addList(any());
 	}
-
-	@Test
-	void getAllOrderDetailsForOrder() {
-		List<OrderDetails> expected = new OrderDetailsBuilder()
-				.w(1234, 1234, 2)
-				.w(1234, 1236, 4)
-				.build();
-		when(service.findAllById(anyLong()))
-				.thenReturn(expected);
-
-		List<OrderDetails> actual = controller.getAllOrderDetailsForOrder(1234L);
-
-		assertEquals(expected, actual);
-		verify(service, times(1)).findAllById(anyLong());
-	}
 }
