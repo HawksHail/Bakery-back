@@ -3,6 +3,7 @@ package com.cts.capstone.controller;
 import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
+import com.cts.capstone.model.OrderDetailsKey;
 import com.cts.capstone.service.OrderDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,8 +53,23 @@ public class OrderDetailsController {
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
 		OrderDetails find = orderDetailsService.findByOrderIdAndProductId(orderId, productId);
 		if (find == null) {
-			throw new OrderDetailsNotFoundException(orderId, productId);
+			throw new OrderDetailsNotFoundException(new OrderDetailsKey(orderId, productId));
 		}
 		return find;
+	}
+
+	@PutMapping
+	public ResponseEntity<OrderDetails> putOrderDetails(@Valid @RequestBody OrderDetails orderDetails) {
+		OrderDetails added = orderDetailsService.add(orderDetails);
+		if (added == null) {
+			throw new OrderDetailsNotFoundException(orderDetails.getId());
+		}
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<OrderDetails> deleteOrderDetails(@Valid @RequestBody OrderDetails orderDetails) {
+		orderDetailsService.delete(orderDetails);
+		return ResponseEntity.noContent().build();
 	}
 }

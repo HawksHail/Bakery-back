@@ -2,6 +2,7 @@ package com.cts.capstone.advice;
 
 import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
+import com.cts.capstone.model.OrderDetailsKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -46,7 +47,7 @@ class OrderDetailsResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		OrderDetailsNotFoundException exception = new OrderDetailsNotFoundException(1);
+		OrderDetailsNotFoundException exception = new OrderDetailsNotFoundException(new OrderDetailsKey(1, 1));
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

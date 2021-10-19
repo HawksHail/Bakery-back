@@ -2,6 +2,7 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.model.Order;
 import com.cts.capstone.repository.OrderRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +36,23 @@ public class OrderService {
 
 	public List<Order> findByCustomerId(String customerId) {
 		return orderRepository.findByCustomerId(customerId);
+	}
+
+	public boolean delete(Order order) {
+		try {
+			orderRepository.delete(order);
+		} catch (IllegalArgumentException ex) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean delete(Long id) {
+		try {
+			orderRepository.deleteById(id);
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
+			return false;
+		}
+		return true;
 	}
 }

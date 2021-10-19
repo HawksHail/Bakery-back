@@ -56,4 +56,25 @@ public class OrderController {
 	public List<Order> getOrdersByCustomer(@PathVariable String customerId) {
 		return orderService.findByCustomerId(customerId);
 	}
+
+	@PutMapping
+	public ResponseEntity<Order> putOrder(@Valid @RequestBody Order order) {
+		Order added = orderService.add(order);
+		if (added == null) {
+			throw new OrderNotFoundException(order.getId());
+		}
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Order> deleteOrder(@Valid @RequestBody Order order) {
+		orderService.delete(order);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Order> deleteOrderById(@PathVariable Long id) {
+		orderService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 }

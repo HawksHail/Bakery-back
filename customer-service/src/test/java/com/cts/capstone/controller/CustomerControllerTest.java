@@ -1,6 +1,7 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.CustomerBuilder;
+import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -60,6 +60,16 @@ class CustomerControllerTest {
 	}
 
 	@Test
+	void getCustomerNotFound() {
+		when(service.findById(anyString()))
+				.thenReturn(null);
+
+		assertThrows(CustomerNotFoundException.class, () -> controller.getCustomer("id123"));
+
+		verify(service, times(1)).findById(anyString());
+	}
+
+	@Test
 	void addCustomer() {
 		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
 		when(service.add(any(Customer.class)))
@@ -71,5 +81,40 @@ class CustomerControllerTest {
 		assertEquals(expected, actual.getBody());
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getCustomerId())));
 		verify(service, times(1)).add(any(Customer.class));
+	}
+
+	@Test
+	void putCustomer() {
+		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		when(service.add(any(Customer.class)))
+				.thenReturn(expected);
+
+		ResponseEntity<Customer> actual = controller.putCustomer(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).add(any(Customer.class));
+	}
+
+	@Test
+	void deleteCustomer() {
+		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		when(service.delete(any(Customer.class)))
+				.thenReturn(true);
+
+		ResponseEntity<Customer> actual = controller.deleteCustomer(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(any(Customer.class));
+	}
+
+	@Test
+	void deleteCustomerById() {
+		when(service.delete(any(Customer.class)))
+				.thenReturn(true);
+
+		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyString());
 	}
 }

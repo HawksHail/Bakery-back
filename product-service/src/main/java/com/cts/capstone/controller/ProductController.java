@@ -51,4 +51,25 @@ public class ProductController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
+
+	@PutMapping
+	public ResponseEntity<Product> putProduct(@Valid @RequestBody Product product) {
+		Product added = productService.add(product);
+		if (added == null) {
+			throw new ProductNotFoundException(product.getId());
+		}
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Product> deleteProduct(@Valid @RequestBody Product product) {
+		productService.delete(product);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Product> deleteProductById(@PathVariable Long id) {
+		productService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 }

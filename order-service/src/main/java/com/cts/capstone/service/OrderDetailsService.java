@@ -44,4 +44,13 @@ public class OrderDetailsService {
 	public List<OrderDetails> findAllById(Long id) {
 		return orderDetailsRepository.findAllByIdOrderId(id);
 	}
+
+	public boolean delete(OrderDetails orderDetails) {
+		try {
+			orderDetailsRepository.delete(orderDetails);
+		} catch (IllegalArgumentException ex) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -1,5 +1,7 @@
 package com.cts.capstone.exception;
 
+import com.cts.capstone.model.OrderDetailsKey;
+
 public class OrderDetailsNotFoundException extends RuntimeException {
 
 	private final static String message = "Could not find order details";
@@ -8,20 +10,11 @@ public class OrderDetailsNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public OrderDetailsNotFoundException(long id) {
+	public OrderDetailsNotFoundException(OrderDetailsKey id) {
 		this(id, null);
 	}
 
-	public OrderDetailsNotFoundException(long id, Throwable cause) {
+	public OrderDetailsNotFoundException(OrderDetailsKey id, Throwable cause) {
 		super(message + " " + id, cause);
-	}
-
-	public OrderDetailsNotFoundException(long orderId, long productId) {
-		this(orderId, productId, null);
-	}
-
-	public OrderDetailsNotFoundException(long orderId, long productId, Throwable cause) {
-		super(message + " with order " + orderId + " and product " + productId, cause);
-
 	}
 }

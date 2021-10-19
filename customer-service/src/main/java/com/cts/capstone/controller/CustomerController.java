@@ -45,10 +45,25 @@ public class CustomerController {
 	@PostMapping()
 	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);
-		if (added == null) {
-			throw new CustomerNotFoundException(customer.getCustomerId());
-		}
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();
 		return ResponseEntity.created(location).body(added);
+	}
+
+	@PutMapping
+	public ResponseEntity<Customer> putCustomer(@Valid @RequestBody Customer customer) {
+		Customer added = customerService.add(customer);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Customer> deleteCustomer(@Valid @RequestBody Customer customer) {
+		customerService.delete(customer);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Customer> deleteCustomerById(@PathVariable String id) {
+		customerService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

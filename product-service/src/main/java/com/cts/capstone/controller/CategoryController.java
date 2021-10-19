@@ -51,4 +51,25 @@ public class CategoryController {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
+
+	@PutMapping
+	public ResponseEntity<Category> putCategory(@Valid @RequestBody Category category) {
+		Category added = categoryService.add(category);
+		if (added == null) {
+			throw new CategoryNotFoundException(category.getId());
+		}
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Category> deleteCategory(@Valid @RequestBody Category category) {
+		categoryService.delete(category);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Category> deleteCategoryById(@PathVariable Long id) {
+		categoryService.delete(id);
+		return ResponseEntity.noContent().build();
+	}
 }
