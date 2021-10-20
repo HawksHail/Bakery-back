@@ -33,21 +33,17 @@ public class ProductService {
 		return productRepository.save(category);
 	}
 
-	public boolean delete(Product product) {
+	public void delete(Product product) {
 		try {
 			productRepository.delete(product);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 
-	public boolean delete(Long id) {
+	public void delete(Long id) {
 		try {
 			productRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
-			return false;
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
 		}
-		return true;
 	}
 }

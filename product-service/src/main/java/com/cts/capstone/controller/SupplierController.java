@@ -45,9 +45,6 @@ public class SupplierController {
 	@PostMapping()
 	public ResponseEntity<Supplier> addSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
-		if (added == null) {
-			throw new SupplierNotFoundException(supplier.getId());
-		}
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
@@ -55,9 +52,6 @@ public class SupplierController {
 	@PutMapping
 	public ResponseEntity<Supplier> putSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
-		if (added == null) {
-			throw new SupplierNotFoundException(supplier.getId());
-		}
 		return ResponseEntity.noContent().build();
 	}
 

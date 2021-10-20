@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -39,12 +40,14 @@ public class OrderDetailsController {
 	@PostMapping()
 	public ResponseEntity<Object> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
 		if (list.size() < 1) {
-			return ResponseEntity.badRequest().body(ExceptionResponse.of(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.getReasonPhrase(), "Empty list", "order/details"));
+			return ResponseEntity.badRequest().body(new ExceptionResponse(
+					LocalDateTime.now(),
+					HttpStatus.BAD_REQUEST,
+					HttpStatus.BAD_REQUEST.getReasonPhrase(),
+					"Empty list",
+					"order/details"));
 		}
 		List<OrderDetails> added = orderDetailsService.addList(list);
-		if (added == null) {
-			throw new OrderDetailsNotFoundException();
-		}
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.get(0).getId().getOrderId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
@@ -61,9 +64,6 @@ public class OrderDetailsController {
 	@PutMapping
 	public ResponseEntity<OrderDetails> putOrderDetails(@Valid @RequestBody OrderDetails orderDetails) {
 		OrderDetails added = orderDetailsService.add(orderDetails);
-		if (added == null) {
-			throw new OrderDetailsNotFoundException(orderDetails.getId());
-		}
 		return ResponseEntity.noContent().build();
 	}
 

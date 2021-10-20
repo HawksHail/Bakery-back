@@ -98,8 +98,6 @@ class CustomerControllerTest {
 	@Test
 	void deleteCustomer() {
 		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(service.delete(any(Customer.class)))
-				.thenReturn(true);
 
 		ResponseEntity<Customer> actual = controller.deleteCustomer(expected);
 
@@ -109,9 +107,6 @@ class CustomerControllerTest {
 
 	@Test
 	void deleteCustomerById() {
-		when(service.delete(any(Customer.class)))
-				.thenReturn(true);
-
 		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());

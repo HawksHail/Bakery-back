@@ -45,9 +45,6 @@ public class OrderController {
 	@PostMapping()
 	public ResponseEntity<Order> addOrder(@Valid @RequestBody Order order) {
 		Order added = orderService.add(order);
-		if (added == null) {
-			throw new OrderNotFoundException(order.getId());
-		}
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
@@ -60,9 +57,6 @@ public class OrderController {
 	@PutMapping
 	public ResponseEntity<Order> putOrder(@Valid @RequestBody Order order) {
 		Order added = orderService.add(order);
-		if (added == null) {
-			throw new OrderNotFoundException(order.getId());
-		}
 		return ResponseEntity.noContent().build();
 	}
 

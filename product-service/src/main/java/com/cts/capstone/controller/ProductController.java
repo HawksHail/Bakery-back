@@ -45,9 +45,6 @@ public class ProductController {
 	@PostMapping()
 	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
-		if (added == null) {
-			throw new ProductNotFoundException(product.getId());
-		}
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
@@ -55,9 +52,6 @@ public class ProductController {
 	@PutMapping
 	public ResponseEntity<Product> putProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
-		if (added == null) {
-			throw new ProductNotFoundException(product.getId());
-		}
 		return ResponseEntity.noContent().build();
 	}
 

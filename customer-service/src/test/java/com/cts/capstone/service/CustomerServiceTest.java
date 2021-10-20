@@ -77,4 +77,20 @@ class CustomerServiceTest {
 		assertEquals(expected, actual);
 		verify(repository, times(1)).save(any(Customer.class));
 	}
+
+	@Test
+	void delete() {
+		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+
+		service.delete(expected);
+
+		verify(repository, times(1)).delete(any(Customer.class));
+	}
+
+	@Test
+	void deleteByCustomerId() {
+		service.delete("id123");
+
+		verify(repository, times(1)).deleteByCustomerId(anyString());
+	}
 }

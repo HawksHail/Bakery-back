@@ -45,12 +45,10 @@ public class OrderDetailsService {
 		return orderDetailsRepository.findAllByIdOrderId(id);
 	}
 
-	public boolean delete(OrderDetails orderDetails) {
+	public void delete(OrderDetails orderDetails) {
 		try {
 			orderDetailsRepository.delete(orderDetails);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 }

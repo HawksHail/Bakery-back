@@ -1,6 +1,7 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.CategoryBuilder;
+import com.cts.capstone.exception.CategoryNotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -60,6 +60,17 @@ class CategoryControllerTest {
 	}
 
 	@Test
+	void getCategoryNotFound() {
+		Category expected = CategoryBuilder.of(123, "name", "description");
+		when(service.findById(anyLong()))
+				.thenReturn(null);
+
+		assertThrows(CategoryNotFoundException.class, () -> controller.getCategory(123L));
+
+		verify(service, times(1)).findById(anyLong());
+	}
+
+	@Test
 	void addCategory() {
 		Category expected = CategoryBuilder.of(123, "name", "description");
 		when(service.add(any(Category.class)))
@@ -71,5 +82,35 @@ class CategoryControllerTest {
 		assertEquals(expected, actual.getBody());
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getId())));
 		verify(service, times(1)).add(any(Category.class));
+	}
+
+	@Test
+	void putCategory() {
+		Category expected = CategoryBuilder.of(123, "name", "description");
+		when(service.add(any(Category.class)))
+				.thenReturn(expected);
+
+		ResponseEntity<Category> actual = controller.putCategory(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).add(any(Category.class));
+	}
+
+	@Test
+	void deleteCategory() {
+		Category expected = CategoryBuilder.of(123, "name", "description");
+
+		ResponseEntity<Category> actual = controller.deleteCategory(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(any(Category.class));
+	}
+
+	@Test
+	void deleteCategoryById() {
+		ResponseEntity<Category> actual = controller.deleteCategoryById(123L);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
 	}
 }

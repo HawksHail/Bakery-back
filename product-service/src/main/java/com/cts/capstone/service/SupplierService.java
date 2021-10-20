@@ -34,21 +34,17 @@ public class SupplierService {
 		return supplierRepository.save(product);
 	}
 
-	public boolean delete(Supplier supplier) {
+	public void delete(Supplier supplier) {
 		try {
 			supplierRepository.delete(supplier);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 
-	public boolean delete(Long id) {
+	public void delete(Long id) {
 		try {
 			supplierRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
-			return false;
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
 		}
-		return true;
 	}
 }

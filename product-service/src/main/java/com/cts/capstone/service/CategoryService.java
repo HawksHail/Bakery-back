@@ -34,21 +34,17 @@ public class CategoryService {
 		return categoryRepository.save(category);
 	}
 
-	public boolean delete(Category category) {
+	public void delete(Category category) {
 		try {
 			categoryRepository.delete(category);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 
-	public boolean delete(Long id) {
+	public void delete(Long id) {
 		try {
 			categoryRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
-			return false;
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
 		}
-		return true;
 	}
 }

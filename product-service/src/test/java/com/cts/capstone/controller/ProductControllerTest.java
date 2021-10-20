@@ -1,6 +1,7 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.ProductBuilder;
+import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -60,6 +60,17 @@ class ProductControllerTest {
 	}
 
 	@Test
+	void getProductNotFound() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(service.findById(anyLong()))
+				.thenReturn(null);
+
+		assertThrows(ProductNotFoundException.class, () -> controller.getProduct(123L));
+
+		verify(service, times(1)).findById(anyLong());
+	}
+
+	@Test
 	void addProduct() {
 		Product expected = ProductBuilder.of(123, "name", "123");
 		when(service.add(any(Product.class)))
@@ -71,5 +82,35 @@ class ProductControllerTest {
 		assertEquals(expected, actual.getBody());
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getId())));
 		verify(service, times(1)).add(any(Product.class));
+	}
+
+	@Test
+	void putProduct() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(service.add(any(Product.class)))
+				.thenReturn(expected);
+
+		ResponseEntity<Product> actual = controller.putProduct(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).add(any(Product.class));
+	}
+
+	@Test
+	void deleteProduct() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+
+		ResponseEntity<Product> actual = controller.deleteProduct(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(any(Product.class));
+	}
+
+	@Test
+	void deleteProductById() {
+		ResponseEntity<Product> actual = controller.deleteProductById(123L);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
 	}
 }

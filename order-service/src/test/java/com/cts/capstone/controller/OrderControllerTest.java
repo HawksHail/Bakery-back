@@ -1,6 +1,7 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.OrderBuilder;
+import com.cts.capstone.exception.OrderNotFoundException;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -60,6 +60,17 @@ class OrderControllerTest {
 	}
 
 	@Test
+	void getOrderNotFound() {
+		Order expected = OrderBuilder.of(1234, "id123");
+		when(service.findById(anyLong()))
+				.thenReturn(null);
+
+		assertThrows(OrderNotFoundException.class, () -> controller.getOrder(123L));
+
+		verify(service, times(1)).findById(anyLong());
+	}
+
+	@Test
 	void addOrder() {
 		Order expected = OrderBuilder.of(1234, "id123");
 		when(service.add(any(Order.class)))
@@ -87,5 +98,35 @@ class OrderControllerTest {
 		assertEquals(expected, actual);
 
 		verify(service, times(1)).findByCustomerId(anyString());
+	}
+
+	@Test
+	void putOrder() {
+		Order expected = OrderBuilder.of(1234, "id123");
+		when(service.add(any(Order.class)))
+				.thenReturn(expected);
+
+		ResponseEntity<Order> actual = controller.putOrder(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).add(any(Order.class));
+	}
+
+	@Test
+	void deleteOrder() {
+		Order expected = OrderBuilder.of(1234, "id123");
+
+		ResponseEntity<Order> actual = controller.deleteOrder(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(any(Order.class));
+	}
+
+	@Test
+	void deleteOrderById() {
+		ResponseEntity<Order> actual = controller.deleteOrderById(123L);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
 	}
 }

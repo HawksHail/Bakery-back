@@ -34,21 +34,17 @@ public class CustomerService {
 		return customerRepository.save(customer);
 	}
 
-	public boolean delete(Customer customer) {
+	public void delete(Customer customer) {
 		try {
 			customerRepository.delete(customer);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 
-	public boolean delete(String id) {
+	public void delete(String id) {
 		try {
 			customerRepository.deleteByCustomerId(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
-			return false;
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
 		}
-		return true;
 	}
 }

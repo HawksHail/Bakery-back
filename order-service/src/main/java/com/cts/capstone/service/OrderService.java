@@ -38,21 +38,17 @@ public class OrderService {
 		return orderRepository.findByCustomerId(customerId);
 	}
 
-	public boolean delete(Order order) {
+	public void delete(Order order) {
 		try {
 			orderRepository.delete(order);
-		} catch (IllegalArgumentException ex) {
-			return false;
+		} catch (IllegalArgumentException ignored) {
 		}
-		return true;
 	}
 
-	public boolean delete(Long id) {
+	public void delete(Long id) {
 		try {
 			orderRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ex) {
-			return false;
+		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
 		}
-		return true;
 	}
 }

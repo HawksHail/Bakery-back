@@ -1,6 +1,7 @@
 package com.cts.capstone.controller;
 
 import com.cts.capstone.builder.SupplierBuilder;
+import com.cts.capstone.exception.SupplierNotFoundException;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.SupplierService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -60,6 +60,17 @@ class SupplierControllerTest {
 	}
 
 	@Test
+	void getSupplierNotFound() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(service.findById(anyLong()))
+				.thenReturn(null);
+
+		assertThrows(SupplierNotFoundException.class, () -> controller.getSupplier(123L));
+
+		verify(service, times(1)).findById(anyLong());
+	}
+
+	@Test
 	void addSupplier() {
 		Supplier expected = SupplierBuilder.of(123, "company", "contact");
 		when(service.add(any(Supplier.class)))
@@ -71,5 +82,35 @@ class SupplierControllerTest {
 		assertEquals(expected, actual.getBody());
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getId())));
 		verify(service, times(1)).add(any(Supplier.class));
+	}
+
+	@Test
+	void putSupplier() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(service.add(any(Supplier.class)))
+				.thenReturn(expected);
+
+		ResponseEntity<Supplier> actual = controller.putSupplier(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).add(any(Supplier.class));
+	}
+
+	@Test
+	void deleteSupplier() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+
+		ResponseEntity<Supplier> actual = controller.deleteSupplier(expected);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(any(Supplier.class));
+	}
+
+	@Test
+	void deleteSupplierById() {
+		ResponseEntity<Supplier> actual = controller.deleteSupplierById(123L);
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
 	}
 }
