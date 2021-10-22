@@ -28,6 +28,11 @@ public class SupplierController {
 		this.supplierService = supplierService;
 	}
 
+	@GetMapping("health")
+	public ResponseEntity<Object> healthCheck() {
+		return ResponseEntity.ok().build();
+	}
+
 	@GetMapping()
 	public List<Supplier> getAllSuppliers() {
 		return supplierService.findAll();

@@ -13,6 +13,7 @@ import java.util.Objects;
 public class Order {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "orderid")
 	private long id;
 

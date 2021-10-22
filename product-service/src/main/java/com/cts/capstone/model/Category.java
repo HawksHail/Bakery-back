@@ -13,6 +13,7 @@ public class Category {
 
 	@Id
 	@Column(name = "categoryid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@Column(name = "categoryname", nullable = false, length = 15)

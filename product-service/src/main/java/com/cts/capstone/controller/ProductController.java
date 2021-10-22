@@ -28,6 +28,11 @@ public class ProductController {
 		this.productService = productService;
 	}
 
+	@GetMapping("health")
+	public ResponseEntity<Object> healthCheck() {
+		return ResponseEntity.ok().build();
+	}
+
 	@GetMapping()
 	public List<Product> getAllProducts() {
 		return productService.findAll();
