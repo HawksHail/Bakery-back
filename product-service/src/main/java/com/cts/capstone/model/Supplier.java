@@ -12,6 +12,7 @@ import java.util.Objects;
 public class Supplier {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "supplierid")
 	private long id;
 

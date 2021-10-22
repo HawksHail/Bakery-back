@@ -2,10 +2,7 @@ package com.cts.capstone.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +11,7 @@ public class Customer {
 
 	@Id
 	@Column(name = "customerid", length = 5)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Length(max = 5, min = 5, message = "Customer ID must be length 5")
 	private String customerId;
 
