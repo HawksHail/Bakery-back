@@ -9,11 +9,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - mvn test
+#      - mvn test
     post_build:
       commands:
         - echo Build completed on `date`
+        - ls
         - mvn package
+        - ls
 artifacts:
   files:
     - customer-service/target/customer-service-0.0.1-SNAPSHOT.jar
