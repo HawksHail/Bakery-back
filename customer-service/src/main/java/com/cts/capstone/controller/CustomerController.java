@@ -28,6 +28,11 @@ public class CustomerController {
 		this.customerService = customerService;
 	}
 
+	@GetMapping("health")
+	public ResponseEntity<Object> healthCheck() {
+		return ResponseEntity.ok().build();
+	}
+
 	@GetMapping()
 	public List<Customer> getAllCustomers() {
 		return customerService.findAll();

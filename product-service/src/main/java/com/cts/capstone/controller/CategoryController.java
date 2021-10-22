@@ -28,6 +28,11 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
+	@GetMapping("health")
+	public ResponseEntity<Object> healthCheck() {
+		return ResponseEntity.ok().build();
+	}
+
 	@GetMapping()
 	public List<Category> getAllCategories() {
 		return categoryService.findAll();
