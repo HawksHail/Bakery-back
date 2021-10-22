@@ -13,9 +13,9 @@ phases:
     post_build:
       commands:
         - echo Build completed on `date`
-        - ls
+        - echo `ls`
         - mvn package
-        - ls
+        - echo `ls`
 artifacts:
   files:
     - customer-service/target/customer-service-0.0.1-SNAPSHOT.jar
