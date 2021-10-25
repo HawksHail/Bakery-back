@@ -96,20 +96,26 @@ class CustomerControllerTest {
 	}
 
 	@Test
-	void deleteCustomer() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-
-		ResponseEntity<Customer> actual = controller.deleteCustomer(expected);
-
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(Customer.class));
-	}
-
-	@Test
 	void deleteCustomerById() {
+		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		when(service.delete(anyString()))
+				.thenReturn(true);
+
 		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyString());
+	}
+
+	@Test
+	void deleteCustomerByIdNotFound() {
+		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		when(service.delete(anyString()))
+				.thenReturn(false);
+
+		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
 		verify(service, times(1)).delete(anyString());
 	}
 }

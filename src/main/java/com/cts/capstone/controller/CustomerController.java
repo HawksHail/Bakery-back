@@ -55,15 +55,13 @@ public class CustomerController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Customer> deleteCustomer(@Valid @RequestBody Customer customer) {
-		customerService.delete(customer);
-		return ResponseEntity.noContent().build();
-	}
-
 	@DeleteMapping("{id}")
 	public ResponseEntity<Customer> deleteCustomerById(@PathVariable String id) {
-		customerService.delete(id);
-		return ResponseEntity.noContent().build();
+		boolean delete = customerService.delete(id);
+		if (delete) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

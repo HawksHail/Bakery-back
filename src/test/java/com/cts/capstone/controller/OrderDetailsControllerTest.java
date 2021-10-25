@@ -4,6 +4,7 @@ import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
 import com.cts.capstone.model.OrderDetails;
+import com.cts.capstone.model.OrderDetailsKey;
 import com.cts.capstone.service.OrderDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,11 +116,25 @@ class OrderDetailsControllerTest {
 	@Test
 	void deleteOrder() {
 		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
+		when(service.delete(any(OrderDetailsKey.class)))
+				.thenReturn(true);
 
-		ResponseEntity<OrderDetails> actual = controller.deleteOrderDetails(expected);
+		ResponseEntity<OrderDetails> actual = controller.deleteOrderDetails(expected.getId().getOrderId(), expected.getId().getProductId());
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(OrderDetails.class));
+		verify(service, times(1)).delete(any(OrderDetailsKey.class));
+	}
+
+	@Test
+	void deleteOrderNotFound() {
+		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
+		when(service.delete(any(OrderDetailsKey.class)))
+				.thenReturn(false);
+
+		ResponseEntity<OrderDetails> actual = controller.deleteOrderDetails(expected.getId().getOrderId(), expected.getId().getProductId());
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
+		verify(service, times(1)).delete(any(OrderDetailsKey.class));
 	}
 
 }

@@ -97,20 +97,26 @@ class CategoryControllerTest {
 	}
 
 	@Test
-	void deleteCategory() {
-		Category expected = CategoryBuilder.of(123, "name", "description");
-
-		ResponseEntity<Category> actual = controller.deleteCategory(expected);
-
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(Category.class));
-	}
-
-	@Test
 	void deleteCategoryById() {
+		Category customer = CategoryBuilder.of(123, "name", "description");
+		when(service.delete(anyLong()))
+				.thenReturn(true);
+
 		ResponseEntity<Category> actual = controller.deleteCategoryById(123L);
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
+	}
+
+	@Test
+	void deleteCategoryByIdNotFound() {
+		Category customer = CategoryBuilder.of(123, "name", "description");
+		when(service.delete(anyLong()))
+				.thenReturn(false);
+
+		ResponseEntity<Category> actual = controller.deleteCategoryById(123L);
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
 		verify(service, times(1)).delete(anyLong());
 	}
 }

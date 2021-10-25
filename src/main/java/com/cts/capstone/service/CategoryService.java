@@ -2,10 +2,10 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.model.Category;
 import com.cts.capstone.repository.CategoryRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -34,17 +34,13 @@ public class CategoryService {
 		return categoryRepository.save(category);
 	}
 
-	public void delete(Category category) {
-		try {
-			categoryRepository.delete(category);
-		} catch (IllegalArgumentException ignored) {
-		}
-	}
-
-	public void delete(Long id) {
-		try {
+	public boolean delete(Long id) {
+		Optional<Category> category = categoryRepository.findById(id);
+		if (category.isPresent()) {
 			categoryRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

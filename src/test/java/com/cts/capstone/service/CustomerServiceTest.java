@@ -9,9 +9,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -79,18 +79,25 @@ class CustomerServiceTest {
 	}
 
 	@Test
-	void delete() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+	void deleteByCustomerId() {
+		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		when(repository.findByCustomerId(anyString()))
+				.thenReturn(Optional.of(customer));
 
-		service.delete(expected);
+		boolean delete = service.delete("id123");
 
-		verify(repository, times(1)).delete(any(Customer.class));
+		assertTrue(delete);
+		verify(repository, times(1)).deleteByCustomerId(anyString());
 	}
 
 	@Test
-	void deleteByCustomerId() {
-		service.delete("id123");
+	void deleteByCustomerIdNotFound() {
+		when(repository.findByCustomerId(anyString()))
+				.thenReturn(Optional.empty());
 
-		verify(repository, times(1)).deleteByCustomerId(anyString());
+		boolean delete = service.delete("id123");
+
+		assertFalse(delete);
+		verify(repository, times(0)).deleteByCustomerId(anyString());
 	}
 }

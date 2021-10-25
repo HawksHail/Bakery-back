@@ -97,20 +97,26 @@ class SupplierControllerTest {
 	}
 
 	@Test
-	void deleteSupplier() {
-		Supplier expected = SupplierBuilder.of(123, "company", "contact");
-
-		ResponseEntity<Supplier> actual = controller.deleteSupplier(expected);
-
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(Supplier.class));
-	}
-
-	@Test
 	void deleteSupplierById() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(service.delete(anyLong()))
+				.thenReturn(true);
+
 		ResponseEntity<Supplier> actual = controller.deleteSupplierById(123L);
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
+	}
+
+	@Test
+	void deleteSupplierByIdNotFound() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(service.delete(anyLong()))
+				.thenReturn(false);
+
+		ResponseEntity<Supplier> actual = controller.deleteSupplierById(123L);
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
 		verify(service, times(1)).delete(anyLong());
 	}
 }
