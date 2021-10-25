@@ -3,6 +3,8 @@ package com.cts.capstone.model;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,7 +13,7 @@ public class Customer {
 
 	@Id
 	@Column(name = "customerid", length = 5)
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Length(max = 5, min = 5, message = "Customer ID must be length 5")
 	private String customerId;
 
@@ -35,6 +37,10 @@ public class Customer {
 	@Length(max = 15, message = "State max length 40")
 	private String state;
 
+	@Column
+	@ElementCollection
+	private List<Product> cart;
+
 	public Customer() {
 		//Empty
 	}
@@ -46,6 +52,17 @@ public class Customer {
 		this.street = street;
 		this.city = city;
 		this.state = state;
+		cart = new ArrayList<>();
+	}
+
+	public Customer(String customerId, String companyName, String contactName, String street, String city, String state, List<Product> cart) {
+		this.customerId = customerId;
+		this.companyName = companyName;
+		this.contactName = contactName;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.cart = cart;
 	}
 
 	public String getCustomerId() {
@@ -96,6 +113,14 @@ public class Customer {
 		this.state = state;
 	}
 
+	public List<Product> getCart() {
+		return cart;
+	}
+
+	public void setCart(List<Product> cart) {
+		this.cart = cart;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(customerId, companyName, contactName, street, city, state);
@@ -118,6 +143,7 @@ public class Customer {
 				", street='" + street + '\'' +
 				", city='" + city + '\'' +
 				", state='" + state + '\'' +
+				", cart=" + cart +
 				'}';
 	}
 }
