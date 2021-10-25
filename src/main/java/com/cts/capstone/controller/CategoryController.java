@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("category")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin("https://master.ditbstqq8z8x3.amplifyapp.com/")
 public class CategoryController {
 
 	private CategoryService categoryService;

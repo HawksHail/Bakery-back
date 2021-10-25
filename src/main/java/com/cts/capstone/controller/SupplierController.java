@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("supplier")
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin("https://master.ditbstqq8z8x3.amplifyapp.com/")
 public class SupplierController {
 
 	private SupplierService supplierService;
