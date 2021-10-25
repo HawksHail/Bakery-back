@@ -16,11 +16,7 @@ phases:
       - mvn package
 artifacts:
   files:
-#    - customer-service/target/customer-service-0.0.1-SNAPSHOT.jar
-#    - order-service/target/order-service-0.0.1-SNAPSHOT.jar
-    - product-service/target/product-service-0.0.1-SNAPSHOT.jar
-#    - eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar
-#    - Procfile
+    - target/capstone-0.0.1-SNAPSHOT.jar
   discard-paths: yes
 
 
