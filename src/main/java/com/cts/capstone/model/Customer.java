@@ -1,10 +1,9 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -37,12 +36,13 @@ public class Customer {
 	@Length(max = 15, message = "State max length 40")
 	private String state;
 
-	@Column
-	@ElementCollection
-	private List<Product> cart;
+	@OneToOne
+	@JoinColumn(name = "cart_id")
+	@JsonIgnoreProperties({"customer", "id"})
+	private Cart cart;
 
 	public Customer() {
-		//Empty
+		cart = new Cart();
 	}
 
 	public Customer(String customerId, String companyName, String contactName, String street, String city, String state) {
@@ -52,17 +52,7 @@ public class Customer {
 		this.street = street;
 		this.city = city;
 		this.state = state;
-		cart = new ArrayList<>();
-	}
-
-	public Customer(String customerId, String companyName, String contactName, String street, String city, String state, List<Product> cart) {
-		this.customerId = customerId;
-		this.companyName = companyName;
-		this.contactName = contactName;
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.cart = cart;
+		cart = new Cart();
 	}
 
 	public String getCustomerId() {
@@ -113,11 +103,11 @@ public class Customer {
 		this.state = state;
 	}
 
-	public List<Product> getCart() {
+	public Cart getCart() {
 		return cart;
 	}
 
-	public void setCart(List<Product> cart) {
+	public void setCart(Cart cart) {
 		this.cart = cart;
 	}
 

@@ -2,8 +2,10 @@ package com.cts.capstone.controller;
 
 import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ProductNotFoundException;
+import com.cts.capstone.model.Cart;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
+import com.cts.capstone.repository.CartRepository;
 import com.cts.capstone.service.CustomerService;
 import com.cts.capstone.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class CartController {
 
 	@Autowired
 	ProductService productService;
+
+	@Autowired
+	CartRepository cartRepository;
 
 	public CartController(CustomerService customerService, ProductService productService) {
 		this.customerService = customerService;
@@ -40,6 +45,13 @@ public class CartController {
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
 		}
+		if (customer.getCart() == null) {
+			Cart cart = cartRepository.save(new Cart());
+			cart.setCustomer(customer);
+			customer.setCart(cart);
+			customer = customerService.add(customer);
+		}
+
 		return ResponseEntity.ok(customer.getCart());
 	}
 
@@ -53,8 +65,13 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
+		if (customer.getCart() == null) {
+			Cart cart = cartRepository.save(new Cart());
+			cart.setCustomer(customer);
+			customer.setCart(cart);
+		}
 
-		customer.getCart().add(product);
+		customer.getCart().add(product.getId());
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());
 	}
@@ -69,17 +86,27 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
+		if (customer.getCart() == null) {
+			Cart cart = cartRepository.save(new Cart());
+			cart.setCustomer(customer);
+			customer.setCart(cart);
+		}
 
-		boolean remove = customer.getCart().remove(product);
+		customer.getCart().remove(product.getId());
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());
 	}
 
-	@DeleteMapping("{customerId}}")
+	@DeleteMapping("{customerId}")
 	public ResponseEntity<Object> deleteCartAllProduct(@PathVariable String customerId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
+		}
+		if (customer.getCart() == null) {
+			Cart cart = cartRepository.save(new Cart());
+			cart.setCustomer(customer);
+			customer.setCart(cart);
 		}
 
 		customer.getCart().clear();

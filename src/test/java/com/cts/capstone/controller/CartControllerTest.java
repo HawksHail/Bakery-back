@@ -4,6 +4,7 @@ import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ProductNotFoundException;
+import com.cts.capstone.model.Cart;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.service.CustomerService;
@@ -16,10 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -44,7 +44,7 @@ class CartControllerTest {
 		customer = CustomerBuilder.of("test1", "company name", "contact name", "street", "city", "state");
 		product = ProductBuilder.of(1, "product name", "123");
 		product2 = ProductBuilder.of(2, "product2 name", "321");
-		customer.getCart().add(product);
+		customer.getCart().add(product.getId());
 		controller = new CartController(customerService, productService);
 	}
 
@@ -81,8 +81,11 @@ class CartControllerTest {
 
 		ResponseEntity<Object> actual = controller.addCartProduct(customer.getCustomerId(), product2.getId());
 
+		Cart body = (Cart) actual.getBody();
+
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
-		assertEquals(List.of(product, product2), actual.getBody());
+		assertNotNull(body);
+		assertEquals(Map.of(product.getId(), 1, product2.getId(), 1), body.getItems());
 		verify(customerService, times(1)).findById(anyString());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
@@ -132,7 +135,7 @@ class CartControllerTest {
 		ResponseEntity<Object> actual = controller.deleteCartProduct(customer.getCustomerId(), product2.getId());
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
-		assertEquals(List.of(), actual.getBody());
+		assertEquals(new Cart(), actual.getBody());
 		verify(customerService, times(1)).findById(anyString());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
