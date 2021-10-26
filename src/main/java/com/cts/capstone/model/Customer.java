@@ -1,5 +1,6 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ public class Customer {
 
 	@Id
 	@Column(name = "customerid", length = 5)
-	@GeneratedValue(strategy = GenerationType.AUTO)
+//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Length(max = 5, min = 5, message = "Customer ID must be length 5")
 	private String customerId;
 
@@ -35,8 +36,13 @@ public class Customer {
 	@Length(max = 15, message = "State max length 40")
 	private String state;
 
+	@OneToOne
+	@JoinColumn(name = "cart_id")
+	@JsonIgnoreProperties({"customer", "id"})
+	private Cart cart;
+
 	public Customer() {
-		//Empty
+		cart = new Cart();
 	}
 
 	public Customer(String customerId, String companyName, String contactName, String street, String city, String state) {
@@ -46,6 +52,7 @@ public class Customer {
 		this.street = street;
 		this.city = city;
 		this.state = state;
+		cart = new Cart();
 	}
 
 	public String getCustomerId() {
@@ -96,6 +103,14 @@ public class Customer {
 		this.state = state;
 	}
 
+	public Cart getCart() {
+		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(customerId, companyName, contactName, street, city, state);
@@ -118,6 +133,7 @@ public class Customer {
 				", street='" + street + '\'' +
 				", city='" + city + '\'' +
 				", state='" + state + '\'' +
+				", cart=" + cart +
 				'}';
 	}
 }

@@ -97,20 +97,26 @@ class ProductControllerTest {
 	}
 
 	@Test
-	void deleteProduct() {
-		Product expected = ProductBuilder.of(123, "name", "123");
-
-		ResponseEntity<Product> actual = controller.deleteProduct(expected);
-
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(Product.class));
-	}
-
-	@Test
 	void deleteProductById() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(service.delete(anyLong()))
+				.thenReturn(true);
+
 		ResponseEntity<Product> actual = controller.deleteProductById(123L);
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
+	}
+
+	@Test
+	void deleteProductByIdNotFound() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(service.delete(anyLong()))
+				.thenReturn(false);
+
+		ResponseEntity<Product> actual = controller.deleteProductById(123L);
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
 		verify(service, times(1)).delete(anyLong());
 	}
 }

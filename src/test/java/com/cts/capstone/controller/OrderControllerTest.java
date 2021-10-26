@@ -113,20 +113,26 @@ class OrderControllerTest {
 	}
 
 	@Test
-	void deleteOrder() {
-		Order expected = OrderBuilder.of(1234, "id123");
-
-		ResponseEntity<Order> actual = controller.deleteOrder(expected);
-
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(any(Order.class));
-	}
-
-	@Test
 	void deleteOrderById() {
+		Order expected = OrderBuilder.of(1234, "id123");
+		when(service.delete(anyLong()))
+				.thenReturn(true);
+
 		ResponseEntity<Order> actual = controller.deleteOrderById(123L);
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(service, times(1)).delete(anyLong());
+	}
+
+	@Test
+	void deleteOrderByIdNotFound() {
+		Order expected = OrderBuilder.of(1234, "id123");
+		when(service.delete(anyLong()))
+				.thenReturn(false);
+
+		ResponseEntity<Order> actual = controller.deleteOrderById(123L);
+
+		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
 		verify(service, times(1)).delete(anyLong());
 	}
 }

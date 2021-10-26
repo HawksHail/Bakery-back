@@ -2,10 +2,10 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.repository.CustomerRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -34,17 +34,14 @@ public class CustomerService {
 		return customerRepository.save(customer);
 	}
 
-	public void delete(Customer customer) {
-		try {
-			customerRepository.delete(customer);
-		} catch (IllegalArgumentException ignored) {
-		}
-	}
 
-	public void delete(String id) {
-		try {
+	public boolean delete(String id) {
+		Optional<Customer> customer = customerRepository.findByCustomerId(id);
+		if (customer.isPresent()) {
 			customerRepository.deleteByCustomerId(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

@@ -2,10 +2,10 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.model.Product;
 import com.cts.capstone.repository.ProductRepository;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -33,17 +33,13 @@ public class ProductService {
 		return productRepository.save(category);
 	}
 
-	public void delete(Product product) {
-		try {
-			productRepository.delete(product);
-		} catch (IllegalArgumentException ignored) {
-		}
-	}
-
-	public void delete(Long id) {
-		try {
+	public boolean delete(Long id) {
+		Optional<Product> product = productRepository.findById(id);
+		if (product.isPresent()) {
 			productRepository.deleteById(id);
-		} catch (IllegalArgumentException | EmptyResultDataAccessException ignored) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

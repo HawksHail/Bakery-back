@@ -61,15 +61,13 @@ public class OrderController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Order> deleteOrder(@Valid @RequestBody Order order) {
-		orderService.delete(order);
-		return ResponseEntity.noContent().build();
-	}
-
 	@DeleteMapping("{id}")
 	public ResponseEntity<Order> deleteOrderById(@PathVariable Long id) {
-		orderService.delete(id);
-		return ResponseEntity.noContent().build();
+		boolean delete = orderService.delete(id);
+		if (delete) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

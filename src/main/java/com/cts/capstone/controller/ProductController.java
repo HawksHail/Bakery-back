@@ -56,15 +56,13 @@ public class ProductController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Product> deleteProduct(@Valid @RequestBody Product product) {
-		productService.delete(product);
-		return ResponseEntity.noContent().build();
-	}
-
 	@DeleteMapping("{id}")
 	public ResponseEntity<Product> deleteProductById(@PathVariable Long id) {
-		productService.delete(id);
-		return ResponseEntity.noContent().build();
+		boolean delete = productService.delete(id);
+		if (delete) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

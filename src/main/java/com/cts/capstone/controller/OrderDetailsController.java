@@ -68,9 +68,14 @@ public class OrderDetailsController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<OrderDetails> deleteOrderDetails(@Valid @RequestBody OrderDetails orderDetails) {
-		orderDetailsService.delete(orderDetails);
-		return ResponseEntity.noContent().build();
+	@DeleteMapping("{orderId}/product/{productId}")
+	public ResponseEntity<OrderDetails> deleteOrderDetails(@PathVariable Long orderId, @PathVariable Long productId) {
+		OrderDetailsKey key = new OrderDetailsKey(orderId, productId);
+		boolean delete = orderDetailsService.delete(key);
+		if (delete) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

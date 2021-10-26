@@ -56,15 +56,13 @@ public class SupplierController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Supplier> deleteSupplier(@Valid @RequestBody Supplier supplier) {
-		supplierService.delete(supplier);
-		return ResponseEntity.noContent().build();
-	}
-
 	@DeleteMapping("{id}")
 	public ResponseEntity<Supplier> deleteSupplierById(@PathVariable Long id) {
-		supplierService.delete(id);
-		return ResponseEntity.noContent().build();
+		boolean delete = supplierService.delete(id);
+		if (delete) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 }

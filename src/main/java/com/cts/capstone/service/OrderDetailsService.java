@@ -1,10 +1,12 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.model.OrderDetails;
+import com.cts.capstone.model.OrderDetailsKey;
 import com.cts.capstone.repository.OrderDetailsRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -45,10 +47,13 @@ public class OrderDetailsService {
 		return orderDetailsRepository.findAllByIdOrderId(id);
 	}
 
-	public void delete(OrderDetails orderDetails) {
-		try {
-			orderDetailsRepository.delete(orderDetails);
-		} catch (IllegalArgumentException ignored) {
+	public boolean delete(OrderDetailsKey key) {
+		Optional<OrderDetails> details = orderDetailsRepository.findById(key);
+		if (details.isPresent()) {
+			orderDetailsRepository.deleteById(key);
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
