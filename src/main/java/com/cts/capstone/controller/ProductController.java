@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("product")
 //@CrossOrigin("*")
-@CrossOrigin(originPatterns = {"https://master.ditbstqq8z8x3.amplifyapp.com/", "http://localhost"})
+@CrossOrigin(originPatterns = {"https://master.ditbstqq8z8x3.amplifyapp.com/", "http://localhost:*"})
 public class ProductController {
 
 	private ProductService productService;
