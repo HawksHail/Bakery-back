@@ -17,7 +17,7 @@ public class Cart {
 	@JsonIgnore
 	private Long id;
 
-	@ManyToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_customerid")
 	@JsonIgnoreProperties("cart")
 	@JsonIgnore

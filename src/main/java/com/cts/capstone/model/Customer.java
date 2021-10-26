@@ -36,7 +36,7 @@ public class Customer {
 	@Length(max = 15, message = "State max length 40")
 	private String state;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
 	@JoinColumn(name = "cart_id")
 	@JsonIgnoreProperties({"customer", "id"})
 	private Cart cart;
