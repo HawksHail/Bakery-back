@@ -3,7 +3,6 @@ package com.cts.capstone.service;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.repository.CartRepository;
 import com.cts.capstone.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +14,13 @@ import java.util.Optional;
 public class CustomerService {
 
 	private CustomerRepository customerRepository;
-	@Autowired
+
 	private CartRepository cartRepository;
 
-	public CustomerService(CustomerRepository customerRepository) {
+	public CustomerService(CustomerRepository customerRepository, CartRepository cartRepository) {
 		super();
 		this.customerRepository = customerRepository;
+		this.cartRepository = cartRepository;
 	}
 
 	public void setCartRepository(CartRepository cartRepository) {
