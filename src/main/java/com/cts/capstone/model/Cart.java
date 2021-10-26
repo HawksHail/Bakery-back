@@ -2,6 +2,7 @@ package com.cts.capstone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import javax.persistence.*;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class Cart {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_customerid")
 	@JsonIgnoreProperties("cart")
-	@JsonIgnore
+	@JsonIncludeProperties("customerId")
 	private Customer customer;
 
 	@ElementCollection
@@ -47,9 +48,10 @@ public class Cart {
 	}
 
 	public void set(Long product, int count) {
-		items.put(product, count);
 		if (count < 1) {
 			items.remove(product);
+		} else {
+			items.put(product, count);
 		}
 	}
 
