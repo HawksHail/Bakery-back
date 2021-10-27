@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,40 +24,41 @@ public class Cart {
 	@JsonIncludeProperties("customerId")
 	private Customer customer;
 
-	@ElementCollection
-	@CollectionTable(name = "cart_item_mapping",
-			joinColumns = {@JoinColumn(name = "cart_id", referencedColumnName = "id")})
-	@MapKeyColumn(name = "product_id")
-	@Column(name = "quantity")
-	private Map<Long, Integer> items;
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("cart")
+	private List<CartItem> items;
 
 	public Cart() {
 		//Empty
-		items = new HashMap<>();
+		items = new ArrayList<>();
 	}
 
-	public Cart(Long id, Customer customer, Map<Long, Integer> items) {
+	public Cart(Long id, Customer customer, List<CartItem> items) {
 		this.id = id;
 		this.customer = customer;
 		this.items = items;
 	}
 
-	public void add(Long product) {
-		Integer count = items.getOrDefault(product, 0);
-		set(product, count + 1);
-	}
-
-	public void set(Long product, int count) {
-		if (count < 1) {
-			items.remove(product);
-		} else {
-			items.put(product, count);
+	public void add(Product p) {
+		for (CartItem item : items) {
+			if (item.getProduct().equals(p)) {
+				item.add();
+				return;
+			}
 		}
+		items.add(new CartItem(this, p, 1));
 	}
 
-	public void remove(Long product) {
-		Integer count = items.getOrDefault(product, 0);
-		set(product, count - 1);
+	public void remove(Product p) {
+		for (CartItem item : items) {
+			if (item.getProduct().equals(p)) {
+				int q = item.remove();
+				if (q < 1) {
+					items.remove(item);
+					return;
+				}
+			}
+		}
 	}
 
 	public Customer getCustomer() {
@@ -68,11 +69,12 @@ public class Cart {
 		this.customer = customer;
 	}
 
-	public Map<Long, Integer> getItems() {
+
+	public List<CartItem> getItems() {
 		return items;
 	}
 
-	public void setItems(Map<Long, Integer> items) {
+	public void setItems(List<CartItem> items) {
 		this.items = items;
 	}
 
@@ -101,7 +103,7 @@ public class Cart {
 	public String toString() {
 		return "Cart{" +
 				"id=" + id +
-				", customer=" + customer +
+				", customer=" + customer.getCustomerId() +
 				", items=" + items +
 				'}';
 	}

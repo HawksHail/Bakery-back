@@ -17,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -44,7 +42,7 @@ class CartControllerTest {
 		customer = CustomerBuilder.of("test1", "company name", "contact name", "street", "city", "state");
 		product = ProductBuilder.of(1, "product name", "123");
 		product2 = ProductBuilder.of(2, "product2 name", "321");
-		customer.getCart().add(product.getId());
+		customer.getCart().add(product);
 		controller = new CartController(customerService, productService);
 	}
 
@@ -85,7 +83,7 @@ class CartControllerTest {
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
 		assertNotNull(body);
-		assertEquals(Map.of(product.getId(), 1, product2.getId(), 1), body.getItems());
+		assertEquals(2, body.getItems().size());
 		verify(customerService, times(1)).findById(anyString());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
@@ -134,8 +132,11 @@ class CartControllerTest {
 
 		ResponseEntity<Object> actual = controller.deleteCartProduct(customer.getCustomerId(), product2.getId());
 
+		Cart body = (Cart) actual.getBody();
+
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
-		assertEquals(new Cart(), actual.getBody());
+		assertNotNull(body);
+		assertEquals(0, body.getItems().size());
 		verify(customerService, times(1)).findById(anyString());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
