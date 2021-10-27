@@ -107,8 +107,8 @@ public class Product {
 		return "Product{" +
 				"id=" + id +
 				", productName='" + productName + '\'' +
-				", supplier=" + supplier +
-				", category=" + category +
+				", supplier=" + supplier.getId() +
+				", category=" + category.getId() +
 				", unitPrice=" + unitPrice +
 				'}';
 	}

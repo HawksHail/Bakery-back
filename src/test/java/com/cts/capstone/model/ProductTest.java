@@ -79,6 +79,7 @@ class ProductTest {
 	void toStringTest() {
 		ToStringVerifier.forClass(Product.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
+				.withIgnoredFields("supplier", "category")
 				.verify();
 	}
 }

@@ -133,7 +133,7 @@ public class Customer {
 				", street='" + street + '\'' +
 				", city='" + city + '\'' +
 				", state='" + state + '\'' +
-				", cart=" + cart +
+				", cart=" + cart.getId() +
 				'}';
 	}
 }

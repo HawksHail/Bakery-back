@@ -71,6 +71,7 @@ class CustomerTest {
 	void toStringTest() {
 		ToStringVerifier.forClass(Customer.class)
 				.withClassName(NameStyle.SIMPLE_NAME)
+				.withFormatter(Cart.class, (c) -> String.valueOf(c.getId()))
 				.verify();
 	}
 }

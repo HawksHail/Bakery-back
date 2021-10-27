@@ -89,7 +89,6 @@ public class Supplier {
 				"id=" + id +
 				", companyName='" + companyName + '\'' +
 				", contactName='" + contactName + '\'' +
-				", productList=" + productList +
 				'}';
 	}
 }
