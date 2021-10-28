@@ -69,6 +69,7 @@ public class CartController {
 			cart.setCustomer(customer);
 			customer.setCart(cart);
 		}
+
 		customer.getCart().add(product);
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());
@@ -89,6 +90,7 @@ public class CartController {
 			cart.setCustomer(customer);
 			customer.setCart(cart);
 		}
+
 		customer.getCart().remove(product);
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());
