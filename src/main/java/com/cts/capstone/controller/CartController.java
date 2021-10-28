@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("cart")
-@CrossOrigin("*")
-//@CrossOrigin(originPatterns = {"https://master.ditbstqq8z8x3.amplifyapp.com/", "http://localhost:*"})
 public class CartController {
 
 	@Autowired
