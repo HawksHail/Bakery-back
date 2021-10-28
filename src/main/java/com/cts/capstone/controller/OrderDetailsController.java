@@ -18,8 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("order/details")
-@CrossOrigin("*")
-//@CrossOrigin(originPatterns = {"https://master.ditbstqq8z8x3.amplifyapp.com/", "http://localhost:*"})
 public class OrderDetailsController {
 
 	private OrderDetailsService orderDetailsService;

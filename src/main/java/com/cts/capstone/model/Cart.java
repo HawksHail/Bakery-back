@@ -24,7 +24,8 @@ public class Cart {
 	@JsonIncludeProperties("customerId")
 	private Customer customer;
 
-	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+	@CollectionTable(name = "cartitem_id")
 	@JsonIgnoreProperties("cart")
 	private List<CartItem> items;
 

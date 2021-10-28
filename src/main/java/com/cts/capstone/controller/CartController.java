@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("cart")
-@CrossOrigin("*")
-//@CrossOrigin(originPatterns = {"https://master.ditbstqq8z8x3.amplifyapp.com/", "http://localhost:*"})
 public class CartController {
 
 	@Autowired
@@ -71,6 +69,7 @@ public class CartController {
 			cart.setCustomer(customer);
 			customer.setCart(cart);
 		}
+
 		customer.getCart().add(product);
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());
@@ -91,6 +90,7 @@ public class CartController {
 			cart.setCustomer(customer);
 			customer.setCart(cart);
 		}
+
 		customer.getCart().remove(product);
 		Customer add = customerService.add(customer);
 		return ResponseEntity.ok(add.getCart());

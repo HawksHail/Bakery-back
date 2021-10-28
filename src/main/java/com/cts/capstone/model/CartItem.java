@@ -15,7 +15,7 @@ public class CartItem {
 	@JsonIgnore
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "cart_id")
 	@JsonIgnoreProperties("items")
 	private Cart cart;
