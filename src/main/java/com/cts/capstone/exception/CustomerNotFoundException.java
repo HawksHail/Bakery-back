@@ -8,11 +8,11 @@ public class CustomerNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public CustomerNotFoundException(String id) {
+	public CustomerNotFoundException(Long id) {
 		this(id, null);
 	}
 
-	public CustomerNotFoundException(String id, Throwable cause) {
+	public CustomerNotFoundException(Long id, Throwable cause) {
 		super(message + " " + id, cause);
 	}
 }

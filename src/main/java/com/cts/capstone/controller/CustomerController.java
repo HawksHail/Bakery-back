@@ -33,7 +33,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("{id}")
-	public Customer getCustomer(@PathVariable String id) {
+	public Customer getCustomer(@PathVariable Long id) {
 		Customer find = customerService.findById(id);
 		if (find == null) {
 			throw new CustomerNotFoundException(id);
@@ -55,7 +55,7 @@ public class CustomerController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Customer> deleteCustomerById(@PathVariable String id) {
+	public ResponseEntity<Customer> deleteCustomerById(@PathVariable Long id) {
 		boolean delete = customerService.delete(id);
 		if (delete) {
 			return ResponseEntity.noContent().build();

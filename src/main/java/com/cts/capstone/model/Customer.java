@@ -11,10 +11,9 @@ import java.util.Objects;
 public class Customer {
 
 	@Id
-	@Column(name = "customerid", length = 5)
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Length(max = 5, min = 5, message = "Customer ID must be length 5")
-	private String customerId;
+	@Column(name = "customerid")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long customerId;
 
 	@Column(name = "companyname", nullable = false, length = 40)
 	@Length(max = 40, message = "Company name max length 40")
@@ -45,7 +44,7 @@ public class Customer {
 		cart = new Cart();
 	}
 
-	public Customer(String customerId, String companyName, String contactName, String street, String city, String state) {
+	public Customer(Long customerId, String companyName, String contactName, String street, String city, String state) {
 		this.customerId = customerId;
 		this.companyName = companyName;
 		this.contactName = contactName;
@@ -55,11 +54,11 @@ public class Customer {
 		cart = new Cart();
 	}
 
-	public String getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 

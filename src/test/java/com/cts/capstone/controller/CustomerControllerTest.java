@@ -35,8 +35,8 @@ class CustomerControllerTest {
 	@Test
 	void getAllCustomers() {
 		List<Customer> expected = new CustomerBuilder()
-				.w("id123", "name", "description", "street", "city", "state")
-				.w("id124", "name2", "description2", "street2", "city2", "state2")
+				.w(1234L, "name", "description", "street", "city", "state")
+				.w(12345L, "name2", "description2", "street2", "city2", "state2")
 				.build();
 		when(service.findAll())
 				.thenReturn(expected);
@@ -49,29 +49,29 @@ class CustomerControllerTest {
 
 	@Test
 	void getCustomer() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(service.findById(anyString()))
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.findById(anyLong()))
 				.thenReturn(expected);
 
-		Customer actual = controller.getCustomer("id123");
+		Customer actual = controller.getCustomer(1234L);
 
 		assertEquals(expected, actual);
-		verify(service, times(1)).findById(anyString());
+		verify(service, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void getCustomerNotFound() {
-		when(service.findById(anyString()))
+		when(service.findById(anyLong()))
 				.thenReturn(null);
 
-		assertThrows(CustomerNotFoundException.class, () -> controller.getCustomer("id123"));
+		assertThrows(CustomerNotFoundException.class, () -> controller.getCustomer(1234L));
 
-		verify(service, times(1)).findById(anyString());
+		verify(service, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void addCustomer() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
 		when(service.add(any(Customer.class)))
 				.thenReturn(expected);
 
@@ -85,7 +85,7 @@ class CustomerControllerTest {
 
 	@Test
 	void putCustomer() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
 		when(service.add(any(Customer.class)))
 				.thenReturn(expected);
 
@@ -97,25 +97,25 @@ class CustomerControllerTest {
 
 	@Test
 	void deleteCustomerById() {
-		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(service.delete(anyString()))
+		Customer customer = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.delete(anyLong()))
 				.thenReturn(true);
 
-		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
+		ResponseEntity<Customer> actual = controller.deleteCustomerById(1234L);
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(service, times(1)).delete(anyString());
+		verify(service, times(1)).delete(anyLong());
 	}
 
 	@Test
 	void deleteCustomerByIdNotFound() {
-		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(service.delete(anyString()))
+		Customer customer = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.delete(anyLong()))
 				.thenReturn(false);
 
-		ResponseEntity<Customer> actual = controller.deleteCustomerById("id123");
+		ResponseEntity<Customer> actual = controller.deleteCustomerById(1234L);
 
 		assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
-		verify(service, times(1)).delete(anyString());
+		verify(service, times(1)).delete(anyLong());
 	}
 }

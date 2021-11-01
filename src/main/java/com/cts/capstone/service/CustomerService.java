@@ -35,8 +35,8 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 
-	public Customer findById(String id) {
-		return customerRepository.findByCustomerId(id).orElse(null);
+	public Customer findById(Long id) {
+		return customerRepository.findById(id).orElse(null);
 	}
 
 	public Customer add(Customer customer) {
@@ -44,11 +44,11 @@ public class CustomerService {
 	}
 
 	@Transactional
-	public boolean delete(String id) {
-		Optional<Customer> customer = customerRepository.findByCustomerId(id);
+	public boolean delete(Long id) {
+		Optional<Customer> customer = customerRepository.findById(id);
 		if (customer.isPresent()) {
 			cartRepository.delete(customer.get().getCart());
-			customerRepository.deleteByCustomerId(id);
+			customerRepository.deleteById(id);
 			return true;
 		} else {
 			return false;

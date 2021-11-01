@@ -15,13 +15,13 @@ class CustomerTest {
 
 	@BeforeEach
 	void setUp() {
-		customer = CustomerBuilder.of("cm1234", "Cognizant", "Bob", "street", "city", "state");
+		customer = CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state");
 	}
 
 	@Test
 	void setCustomerId() {
-		customer.setCustomerId("abc");
-		assertEquals("abc", customer.getCustomerId());
+		customer.setCustomerId(4321L);
+		assertEquals(4321, customer.getCustomerId());
 	}
 
 	@Test
@@ -56,8 +56,8 @@ class CustomerTest {
 
 	@Test
 	void hashcodeAndEquals() {
-		Customer x = CustomerBuilder.of("cm1234", "Cognizant", "Bob", "street", "city", "state");
-		Customer y = CustomerBuilder.of("cm1234", "Cognizant", "Bob", "street", "city", "state");
+		Customer x = CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state");
+		Customer y = CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state");
 		Customer a = CustomerBuilder.of();
 		Customer b = CustomerBuilder.of();
 
