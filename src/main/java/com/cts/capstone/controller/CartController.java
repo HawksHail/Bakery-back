@@ -39,7 +39,7 @@ public class CartController {
 	}
 
 	@GetMapping("{customerId}")
-	public ResponseEntity<Object> getCart(@PathVariable String customerId) {
+	public ResponseEntity<Object> getCart(@PathVariable Long customerId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -55,7 +55,7 @@ public class CartController {
 	}
 
 	@PostMapping("{customerId}/{productId}")
-	public ResponseEntity<Object> addCartProduct(@PathVariable String customerId, @PathVariable Long productId) {
+	public ResponseEntity<Object> addCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -76,7 +76,7 @@ public class CartController {
 	}
 
 	@DeleteMapping("{customerId}/{productId}")
-	public ResponseEntity<Object> deleteCartProduct(@PathVariable String customerId, @PathVariable Long productId) {
+	public ResponseEntity<Object> deleteCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -97,7 +97,7 @@ public class CartController {
 	}
 
 	@DeleteMapping("{customerId}")
-	public ResponseEntity<Object> deleteCartAllProduct(@PathVariable String customerId) {
+	public ResponseEntity<Object> deleteCartAllProduct(@PathVariable Long customerId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);

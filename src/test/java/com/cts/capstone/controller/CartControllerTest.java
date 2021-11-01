@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -39,7 +38,7 @@ class CartControllerTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		customer = CustomerBuilder.of("test1", "company name", "contact name", "street", "city", "state");
+		customer = CustomerBuilder.of(1234L, "company name", "contact name", "street", "city", "state");
 		product = ProductBuilder.of(1, "product name", "123");
 		product2 = ProductBuilder.of(2, "product2 name", "321");
 		customer.getCart().add(product);
@@ -48,29 +47,29 @@ class CartControllerTest {
 
 	@Test
 	void getCart() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 
 		ResponseEntity<Object> actual = controller.getCart(customer.getCustomerId());
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
 		assertEquals(customer.getCart(), actual.getBody());
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void getCartNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(null);
 
 		assertThrows(CustomerNotFoundException.class, () -> controller.getCart(customer.getCustomerId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void addCartProduct() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(product2);
@@ -84,14 +83,14 @@ class CartControllerTest {
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
 		assertNotNull(body);
 		assertEquals(2, body.getItems().size());
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
 	}
 
 	@Test
 	void addCartProductCustomerNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(null);
 		when(productService.findById(anyLong()))
 				.thenReturn(product2);
@@ -100,14 +99,14 @@ class CartControllerTest {
 
 		assertThrows(CustomerNotFoundException.class, () -> controller.addCartProduct(customer.getCustomerId(), product2.getId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(0)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
 
 	@Test
 	void addCartProductProductNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(null);
@@ -116,14 +115,14 @@ class CartControllerTest {
 
 		assertThrows(ProductNotFoundException.class, () -> controller.addCartProduct(customer.getCustomerId(), product2.getId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
 
 	@Test
 	void deleteCartProduct() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(product);
@@ -137,14 +136,14 @@ class CartControllerTest {
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
 		assertNotNull(body);
 		assertEquals(0, body.getItems().size());
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
 	}
 
 	@Test
 	void deleteCartProductCustomerNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(null);
 		when(productService.findById(anyLong()))
 				.thenReturn(product);
@@ -153,14 +152,14 @@ class CartControllerTest {
 
 		assertThrows(CustomerNotFoundException.class, () -> controller.deleteCartProduct(customer.getCustomerId(), product2.getId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(0)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
 
 	@Test
 	void deleteCartProductProductNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(null);
@@ -169,14 +168,14 @@ class CartControllerTest {
 
 		assertThrows(ProductNotFoundException.class, () -> controller.deleteCartProduct(customer.getCustomerId(), product2.getId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(productService, times(1)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
 
 	@Test
 	void deleteCartAllProduct() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(customerService.add(any(Customer.class)))
 				.thenReturn(customer);
@@ -184,20 +183,20 @@ class CartControllerTest {
 		ResponseEntity<Object> actual = controller.deleteCartAllProduct(customer.getCustomerId());
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(customerService, times(1)).add(any(Customer.class));
 	}
 
 	@Test
 	void deleteCartAllProductCustomerNotFound() {
-		when(customerService.findById(anyString()))
+		when(customerService.findById(anyLong()))
 				.thenReturn(null);
 		when(customerService.add(any(Customer.class)))
 				.thenReturn(customer);
 
 		assertThrows(CustomerNotFoundException.class, () -> controller.deleteCartAllProduct(customer.getCustomerId()));
 
-		verify(customerService, times(1)).findById(anyString());
+		verify(customerService, times(1)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
 }

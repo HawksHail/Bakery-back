@@ -46,7 +46,7 @@ class CustomerResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		CustomerNotFoundException exception = new CustomerNotFoundException("id123");
+		CustomerNotFoundException exception = new CustomerNotFoundException(1234L);
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

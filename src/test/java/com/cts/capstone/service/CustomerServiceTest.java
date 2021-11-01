@@ -35,8 +35,8 @@ class CustomerServiceTest {
 	@Test
 	void findAll() {
 		List<Customer> expected = new CustomerBuilder()
-				.w("id123", "name", "description", "street", "city", "state")
-				.w("id124", "name2", "description2", "street2", "city2", "state2")
+				.w(1234L, "name", "description", "street", "city", "state")
+				.w(1235L, "name2", "description2", "street2", "city2", "state2")
 				.build();
 		when(repository.findAll())
 				.thenReturn(expected);
@@ -49,30 +49,30 @@ class CustomerServiceTest {
 
 	@Test
 	void findById() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(repository.findByCustomerId(anyString()))
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.of(expected));
 
-		Customer actual = service.findById("id123");
+		Customer actual = service.findById(1234L);
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findByCustomerId(anyString());
+		verify(repository, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void findByIdNotFound() {
-		when(repository.findByCustomerId(anyString()))
+		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		Customer actual = service.findById("id123");
+		Customer actual = service.findById(1234L);
 
 		assertNull(actual);
-		verify(repository, times(1)).findByCustomerId(anyString());
+		verify(repository, times(1)).findById(anyLong());
 	}
 
 	@Test
 	void add() {
-		Customer expected = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
 		when(repository.save(any(Customer.class)))
 				.thenReturn(expected);
 
@@ -84,24 +84,24 @@ class CustomerServiceTest {
 
 	@Test
 	void deleteByCustomerId() {
-		Customer customer = CustomerBuilder.of("id123", "name", "description", "street", "city", "state");
-		when(repository.findByCustomerId(anyString()))
+		Customer customer = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(repository.findById(anyLong()))
 				.thenReturn(Optional.of(customer));
 
-		boolean delete = service.delete("id123");
+		boolean delete = service.delete(1234L);
 
 		assertTrue(delete);
-		verify(repository, times(1)).deleteByCustomerId(anyString());
+		verify(repository, times(1)).deleteById(anyLong());
 	}
 
 	@Test
 	void deleteByCustomerIdNotFound() {
-		when(repository.findByCustomerId(anyString()))
+		when(repository.findById(anyLong()))
 				.thenReturn(Optional.empty());
 
-		boolean delete = service.delete("id123");
+		boolean delete = service.delete(1234L);
 
 		assertFalse(delete);
-		verify(repository, times(0)).deleteByCustomerId(anyString());
+		verify(repository, times(0)).deleteById(anyLong());
 	}
 }

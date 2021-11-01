@@ -17,12 +17,12 @@ public class CustomerBuilder {
 		return new Customer();
 	}
 
-	public CustomerBuilder w(String id, String companyName, String contactName, String street, String city, String state) {
+	public CustomerBuilder w(Long id, String companyName, String contactName, String street, String city, String state) {
 		list.add(of(id, companyName, contactName, street, city, state));
 		return this;
 	}
 
-	public static Customer of(String id, String companyName, String contactName, String street, String city, String state) {
+	public static Customer of(Long id, String companyName, String contactName, String street, String city, String state) {
 		return new Customer(id, companyName, contactName, street, city, state);
 	}
 
