@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.mvcMatchers("/").permitAll()
-				.mvcMatchers("/*").authenticated()
+				.mvcMatchers("/customer", "/cart", "/order").authenticated()
 //				.mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
 				.and().cors()
 				.and().oauth2ResourceServer().jwt();
