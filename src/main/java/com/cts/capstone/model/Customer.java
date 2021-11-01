@@ -15,7 +15,10 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long customerId;
 
-	@Column(name = "companyname", nullable = false, length = 40)
+	@Column
+	private String sub;
+
+	@Column(name = "companyname", length = 40)
 	@Length(max = 40, message = "Company name max length 40")
 	private String companyName;
 
