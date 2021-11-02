@@ -15,7 +15,10 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long customerId;
 
-	@Column(name = "companyname", nullable = false, length = 40)
+	@Column
+	private String sub;
+
+	@Column(name = "companyname", length = 40)
 	@Length(max = 40, message = "Company name max length 40")
 	private String companyName;
 
@@ -66,6 +69,14 @@ public class Customer {
 		return companyName;
 	}
 
+	public String getSub() {
+		return sub;
+	}
+
+	public void setSub(String sub) {
+		this.sub = sub;
+	}
+
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
@@ -112,7 +123,7 @@ public class Customer {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerId, companyName, contactName, street, city, state);
+		return Objects.hash(customerId, companyName, contactName, street, city, state, cart, sub);
 	}
 
 	@Override
@@ -120,13 +131,14 @@ public class Customer {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return Objects.equals(customerId, customer.customerId) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state);
+		return Objects.equals(customerId, customer.customerId) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state) && Objects.equals(cart, customer.cart) && Objects.equals(sub, customer.sub);
 	}
 
 	@Override
 	public String toString() {
 		return "Customer{" +
-				"customerId='" + customerId + '\'' +
+				"customerId=" + customerId +
+				", sub='" + sub + '\'' +
 				", companyName='" + companyName + '\'' +
 				", contactName='" + contactName + '\'' +
 				", street='" + street + '\'' +

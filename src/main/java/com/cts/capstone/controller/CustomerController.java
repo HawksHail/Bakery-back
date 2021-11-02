@@ -41,6 +41,15 @@ public class CustomerController {
 		return find;
 	}
 
+	@GetMapping("sub/{sub}")
+	public Customer getCustomerBySub(@PathVariable String sub) {
+		Customer find = customerService.findBySub(sub);
+		if (find == null) {
+			throw new CustomerNotFoundException();
+		}
+		return find;
+	}
+
 	@PostMapping()
 	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);

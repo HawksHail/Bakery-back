@@ -54,4 +54,8 @@ public class CustomerService {
 			return false;
 		}
 	}
+
+	public Customer findBySub(String sub) {
+		return customerRepository.findBySub(sub).orElse(null);
+	}
 }
