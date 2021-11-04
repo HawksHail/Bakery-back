@@ -1,6 +1,6 @@
 package com.cts.capstone.model;
 
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,12 +10,13 @@ public class CartItem {
 
 	@Id
 	@Column(name = "id")
+	@JsonIgnore
 	@GeneratedValue
 	private Long cartItemId;
 
 	@ManyToOne
 	@JoinColumn(name = "customerid")
-	@JsonIncludeProperties("customerId")
+	@JsonIgnore
 	private Customer customer;
 
 	@ManyToOne
