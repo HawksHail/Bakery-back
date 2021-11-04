@@ -34,13 +34,13 @@ class ProductServiceTest {
 				.w(123, "name", "123")
 				.w(124, "name2", "321")
 				.build();
-		when(repository.findAll())
+		when(repository.findAllByOrderByProductNameAsc())
 				.thenReturn(expected);
 
 		List<Product> actual = service.findAll();
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findAll();
+		verify(repository, times(1)).findAllByOrderByProductNameAsc();
 	}
 
 	@Test

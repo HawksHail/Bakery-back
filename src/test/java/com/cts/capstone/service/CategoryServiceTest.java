@@ -34,13 +34,13 @@ class CategoryServiceTest {
 				.w(123, "name", "description")
 				.w(124, "name2", "description2")
 				.build();
-		when(repository.findAll())
+		when(repository.findAllByOrderByCategoryNameAsc())
 				.thenReturn(expected);
 
 		List<Category> actual = service.findAll();
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findAll();
+		verify(repository, times(1)).findAllByOrderByCategoryNameAsc();
 	}
 
 	@Test
