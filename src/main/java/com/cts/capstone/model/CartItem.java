@@ -1,7 +1,6 @@
 package com.cts.capstone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,18 +9,18 @@ import java.util.Objects;
 public class CartItem {
 
 	@Id
-	@GeneratedValue
-	@Column(name = "id", nullable = false)
+	@Column(name = "id")
 	@JsonIgnore
-	private Long id;
-
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "cart_id")
-	@JsonIgnoreProperties("items")
-	private Cart cart;
+	@GeneratedValue
+	private Long cartItemId;
 
 	@ManyToOne
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "customerid")
+	@JsonIgnore
+	private Customer customer;
+
+	@ManyToOne
+	@JoinColumn(name = "productid")
 	private Product product;
 
 	@Column
@@ -31,31 +30,31 @@ public class CartItem {
 		//Empty
 	}
 
-	public CartItem(Cart cart, Product product, int quantity) {
-		this.cart = cart;
-		this.product = product;
-		this.quantity = quantity;
-	}
-
 	public CartItem(Product product) {
 		this.product = product;
 		this.quantity = 1;
 	}
 
-	public Long getId() {
-		return id;
+	public CartItem(Customer customer, Product product, int quantity) {
+		this.customer = customer;
+		this.product = product;
+		this.quantity = quantity;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Long getCartItemId() {
+		return cartItemId;
 	}
 
-	public Cart getCart() {
-		return cart;
+	public void setCartItemId(Long cartItemId) {
+		this.cartItemId = cartItemId;
 	}
 
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public Product getProduct() {
@@ -74,29 +73,6 @@ public class CartItem {
 		this.quantity = quantity;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, cart, product, quantity);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		CartItem cartItem = (CartItem) o;
-		return quantity == cartItem.quantity && Objects.equals(id, cartItem.id) && Objects.equals(cart, cartItem.cart) && Objects.equals(product, cartItem.product);
-	}
-
-	@Override
-	public String toString() {
-		return "CartItem{" +
-				"id=" + id +
-				", cart=" + cart.getId() +
-				", product=" + product.getId() +
-				", quantity=" + quantity +
-				'}';
-	}
-
 	public int add() {
 		return ++quantity;
 	}
@@ -105,4 +81,26 @@ public class CartItem {
 		return --quantity;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(cartItemId, customer, product, quantity);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CartItem cartItem = (CartItem) o;
+		return quantity == cartItem.quantity && Objects.equals(cartItemId, cartItem.cartItemId) && Objects.equals(customer, cartItem.customer) && Objects.equals(product, cartItem.product);
+	}
+
+	@Override
+	public String toString() {
+		return "CartItem{" +
+				"cartItemId=" + cartItemId +
+				", customer=" + (customer != null ? customer.getCustomerId() : null) +
+				", product=" + (product != null ? product.getId() : null) +
+				", quantity=" + quantity +
+				'}';
+	}
 }

@@ -2,15 +2,18 @@ package com.cts.capstone.controller;
 
 import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ProductNotFoundException;
-import com.cts.capstone.model.Cart;
+import com.cts.capstone.model.CartItem;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
-import com.cts.capstone.repository.CartRepository;
+import com.cts.capstone.repository.CartItemRepository;
 import com.cts.capstone.service.CustomerService;
 import com.cts.capstone.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("cart")
@@ -23,11 +26,12 @@ public class CartController {
 	ProductService productService;
 
 	@Autowired
-	CartRepository cartRepository;
+	CartItemRepository cartRepository;
 
-	public CartController(CustomerService customerService, ProductService productService) {
+	public CartController(CustomerService customerService, ProductService productService, CartItemRepository cartRepository) {
 		this.customerService = customerService;
 		this.productService = productService;
+		this.cartRepository = cartRepository;
 	}
 
 	public void setCustomerService(CustomerService customerService) {
@@ -39,23 +43,17 @@ public class CartController {
 	}
 
 	@GetMapping("{customerId}")
-	public ResponseEntity<Object> getCart(@PathVariable Long customerId) {
+	public ResponseEntity<List<CartItem>> getCart(@PathVariable Long customerId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
-		}
-		if (customer.getCart() == null) {
-			Cart cart = cartRepository.save(new Cart());
-			cart.setCustomer(customer);
-			customer.setCart(cart);
-			customer = customerService.add(customer);
 		}
 
 		return ResponseEntity.ok(customer.getCart());
 	}
 
 	@PostMapping("{customerId}/{productId}")
-	public ResponseEntity<Object> addCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
+	public ResponseEntity<List<CartItem>> addCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -64,19 +62,19 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		if (customer.getCart() == null) {
-			Cart cart = cartRepository.save(new Cart());
-			cart.setCustomer(customer);
-			customer.setCart(cart);
+		Optional<CartItem> item = cartRepository.findByCustomerCustomerIdAndProductId(customerId, productId);
+		if (item.isPresent()) {
+			item.get().add();
+			cartRepository.save(item.get());
+		} else {
+			cartRepository.save(new CartItem(customer, product, 1));
 		}
 
-		customer.getCart().add(product);
-		Customer add = customerService.add(customer);
-		return ResponseEntity.ok(add.getCart());
+		return ResponseEntity.ok(cartRepository.findAllByCustomerCustomerId(customerId));
 	}
 
 	@DeleteMapping("{customerId}/{productId}")
-	public ResponseEntity<Object> deleteCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
+	public ResponseEntity<List<CartItem>> deleteCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -85,31 +83,29 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		if (customer.getCart() == null) {
-			Cart cart = cartRepository.save(new Cart());
-			cart.setCustomer(customer);
-			customer.setCart(cart);
+		Optional<CartItem> item = cartRepository.findByCustomerCustomerIdAndProductId(customerId, productId);
+		if (item.isPresent()) {
+			int quantity = item.get().remove();
+			if (quantity < 1) {
+				cartRepository.delete(item.get());
+			} else {
+				cartRepository.save(item.get());
+			}
 		}
 
-		customer.getCart().remove(product);
-		Customer add = customerService.add(customer);
-		return ResponseEntity.ok(add.getCart());
+
+		return ResponseEntity.ok(cartRepository.findAllByCustomerCustomerId(customerId));
 	}
 
 	@DeleteMapping("{customerId}")
-	public ResponseEntity<Object> deleteCartAllProduct(@PathVariable Long customerId) {
+	public ResponseEntity<List<CartItem>> deleteCartAllProduct(@PathVariable Long customerId) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
 		}
-		if (customer.getCart() == null) {
-			Cart cart = cartRepository.save(new Cart());
-			cart.setCustomer(customer);
-			customer.setCart(cart);
-		}
 
-		customer.getCart().clear();
-		Customer add = customerService.add(customer);
+		cartRepository.deleteAllInBatch(cartRepository.findAllByCustomerCustomerId(customerId));
+
 		return ResponseEntity.noContent().build();
 	}
 }

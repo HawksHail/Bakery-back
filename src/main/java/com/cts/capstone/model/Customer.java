@@ -1,9 +1,10 @@
 package com.cts.capstone.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -38,23 +39,34 @@ public class Customer {
 	@Length(max = 15, message = "State max length 40")
 	private String state;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
-	@JoinColumn(name = "cart_id")
-	@JsonIgnoreProperties({"customer", "id"})
-	private Cart cart;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customerid")
+	private List<CartItem> cart;
 
 	public Customer() {
-		cart = new Cart();
+		cart = new ArrayList<>();
 	}
 
-	public Customer(Long customerId, String companyName, String contactName, String street, String city, String state) {
+	public Customer(Long customerId, String sub, String companyName, String contactName, String street, String city, String state) {
 		this.customerId = customerId;
+		this.sub = sub;
 		this.companyName = companyName;
 		this.contactName = contactName;
 		this.street = street;
 		this.city = city;
 		this.state = state;
-		cart = new Cart();
+		cart = new ArrayList<>();
+	}
+
+	public Customer(Long customerId, String sub, String companyName, String contactName, String street, String city, String state, List<CartItem> cart) {
+		this.customerId = customerId;
+		this.sub = sub;
+		this.companyName = companyName;
+		this.contactName = contactName;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.cart = cart;
 	}
 
 	public Long getCustomerId() {
@@ -113,17 +125,17 @@ public class Customer {
 		this.state = state;
 	}
 
-	public Cart getCart() {
+	public List<CartItem> getCart() {
 		return cart;
 	}
 
-	public void setCart(Cart cart) {
+	public void setCart(List<CartItem> cart) {
 		this.cart = cart;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerId, companyName, contactName, street, city, state, cart, sub);
+		return Objects.hash(customerId, sub, companyName, contactName, street, city, state, cart);
 	}
 
 	@Override
@@ -131,7 +143,7 @@ public class Customer {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return Objects.equals(customerId, customer.customerId) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state) && Objects.equals(cart, customer.cart) && Objects.equals(sub, customer.sub);
+		return Objects.equals(customerId, customer.customerId) && Objects.equals(sub, customer.sub) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state) && Objects.equals(cart, customer.cart);
 	}
 
 	@Override
@@ -144,7 +156,7 @@ public class Customer {
 				", street='" + street + '\'' +
 				", city='" + city + '\'' +
 				", state='" + state + '\'' +
-				", cart=" + cart.getId() +
+				", cart=" + cart +
 				'}';
 	}
 }

@@ -1,7 +1,6 @@
 package com.cts.capstone.service;
 
 import com.cts.capstone.model.Customer;
-import com.cts.capstone.repository.CartRepository;
 import com.cts.capstone.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,16 +14,9 @@ public class CustomerService {
 
 	private CustomerRepository customerRepository;
 
-	private CartRepository cartRepository;
-
-	public CustomerService(CustomerRepository customerRepository, CartRepository cartRepository) {
+	public CustomerService(CustomerRepository customerRepository) {
 		super();
 		this.customerRepository = customerRepository;
-		this.cartRepository = cartRepository;
-	}
-
-	public void setCartRepository(CartRepository cartRepository) {
-		this.cartRepository = cartRepository;
 	}
 
 	public void setCustomerService(CustomerRepository customerRepository) {
@@ -47,7 +39,6 @@ public class CustomerService {
 	public boolean delete(Long id) {
 		Optional<Customer> customer = customerRepository.findById(id);
 		if (customer.isPresent()) {
-			cartRepository.delete(customer.get().getCart());
 			customerRepository.deleteById(id);
 			return true;
 		} else {
