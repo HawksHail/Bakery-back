@@ -4,9 +4,10 @@ import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ProductNotFoundException;
-import com.cts.capstone.model.Cart;
+import com.cts.capstone.model.CartItem;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
+import com.cts.capstone.repository.CartItemRepository;
 import com.cts.capstone.service.CustomerService;
 import com.cts.capstone.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -28,6 +33,9 @@ class CartControllerTest {
 
 	@Mock
 	ProductService productService;
+
+	@Mock
+	CartItemRepository cartRepository;
 
 	CartController controller;
 
@@ -41,8 +49,8 @@ class CartControllerTest {
 		customer = CustomerBuilder.of(1234L, "company name", "contact name", "street", "city", "state");
 		product = ProductBuilder.of(1, "product name", "123");
 		product2 = ProductBuilder.of(2, "product2 name", "321");
-		customer.getCart().add(product);
-		controller = new CartController(customerService, productService);
+		customer.getCart().add(new CartItem(customer, product, 1));
+		controller = new CartController(customerService, productService, cartRepository);
 	}
 
 	@Test
@@ -50,7 +58,7 @@ class CartControllerTest {
 		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 
-		ResponseEntity<Object> actual = controller.getCart(customer.getCustomerId());
+		ResponseEntity<List<CartItem>> actual = controller.getCart(customer.getCustomerId());
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
 		assertEquals(customer.getCart(), actual.getBody());
@@ -68,24 +76,41 @@ class CartControllerTest {
 	}
 
 	@Test
-	void addCartProduct() {
+	void addCartProduct_newItem() {
 		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(product2);
-		when(customerService.add(any(Customer.class)))
-				.thenReturn(customer);
+		when(cartRepository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+				.thenReturn(Optional.empty());
 
-		ResponseEntity<Object> actual = controller.addCartProduct(customer.getCustomerId(), product2.getId());
-
-		Cart body = (Cart) actual.getBody();
+		ResponseEntity<List<CartItem>> actual = controller.addCartProduct(customer.getCustomerId(), product2.getId());
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
-		assertNotNull(body);
-		assertEquals(2, body.getItems().size());
-		verify(customerService, times(1)).findById(anyLong());
-		verify(productService, times(1)).findById(anyLong());
-		verify(customerService, times(1)).add(any(Customer.class));
+		verify(customerService).findById(anyLong());
+		verify(productService).findById(anyLong());
+		verify(cartRepository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(cartRepository).save(any(CartItem.class));
+		verify(cartRepository).findAllByCustomerCustomerId(anyLong());
+	}
+
+	@Test
+	void addCartProduct_existingItem() {
+		when(customerService.findById(anyLong()))
+				.thenReturn(customer);
+		when(productService.findById(anyLong()))
+				.thenReturn(product2);
+		when(cartRepository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+				.thenReturn(Optional.of(customer.getCart().get(0)));
+
+		ResponseEntity<List<CartItem>> actual = controller.addCartProduct(customer.getCustomerId(), product2.getId());
+
+		assertEquals(HttpStatus.OK, actual.getStatusCode());
+		verify(customerService).findById(anyLong());
+		verify(productService).findById(anyLong());
+		verify(cartRepository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(cartRepository).save(any(CartItem.class));
+		verify(cartRepository).findAllByCustomerCustomerId(anyLong());
 	}
 
 	@Test
@@ -121,24 +146,41 @@ class CartControllerTest {
 	}
 
 	@Test
-	void deleteCartProduct() {
+	void deleteCartProductRemoveItem() {
 		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
 		when(productService.findById(anyLong()))
 				.thenReturn(product);
-		when(customerService.add(any(Customer.class)))
-				.thenReturn(customer);
+		when(cartRepository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+				.thenReturn(Optional.of(customer.getCart().get(0)));
 
-		ResponseEntity<Object> actual = controller.deleteCartProduct(customer.getCustomerId(), product2.getId());
-
-		Cart body = (Cart) actual.getBody();
+		ResponseEntity<List<CartItem>> actual = controller.deleteCartProduct(customer.getCustomerId(), product2.getId());
 
 		assertEquals(HttpStatus.OK, actual.getStatusCode());
-		assertNotNull(body);
-		assertEquals(0, body.getItems().size());
-		verify(customerService, times(1)).findById(anyLong());
-		verify(productService, times(1)).findById(anyLong());
-		verify(customerService, times(1)).add(any(Customer.class));
+		verify(customerService).findById(anyLong());
+		verify(productService).findById(anyLong());
+		verify(cartRepository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(cartRepository).delete(any(CartItem.class));
+		verify(cartRepository).findAllByCustomerCustomerId(anyLong());
+	}
+
+	@Test
+	void deleteCartProductDecrementItem() {
+		when(customerService.findById(anyLong()))
+				.thenReturn(customer);
+		when(productService.findById(anyLong()))
+				.thenReturn(product);
+		when(cartRepository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+				.thenReturn(Optional.of(new CartItem(customer, product2, 2)));
+
+		ResponseEntity<List<CartItem>> actual = controller.deleteCartProduct(customer.getCustomerId(), product2.getId());
+
+		assertEquals(HttpStatus.OK, actual.getStatusCode());
+		verify(customerService).findById(anyLong());
+		verify(productService).findById(anyLong());
+		verify(cartRepository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(cartRepository).save(any(CartItem.class));
+		verify(cartRepository).findAllByCustomerCustomerId(anyLong());
 	}
 
 	@Test
@@ -180,11 +222,11 @@ class CartControllerTest {
 		when(customerService.add(any(Customer.class)))
 				.thenReturn(customer);
 
-		ResponseEntity<Object> actual = controller.deleteCartAllProduct(customer.getCustomerId());
+		ResponseEntity<List<CartItem>> actual = controller.deleteCartAllProduct(customer.getCustomerId());
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
 		verify(customerService, times(1)).findById(anyLong());
-		verify(customerService, times(1)).add(any(Customer.class));
+		verify(cartRepository, times(1)).deleteAllInBatch(anyList());
 	}
 
 	@Test

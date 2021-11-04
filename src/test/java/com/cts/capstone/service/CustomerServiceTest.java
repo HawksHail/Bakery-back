@@ -2,7 +2,6 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.model.Customer;
-import com.cts.capstone.repository.CartRepository;
 import com.cts.capstone.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,15 +20,12 @@ class CustomerServiceTest {
 	@Mock
 	CustomerRepository repository;
 
-	@Mock
-	CartRepository cartRepository;
-
 	CustomerService service;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		service = new CustomerService(repository, cartRepository);
+		service = new CustomerService(repository);
 	}
 
 	@Test

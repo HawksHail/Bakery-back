@@ -23,7 +23,7 @@ public class CustomerBuilder {
 	}
 
 	public static Customer of(Long id, String companyName, String contactName, String street, String city, String state) {
-		return new Customer(id, companyName, contactName, street, city, state);
+		return new Customer(id, "subID", companyName, contactName, street, city, state);
 	}
 
 	public List<Customer> build() {
