@@ -23,7 +23,7 @@ public class CategoryService {
 	}
 
 	public List<Category> findAll() {
-		return categoryRepository.findAll();
+		return categoryRepository.findAllByOrderByCategoryNameAsc();
 	}
 
 	public Category findById(Long id) {
