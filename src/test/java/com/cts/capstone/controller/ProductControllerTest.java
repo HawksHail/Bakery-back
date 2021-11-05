@@ -48,6 +48,26 @@ class ProductControllerTest {
 	}
 
 	@Test
+	void getFeaturedProducts() {
+		List<Product> expected = new ProductBuilder()
+				.w(123, "name1", "123")
+				.w(124, "name2", "321")
+				.w(124, "name3", "321")
+				.w(124, "name4", "321")
+				.w(124, "name5", "321")
+				.w(124, "name6", "321")
+				.w(124, "name7", "321")
+				.build();
+		when(service.findAll())
+				.thenReturn(expected);
+
+		List<Product> actual = controller.getFeaturedProducts();
+
+		assertEquals(5, actual.size());
+		verify(service, times(1)).findAll();
+	}
+
+	@Test
 	void getProduct() {
 		Product expected = ProductBuilder.of(123, "name", "123");
 		when(service.findById(anyLong()))
