@@ -9,7 +9,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 
 @RestController
@@ -17,6 +20,8 @@ import java.util.List;
 public class ProductController {
 
 	private ProductService productService;
+
+	private static Random random = new Random();
 
 	public ProductController(ProductService productService) {
 		super();
@@ -27,9 +32,21 @@ public class ProductController {
 		this.productService = productService;
 	}
 
-	@GetMapping()
+	@GetMapping
 	public List<Product> getAllProducts() {
 		return productService.findAll();
+	}
+
+	@GetMapping("/featured")
+	public List<Product> getFeaturedProducts() {
+		List<Product> productList = productService.findAll();
+		HashSet<Product> featured = new HashSet<>();
+
+		while (featured.size() < 5) {
+			featured.add(productList.get(random.nextInt(productList.size())));
+		}
+
+		return new ArrayList<>(featured);
 	}
 
 	@GetMapping("{id}")
