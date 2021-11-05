@@ -33,6 +33,9 @@ public class Product {
 	@Column(name = "unitprice", precision = 7, scale = 2)
 	private BigDecimal unitPrice;
 
+	@Column(name = "img_url")
+	private String imgURL;
+
 	public Product() {
 		//Empty
 	}
@@ -43,6 +46,15 @@ public class Product {
 		this.supplier = supplier;
 		this.category = category;
 		this.unitPrice = unitPrice;
+	}
+
+	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice, String imgURL) {
+		this.id = id;
+		this.productName = productName;
+		this.supplier = supplier;
+		this.category = category;
+		this.unitPrice = unitPrice;
+		this.imgURL = imgURL;
 	}
 
 	public Supplier getSupplier() {
@@ -89,9 +101,17 @@ public class Product {
 		this.unitPrice = new BigDecimal(unitPrice);
 	}
 
+	public String getImgURL() {
+		return imgURL;
+	}
+
+	public void setImgURL(String imgURL) {
+		this.imgURL = imgURL;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, productName, supplier, category, unitPrice);
+		return Objects.hash(id, productName, supplier, category, unitPrice, imgURL);
 	}
 
 	@Override
@@ -99,7 +119,7 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice);
+		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice) && Objects.equals(imgURL, product.imgURL);
 	}
 
 	@Override
@@ -107,9 +127,10 @@ public class Product {
 		return "Product{" +
 				"id=" + id +
 				", productName='" + productName + '\'' +
-				", supplier=" + (supplier != null ? supplier.getId() : null) +
-				", category=" + (category != null ? category.getId() : null) +
+				", supplier=" + supplier +
+				", category=" + category +
 				", unitPrice=" + unitPrice +
+				", imgURL='" + imgURL + '\'' +
 				'}';
 	}
 }
