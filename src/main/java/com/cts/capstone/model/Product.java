@@ -1,6 +1,7 @@
 package com.cts.capstone.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -33,6 +34,14 @@ public class Product {
 	@Column(name = "unitprice", precision = 7, scale = 2)
 	private BigDecimal unitPrice;
 
+	@Column(name = "img_url")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String imgURL;
+
+	@Column(name = "img_credit")
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String imgCredit;
+
 	public Product() {
 		//Empty
 	}
@@ -43,6 +52,16 @@ public class Product {
 		this.supplier = supplier;
 		this.category = category;
 		this.unitPrice = unitPrice;
+	}
+
+	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice, String imgURL, String imgCredit) {
+		this.id = id;
+		this.productName = productName;
+		this.supplier = supplier;
+		this.category = category;
+		this.unitPrice = unitPrice;
+		this.imgURL = imgURL;
+		this.imgCredit = imgCredit;
 	}
 
 	public Supplier getSupplier() {
@@ -59,6 +78,14 @@ public class Product {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getImgCredit() {
+		return imgCredit;
+	}
+
+	public void setImgCredit(String imgCredit) {
+		this.imgCredit = imgCredit;
 	}
 
 	public String getProductName() {
@@ -89,9 +116,17 @@ public class Product {
 		this.unitPrice = new BigDecimal(unitPrice);
 	}
 
+	public String getImgURL() {
+		return imgURL;
+	}
+
+	public void setImgURL(String imgURL) {
+		this.imgURL = imgURL;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, productName, supplier, category, unitPrice);
+		return Objects.hash(id, productName, supplier, category, unitPrice, imgURL, imgCredit);
 	}
 
 	@Override
@@ -99,7 +134,7 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice);
+		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice) && Objects.equals(imgURL, product.imgURL) && Objects.equals(imgCredit, product.imgCredit);
 	}
 
 	@Override
@@ -107,9 +142,11 @@ public class Product {
 		return "Product{" +
 				"id=" + id +
 				", productName='" + productName + '\'' +
-				", supplier=" + (supplier != null ? supplier.getId() : null) +
-				", category=" + (category != null ? category.getId() : null) +
+				", supplier=" + supplier +
+				", category=" + category +
 				", unitPrice=" + unitPrice +
+				", imgURL='" + imgURL + '\'' +
+				", imgCredit='" + imgCredit + '\'' +
 				'}';
 	}
 }
