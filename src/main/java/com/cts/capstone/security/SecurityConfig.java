@@ -2,6 +2,7 @@ package com.cts.capstone.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,9 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.mvcMatchers("/").permitAll()
-				.mvcMatchers("/customer", "/cart", "/order").authenticated()
-//				.mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
+				.mvcMatchers(HttpMethod.GET, "/**").permitAll()
+				.anyRequest()
+				.authenticated()
 				.and().cors()
 				.and().oauth2ResourceServer().jwt();
 	}
