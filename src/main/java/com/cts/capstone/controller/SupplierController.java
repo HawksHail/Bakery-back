@@ -4,6 +4,7 @@ import com.cts.capstone.exception.SupplierNotFoundException;
 import com.cts.capstone.model.Supplier;
 import com.cts.capstone.service.SupplierService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -42,6 +43,7 @@ public class SupplierController {
 	}
 
 	@PostMapping()
+	@PreAuthorize("hasAuthority('create:supplier')")
 	public ResponseEntity<Supplier> addSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
@@ -49,12 +51,14 @@ public class SupplierController {
 	}
 
 	@PutMapping
+	@PreAuthorize("hasAuthority('update:supplier')")
 	public ResponseEntity<Supplier> putSupplier(@Valid @RequestBody Supplier supplier) {
 		Supplier added = supplierService.add(supplier);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("{id}")
+	@PreAuthorize("hasAuthority('delete:supplier')")
 	public ResponseEntity<Supplier> deleteSupplierById(@PathVariable Long id) {
 		boolean delete = supplierService.delete(id);
 		if (delete) {

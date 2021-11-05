@@ -4,6 +4,7 @@ import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.service.ProductService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -58,7 +59,8 @@ public class ProductController {
 		return find;
 	}
 
-	@PostMapping()
+	@PostMapping
+	@PreAuthorize("hasAuthority('create:product')")
 	public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
@@ -66,12 +68,14 @@ public class ProductController {
 	}
 
 	@PutMapping
+	@PreAuthorize("hasAuthority('update:product')")
 	public ResponseEntity<Product> putProduct(@Valid @RequestBody Product product) {
 		Product added = productService.add(product);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("{id}")
+	@PreAuthorize("hasAuthority('delete:product')")
 	public ResponseEntity<Product> deleteProductById(@PathVariable Long id) {
 		boolean delete = productService.delete(id);
 		if (delete) {

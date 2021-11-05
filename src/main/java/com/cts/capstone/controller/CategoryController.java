@@ -4,6 +4,7 @@ import com.cts.capstone.exception.CategoryNotFoundException;
 import com.cts.capstone.model.Category;
 import com.cts.capstone.service.CategoryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -42,6 +43,7 @@ public class CategoryController {
 	}
 
 	@PostMapping()
+	@PreAuthorize("hasAuthority('create:category')")
 	public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category) {
 		Category added = categoryService.add(category);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
@@ -49,12 +51,14 @@ public class CategoryController {
 	}
 
 	@PutMapping
+	@PreAuthorize("hasAuthority('update:category')")
 	public ResponseEntity<Category> putCategory(@Valid @RequestBody Category category) {
 		Category added = categoryService.add(category);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("{id}")
+	@PreAuthorize("hasAuthority('delete:category')")
 	public ResponseEntity<Category> deleteCategoryById(@PathVariable Long id) {
 		boolean delete = categoryService.delete(id);
 		if (delete) {
