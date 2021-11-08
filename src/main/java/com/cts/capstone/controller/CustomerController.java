@@ -4,6 +4,7 @@ import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.service.CustomerService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -58,12 +59,14 @@ public class CustomerController {
 	}
 
 	@PutMapping
+	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public ResponseEntity<Customer> putCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("{id}")
+	@PreAuthorize("hasAuthority('delete:customer')")
 	public ResponseEntity<Customer> deleteCustomerById(@PathVariable Long id) {
 		boolean delete = customerService.delete(id);
 		if (delete) {

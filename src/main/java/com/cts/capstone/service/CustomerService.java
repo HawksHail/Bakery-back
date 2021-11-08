@@ -2,6 +2,8 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.repository.CustomerRepository;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 
+	@PostAuthorize("returnObject.sub == authentication.name")
 	public Customer findById(Long id) {
 		return customerRepository.findById(id).orElse(null);
 	}
@@ -46,6 +49,7 @@ public class CustomerService {
 		}
 	}
 
+	@PreAuthorize("#sub == authentication.name")
 	public Customer findBySub(String sub) {
 		return customerRepository.findBySub(sub).orElse(null);
 	}

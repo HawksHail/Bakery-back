@@ -2,6 +2,7 @@ package com.cts.capstone.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${auth0.audience}")
@@ -56,15 +58,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	JwtDecoder jwtDecoder() {
-		NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder)
-				JwtDecoders.fromOidcIssuerLocation(issuer);
-
-		OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
+		OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
 		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
-		OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+		OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withAudience, withIssuer);
 
-		jwtDecoder.setJwtValidator(withAudience);
-
+		NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromOidcIssuerLocation(issuer);
+		jwtDecoder.setJwtValidator(validator);
 		return jwtDecoder;
 	}
 
