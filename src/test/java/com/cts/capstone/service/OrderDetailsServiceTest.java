@@ -2,6 +2,7 @@ package com.cts.capstone.service;
 
 import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.cts.capstone.model.OrderDetails;
+import com.cts.capstone.model.OrderDetailsKey;
 import com.cts.capstone.repository.OrderDetailsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -27,6 +27,12 @@ class OrderDetailsServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		service = new OrderDetailsService(repository);
+	}
+
+	@Test
+	void setOrderDetailsRepository() {
+		service.setOrderDetailsRepository(null);
+		assertNull(service.getOrderDetailsRepository());
 	}
 
 	@Test
@@ -130,5 +136,31 @@ class OrderDetailsServiceTest {
 
 		assertEquals(expected, actual);
 		verify(repository, times(1)).findAllByIdOrderId(anyLong());
+	}
+
+	@Test
+	void delete() {
+		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
+		when(repository.findById(any(OrderDetailsKey.class)))
+				.thenReturn(java.util.Optional.of(expected));
+
+		boolean actual = service.delete(expected.getId());
+
+		assertTrue(actual);
+		verify(repository).findById(any(OrderDetailsKey.class));
+		verify(repository).deleteById(any(OrderDetailsKey.class));
+	}
+
+	@Test
+	void deleteNotFound() {
+		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
+		when(repository.findById(any(OrderDetailsKey.class)))
+				.thenReturn(java.util.Optional.empty());
+
+		boolean actual = service.delete(expected.getId());
+
+		assertFalse(actual);
+		verify(repository).findById(any(OrderDetailsKey.class));
+		verify(repository, times(0)).deleteById(any(OrderDetailsKey.class));
 	}
 }

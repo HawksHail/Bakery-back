@@ -29,6 +29,12 @@ class CustomerServiceTest {
 	}
 
 	@Test
+	void setCustomerRepository() {
+		service.setCustomerRepository(null);
+		assertNull(service.getCustomerRepository());
+	}
+
+	@Test
 	void findAll() {
 		List<Customer> expected = new CustomerBuilder()
 				.w(1234L, "name", "description", "street", "city", "state")
@@ -99,5 +105,29 @@ class CustomerServiceTest {
 
 		assertFalse(delete);
 		verify(repository, times(0)).deleteById(anyLong());
+	}
+
+	@Test
+	void findBySub() {
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(repository.findBySub(anyString()))
+				.thenReturn(java.util.Optional.of(expected));
+
+		Customer actual = service.findBySub("id");
+
+		assertEquals(expected, actual);
+		verify(repository).findBySub(anyString());
+	}
+
+	@Test
+	void findBySubNotFound() {
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(repository.findBySub(anyString()))
+				.thenReturn(java.util.Optional.empty());
+
+		Customer actual = service.findBySub("id");
+
+		assertNull(actual);
+		verify(repository).findBySub(anyString());
 	}
 }

@@ -21,7 +21,11 @@ public class CustomerService {
 		this.customerRepository = customerRepository;
 	}
 
-	public void setCustomerService(CustomerRepository customerRepository) {
+	public CustomerRepository getCustomerRepository() {
+		return customerRepository;
+	}
+
+	public void setCustomerRepository(CustomerRepository customerRepository) {
 		this.customerRepository = customerRepository;
 	}
 

@@ -10,8 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -26,6 +25,12 @@ class CategoryServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		service = new CategoryService(repository);
+	}
+
+	@Test
+	void setCategoryRepository() {
+		service.setCategoryRepository(null);
+		assertNull(service.getCategoryRepository());
 	}
 
 	@Test
@@ -76,5 +81,29 @@ class CategoryServiceTest {
 
 		assertEquals(expected, actual);
 		verify(repository, times(1)).save(any(Category.class));
+	}
+
+	@Test
+	void delete() {
+		Category expected = CategoryBuilder.of(123, "name", "description");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.of(expected));
+
+		boolean actual = service.delete(expected.getId());
+
+		assertTrue(actual);
+		verify(repository).deleteById(anyLong());
+	}
+
+	@Test
+	void deleteNotFound() {
+		Category expected = CategoryBuilder.of(123, "name", "description");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.empty());
+
+		boolean actual = service.delete(expected.getId());
+
+		assertFalse(actual);
+		verify(repository, times(0)).deleteById(anyLong());
 	}
 }

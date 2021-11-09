@@ -67,7 +67,6 @@ class OrderControllerTest {
 
 	@Test
 	void getOrderNotFound() {
-		Order expected = OrderBuilder.of(1234, "id123");
 		when(service.findById(anyLong()))
 				.thenReturn(null);
 

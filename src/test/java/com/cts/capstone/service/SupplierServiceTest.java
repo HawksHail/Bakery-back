@@ -10,8 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -26,6 +25,12 @@ class SupplierServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		service = new SupplierService(repository);
+	}
+
+	@Test
+	void setSupplierRepository() {
+		service.setSupplierRepository(null);
+		assertNull(service.getSupplierRepository());
 	}
 
 	@Test
@@ -76,5 +81,31 @@ class SupplierServiceTest {
 
 		assertEquals(expected, actual);
 		verify(repository, times(1)).save(any(Supplier.class));
+	}
+
+	@Test
+	void delete() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.of(expected));
+
+		boolean actual = service.delete(123L);
+
+		assertTrue(actual);
+		verify(repository).findById(anyLong());
+		verify(repository).deleteById(anyLong());
+	}
+
+	@Test
+	void deleteNotFound() {
+		Supplier expected = SupplierBuilder.of(123, "company", "contact");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.empty());
+
+		boolean actual = service.delete(123L);
+
+		assertFalse(actual);
+		verify(repository).findById(anyLong());
+		verify(repository, times(0)).deleteById(anyLong());
 	}
 }
