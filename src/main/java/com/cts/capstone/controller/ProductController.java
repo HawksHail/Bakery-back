@@ -22,7 +22,7 @@ public class ProductController {
 
 	private ProductService productService;
 
-	private static Random random = new Random();
+	private static final Random random = new Random();
 
 	public ProductController(ProductService productService) {
 		super();
