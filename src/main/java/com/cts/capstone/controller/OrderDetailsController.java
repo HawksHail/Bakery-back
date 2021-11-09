@@ -27,6 +27,10 @@ public class OrderDetailsController {
 		this.orderDetailsService = orderDetailsService;
 	}
 
+	public OrderDetailsService getOrderDetailsService() {
+		return orderDetailsService;
+	}
+
 	public void setOrderDetailsService(OrderDetailsService orderDetailsService) {
 		this.orderDetailsService = orderDetailsService;
 	}

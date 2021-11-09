@@ -33,6 +33,12 @@ class OrderControllerTest {
 	}
 
 	@Test
+	void setOrderService() {
+		controller.setOrderService(null);
+		assertNull(controller.getOrderService());
+	}
+
+	@Test
 	void getAllCategories() {
 		List<Order> expected = new OrderBuilder()
 				.w(1234, "id123")

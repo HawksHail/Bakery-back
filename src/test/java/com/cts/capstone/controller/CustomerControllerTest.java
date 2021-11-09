@@ -33,6 +33,12 @@ class CustomerControllerTest {
 	}
 
 	@Test
+	void setCustomerService() {
+		controller.setCustomerService(null);
+		assertNull(controller.getCustomerService());
+	}
+
+	@Test
 	void getAllCustomers() {
 		List<Customer> expected = new CustomerBuilder()
 				.w(1234L, "name", "description", "street", "city", "state")
@@ -45,6 +51,28 @@ class CustomerControllerTest {
 
 		assertEquals(expected, actual);
 		verify(service, times(1)).findAll();
+	}
+
+	@Test
+	void getCustomerBySub() {
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.findBySub(anyString()))
+				.thenReturn(expected);
+
+		Customer actual = controller.getCustomerBySub("ID");
+
+		assertEquals(expected, actual);
+		verify(service).findBySub(anyString());
+	}
+
+	@Test
+	void getCustomerBySubNotFound() {
+		when(service.findBySub(anyString()))
+				.thenReturn(null);
+
+		assertThrows(CustomerNotFoundException.class, () -> controller.getCustomerBySub("ID"));
+
+		verify(service).findBySub(anyString());
 	}
 
 	@Test

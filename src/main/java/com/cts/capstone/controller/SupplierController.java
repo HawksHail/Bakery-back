@@ -24,6 +24,10 @@ public class SupplierController {
 		this.supplierService = supplierService;
 	}
 
+	public SupplierService getSupplierService() {
+		return supplierService;
+	}
+
 	public void setSupplierService(SupplierService supplierService) {
 		this.supplierService = supplierService;
 	}

@@ -24,6 +24,10 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
+	public CategoryService getCategoryService() {
+		return categoryService;
+	}
+
 	public void setCategoryService(CategoryService categoryService) {
 		this.categoryService = categoryService;
 	}
