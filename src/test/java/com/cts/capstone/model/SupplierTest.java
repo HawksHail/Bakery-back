@@ -1,8 +1,13 @@
 package com.cts.capstone.model;
 
+import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.builder.SupplierBuilder;
+import com.jparams.verifier.tostring.NameStyle;
+import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,6 +40,16 @@ class SupplierTest {
 	}
 
 	@Test
+	void setProductList() {
+		List<Product> expected = new ProductBuilder()
+				.w(1, "product1", "123")
+				.w(2, "product2", "456")
+				.build();
+		supplier.setProductList(expected);
+		assertEquals(expected, supplier.getProductList());
+	}
+
+	@Test
 	void hashcodeAndEquals() {
 		Supplier x = SupplierBuilder.of(123L, "company", "contact");
 		Supplier y = SupplierBuilder.of(123L, "company", "contact");
@@ -49,16 +64,9 @@ class SupplierTest {
 
 	@Test
 	void toStringTest() {
-		Supplier supplier = SupplierBuilder.of(123L, "company", "contact");
-		String s = supplier.toString();
-		assertTrue(s.contains("id=" + supplier.getId()));
-		assertTrue(s.contains("companyName='" + supplier.getCompanyName()));
-		assertTrue(s.contains("contactName='" + supplier.getContactName()));
-
-// has NullPointer error on Product.toString
-//		ToStringVerifier.forClass(Supplier.class)
-//				.withClassName(NameStyle.SIMPLE_NAME)
-//				.withIgnoredFields("productList")
-//				.verify();
+		ToStringVerifier.forClass(Supplier.class)
+				.withClassName(NameStyle.SIMPLE_NAME)
+				.withIgnoredFields("productList")
+				.verify();
 	}
 }

@@ -23,6 +23,12 @@ class ProductTest {
 	}
 
 	@Test
+	void Product() {
+		Product product2 = new Product(123L, "name", new Supplier(), new Category(), new BigDecimal("765"), null, null);
+		assertEquals(product, product2);
+	}
+
+	@Test
 	void setProductId() {
 		product.setId(654L);
 		assertEquals(654L, product.getId());
@@ -58,6 +64,18 @@ class ProductTest {
 	void setUnitPrice_double() {
 		product.setUnitPrice("3.14");
 		assertEquals(0, product.getUnitPrice().compareTo(new BigDecimal("3.14")));
+	}
+
+	@Test
+	void setImgURL() {
+		product.setImgURL("http://new-url.com");
+		assertEquals("http://new-url.com", product.getImgURL());
+	}
+
+	@Test
+	void setImgCredit() {
+		product.setImgCredit("http://new-url.com");
+		assertEquals("http://new-url.com", product.getImgCredit());
 	}
 
 	@Test
