@@ -33,7 +33,7 @@ public class CustomerService {
 		return customerRepository.findAll();
 	}
 
-	@PostAuthorize("returnObject.sub == authentication.name")
+	@PostAuthorize("returnObject.sub == authentication.name or hasAuthority('view:customer')")
 	public Customer findById(Long id) {
 		return customerRepository.findById(id).orElse(null);
 	}
@@ -53,7 +53,7 @@ public class CustomerService {
 		}
 	}
 
-	@PreAuthorize("#sub == authentication.name")
+	@PreAuthorize("#sub == authentication.name or hasAuthority('view:customer')")
 	public Customer findBySub(String sub) {
 		return customerRepository.findBySub(sub).orElse(null);
 	}
