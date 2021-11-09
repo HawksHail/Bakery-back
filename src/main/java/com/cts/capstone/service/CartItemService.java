@@ -4,6 +4,7 @@ import com.cts.capstone.model.CartItem;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.repository.CartItemRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class CartItemService {
 		return cartItemRepository.findByCustomerCustomerIdAndProductId(customerId, productId).orElse(null);
 	}
 
+	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public void add(Customer customer, Product product) {
 		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
 		if (item.isPresent()) {
@@ -40,6 +42,7 @@ public class CartItemService {
 		}
 	}
 
+	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public void remove(Customer customer, Product product) {
 		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
 		if (item.isPresent()) {
