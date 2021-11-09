@@ -5,7 +5,7 @@ import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.CartItem;
 import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Product;
-import com.cts.capstone.repository.CartItemRepository;
+import com.cts.capstone.service.CartItemService;
 import com.cts.capstone.service.CustomerService;
 import com.cts.capstone.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("cart")
@@ -26,20 +25,36 @@ public class CartController {
 	ProductService productService;
 
 	@Autowired
-	CartItemRepository cartRepository;
+	CartItemService cartItemService;
 
-	public CartController(CustomerService customerService, ProductService productService, CartItemRepository cartRepository) {
+	public CartController(CustomerService customerService, ProductService productService, CartItemService cartItemService) {
 		this.customerService = customerService;
 		this.productService = productService;
-		this.cartRepository = cartRepository;
+		this.cartItemService = cartItemService;
+	}
+
+	public CustomerService getCustomerService() {
+		return customerService;
 	}
 
 	public void setCustomerService(CustomerService customerService) {
 		this.customerService = customerService;
 	}
 
+	public ProductService getProductService() {
+		return productService;
+	}
+
 	public void setProductService(ProductService productService) {
 		this.productService = productService;
+	}
+
+	public CartItemService getCartItemService() {
+		return cartItemService;
+	}
+
+	public void setCartItemService(CartItemService cartItemService) {
+		this.cartItemService = cartItemService;
 	}
 
 	@GetMapping("{customerId}")
@@ -62,15 +77,9 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		Optional<CartItem> item = cartRepository.findByCustomerCustomerIdAndProductId(customerId, productId);
-		if (item.isPresent()) {
-			item.get().add();
-			cartRepository.save(item.get());
-		} else {
-			cartRepository.save(new CartItem(customer, product, 1));
-		}
+		cartItemService.add(customer, product);
 
-		return ResponseEntity.ok(cartRepository.findAllByCustomerCustomerId(customerId));
+		return ResponseEntity.ok(cartItemService.findAllByCustomerId(customerId));
 	}
 
 	@DeleteMapping("{customerId}/{productId}")
@@ -83,18 +92,9 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		Optional<CartItem> item = cartRepository.findByCustomerCustomerIdAndProductId(customerId, productId);
-		if (item.isPresent()) {
-			int quantity = item.get().remove();
-			if (quantity < 1) {
-				cartRepository.delete(item.get());
-			} else {
-				cartRepository.save(item.get());
-			}
-		}
+		cartItemService.remove(customer, product);
 
-
-		return ResponseEntity.ok(cartRepository.findAllByCustomerCustomerId(customerId));
+		return ResponseEntity.ok(cartItemService.findAllByCustomerId(customerId));
 	}
 
 	@DeleteMapping("{customerId}")
@@ -104,7 +104,7 @@ public class CartController {
 			throw new CustomerNotFoundException(customerId);
 		}
 
-		cartRepository.deleteAllInBatch(cartRepository.findAllByCustomerCustomerId(customerId));
+		cartItemService.clear(customerId);
 
 		return ResponseEntity.noContent().build();
 	}

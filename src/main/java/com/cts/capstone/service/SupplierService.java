@@ -18,8 +18,12 @@ public class SupplierService {
 		this.supplierRepository = supplierRepository;
 	}
 
-	public void setSupplierService(SupplierRepository productRepository) {
-		this.supplierRepository = productRepository;
+	public SupplierRepository getSupplierRepository() {
+		return supplierRepository;
+	}
+
+	public void setSupplierRepository(SupplierRepository supplierRepository) {
+		this.supplierRepository = supplierRepository;
 	}
 
 	public List<Supplier> findAll() {

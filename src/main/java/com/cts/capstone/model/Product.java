@@ -52,6 +52,8 @@ public class Product {
 		this.supplier = supplier;
 		this.category = category;
 		this.unitPrice = unitPrice;
+		this.imgURL = null;
+		this.imgCredit = null;
 	}
 
 	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice, String imgURL, String imgCredit) {
@@ -78,14 +80,6 @@ public class Product {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public String getImgCredit() {
-		return imgCredit;
-	}
-
-	public void setImgCredit(String imgCredit) {
-		this.imgCredit = imgCredit;
 	}
 
 	public String getProductName() {
@@ -122,6 +116,14 @@ public class Product {
 
 	public void setImgURL(String imgURL) {
 		this.imgURL = imgURL;
+	}
+
+	public String getImgCredit() {
+		return imgCredit;
+	}
+
+	public void setImgCredit(String imgCredit) {
+		this.imgCredit = imgCredit;
 	}
 
 	@Override

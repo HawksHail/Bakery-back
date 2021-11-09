@@ -10,8 +10,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
@@ -26,6 +25,12 @@ class ProductServiceTest {
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		service = new ProductService(repository);
+	}
+
+	@Test
+	void setProductRepository() {
+		service.setProductRepository(null);
+		assertNull(service.getProductRepository());
 	}
 
 	@Test
@@ -76,5 +81,31 @@ class ProductServiceTest {
 
 		assertEquals(expected, actual);
 		verify(repository, times(1)).save(any(Product.class));
+	}
+
+	@Test
+	void delete() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.of(expected));
+
+		boolean actual = service.delete(123L);
+
+		assertTrue(actual);
+		verify(repository).findById(anyLong());
+		verify(repository).deleteById(anyLong());
+	}
+
+	@Test
+	void deleteNotFound() {
+		Product expected = ProductBuilder.of(123, "name", "123");
+		when(repository.findById(anyLong()))
+				.thenReturn(java.util.Optional.empty());
+
+		boolean actual = service.delete(123L);
+
+		assertFalse(actual);
+		verify(repository).findById(anyLong());
+		verify(repository, times(0)).deleteById(anyLong());
 	}
 }

@@ -33,6 +33,12 @@ class SupplierControllerTest {
 	}
 
 	@Test
+	void setSupplierService() {
+		controller.setSupplierService(null);
+		assertNull(controller.getSupplierService());
+	}
+
+	@Test
 	void getAllCategories() {
 		List<Supplier> expected = new SupplierBuilder()
 				.w(123, "company", "contact")

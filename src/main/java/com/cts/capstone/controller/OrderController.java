@@ -23,6 +23,10 @@ public class OrderController {
 		this.orderService = orderService;
 	}
 
+	public OrderService getOrderService() {
+		return orderService;
+	}
+
 	public void setOrderService(OrderService orderService) {
 		this.orderService = orderService;
 	}

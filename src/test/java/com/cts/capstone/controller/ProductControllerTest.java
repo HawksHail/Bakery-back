@@ -33,6 +33,12 @@ class ProductControllerTest {
 	}
 
 	@Test
+	void setProductService() {
+		controller.setProductService(null);
+		assertNull(controller.getProductService());
+	}
+
+	@Test
 	void getAllProducts() {
 		List<Product> expected = new ProductBuilder()
 				.w(123, "name", "123")

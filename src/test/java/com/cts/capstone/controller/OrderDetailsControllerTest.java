@@ -35,6 +35,12 @@ class OrderDetailsControllerTest {
 	}
 
 	@Test
+	void setOrderDetailsService() {
+		controller.setOrderDetailsService(null);
+		assertNull(controller.getOrderDetailsService());
+	}
+
+	@Test
 	void getAllOrderDetails() {
 		List<OrderDetails> expected = new OrderDetailsBuilder()
 				.w(1234, 1234, 2)

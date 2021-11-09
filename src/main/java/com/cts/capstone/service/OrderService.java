@@ -18,7 +18,11 @@ public class OrderService {
 		this.orderRepository = orderRepository;
 	}
 
-	public void setOrderService(OrderRepository orderRepository) {
+	public OrderRepository getOrderRepository() {
+		return orderRepository;
+	}
+
+	public void setOrderRepository(OrderRepository orderRepository) {
 		this.orderRepository = orderRepository;
 	}
 

@@ -33,6 +33,12 @@ class OrderControllerTest {
 	}
 
 	@Test
+	void setOrderService() {
+		controller.setOrderService(null);
+		assertNull(controller.getOrderService());
+	}
+
+	@Test
 	void getAllCategories() {
 		List<Order> expected = new OrderBuilder()
 				.w(1234, "id123")
@@ -61,7 +67,6 @@ class OrderControllerTest {
 
 	@Test
 	void getOrderNotFound() {
-		Order expected = OrderBuilder.of(1234, "id123");
 		when(service.findById(anyLong()))
 				.thenReturn(null);
 

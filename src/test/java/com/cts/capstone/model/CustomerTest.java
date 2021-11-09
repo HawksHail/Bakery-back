@@ -6,6 +6,9 @@ import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,6 +19,12 @@ class CustomerTest {
 	@BeforeEach
 	void setUp() {
 		customer = CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state");
+	}
+
+	@Test
+	void Customer() {
+		Customer customer2 = new Customer(1234L, "subID", "Cognizant", "Bob", "street", "city", "state", new ArrayList<CartItem>());
+		assertEquals(customer, customer2);
 	}
 
 	@Test
@@ -52,6 +61,19 @@ class CustomerTest {
 	void setState() {
 		customer.setState("abc");
 		assertEquals("abc", customer.getState());
+	}
+
+	@Test
+	void setSub() {
+		customer.setSub("abc");
+		assertEquals("abc", customer.getSub());
+	}
+
+	@Test
+	void setCart() {
+		List<CartItem> expected = List.of(new CartItem(), new CartItem());
+		customer.setCart(expected);
+		assertEquals(expected, customer.getCart());
 	}
 
 	@Test

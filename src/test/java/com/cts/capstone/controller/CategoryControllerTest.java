@@ -33,6 +33,12 @@ class CategoryControllerTest {
 	}
 
 	@Test
+	void setCategoryService() {
+		controller.setCategoryService(null);
+		assertNull(controller.getCategoryService());
+	}
+
+	@Test
 	void getAllCategories() {
 		List<Category> expected = new CategoryBuilder()
 				.w(123, "name", "description")

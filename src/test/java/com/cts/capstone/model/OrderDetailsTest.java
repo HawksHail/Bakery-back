@@ -26,6 +26,18 @@ class OrderDetailsTest {
 	}
 
 	@Test
+	void setOrderId() {
+		orderDetails.getId().setOrderId(987L);
+		assertEquals(987L, orderDetails.getId().getOrderId());
+	}
+
+	@Test
+	void setProductId() {
+		orderDetails.getId().setProductId(123L);
+		assertEquals(123L, orderDetails.getId().getProductId());
+	}
+
+	@Test
 	void setOrder() {
 		Order expected = OrderBuilder.of(123, "id123");
 		orderDetails.setOrder(expected);
