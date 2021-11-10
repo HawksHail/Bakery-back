@@ -46,8 +46,8 @@ public class CustomerController {
 		return find;
 	}
 
-	@GetMapping("sub/{sub}")
-	public Customer getCustomerBySub(@PathVariable String sub) {
+	@PostMapping("sub")
+	public Customer getCustomerBySub(@RequestBody String sub) {
 		Customer find = customerService.findBySub(sub);
 		if (find == null) {
 			throw new CustomerNotFoundException();
