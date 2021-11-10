@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				HttpMethod.POST.name(),
 				HttpMethod.DELETE.name()
 		));
+		configuration.addAllowedOriginPattern("http://localhost:*");
+		configuration.addAllowedOrigin("https://master.ditbstqq8z8x3.amplifyapp.com/*");
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
