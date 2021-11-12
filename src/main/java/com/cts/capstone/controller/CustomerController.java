@@ -34,7 +34,9 @@ public class CustomerController {
 
 	@GetMapping()
 	public List<Customer> getAllCustomers() {
-		return customerService.findAll();
+		List<Customer> all = customerService.findAll();
+		all.forEach(x -> x.setCart(null));
+		return all;
 	}
 
 	@GetMapping("{id}")

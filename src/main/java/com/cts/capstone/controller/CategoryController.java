@@ -32,9 +32,11 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
-	@GetMapping()
+	@GetMapping
 	public List<Category> getAllCategories() {
-		return categoryService.findAll();
+		List<Category> all = categoryService.findAll();
+		all.forEach(x -> x.setProductList(null));
+		return all;
 	}
 
 	@GetMapping("{id}")
