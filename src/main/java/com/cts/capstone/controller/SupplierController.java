@@ -34,7 +34,9 @@ public class SupplierController {
 
 	@GetMapping()
 	public List<Supplier> getAllSuppliers() {
-		return supplierService.findAll();
+		List<Supplier> all = supplierService.findAll();
+		all.forEach(x -> x.setProductList(null));
+		return all;
 	}
 
 	@GetMapping("{id}")
