@@ -26,6 +26,13 @@ public class CategoryBuilder {
 		return new Category(id, name, description);
 	}
 
+	public static Category of(String name, String description) {
+		Category category = new Category();
+		category.setCategoryName(name);
+		category.setDescription(description);
+		return category;
+	}
+
 	public List<Category> build() {
 		return this.list;
 	}

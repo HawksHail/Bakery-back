@@ -33,6 +33,15 @@ public class ProductBuilder {
 		return new Product(id, name, supplier, category, new BigDecimal(unitPrice));
 	}
 
+	public static Product of(String name, Supplier supplier, Category category, String unitPrice) {
+		Product product = new Product();
+		product.setProductName(name);
+		product.setSupplier(supplier);
+		product.setCategory(category);
+		product.setUnitPrice(unitPrice);
+		return product;
+	}
+
 	public List<Product> build() {
 		return this.list;
 	}

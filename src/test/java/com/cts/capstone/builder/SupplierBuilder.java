@@ -26,6 +26,13 @@ public class SupplierBuilder {
 		return new Supplier(id, companyName, contactName);
 	}
 
+	public static Supplier of(String companyName, String contactName) {
+		Supplier supplier = new Supplier();
+		supplier.setCompanyName(companyName);
+		supplier.setContactName(contactName);
+		return supplier;
+	}
+
 	public List<Supplier> build() {
 		return this.list;
 	}

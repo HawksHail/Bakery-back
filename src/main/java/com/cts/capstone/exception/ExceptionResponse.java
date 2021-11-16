@@ -31,7 +31,7 @@ public class ExceptionResponse {
 	}
 
 	public String getStatus() {
-		return status.getReasonPhrase();
+		return status != null ? status.getReasonPhrase() : null;
 	}
 
 	public void setStatus(HttpStatus status) {

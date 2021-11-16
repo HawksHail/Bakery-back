@@ -15,6 +15,6 @@ public class OrderDetailsNotFoundException extends RuntimeException {
 	}
 
 	public OrderDetailsNotFoundException(OrderDetailsKey id, Throwable cause) {
-		super(message + " " + id, cause);
+		super(message + " " + id.getOrderId() + " " + id.getProductId(), cause);
 	}
 }

@@ -27,6 +27,13 @@ public class OrderBuilder {
 		return new Order(orderId, customerId);
 	}
 
+	public static Order of(Long customerId) {
+		Order order = new Order();
+		order.setCustomerId(customerId.toString());
+		order.setOrderDate(LocalDate.now());
+		return order;
+	}
+
 	public OrderBuilder w(long orderId, String customerId, int year, int month, int day) {
 		list.add(of(orderId, customerId, year, month, day));
 		return this;
