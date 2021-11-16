@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 @RestController
-class DateIntegrityViolationResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+class DataIntegrityViolationResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public final ResponseEntity<ExceptionResponse> handleNotFoundException(DataIntegrityViolationException ex, WebRequest request) {
+	public final ResponseEntity<ExceptionResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(LocalDateTime.now(),
 				HttpStatus.BAD_REQUEST,
 				"Data Integrity Violation",
