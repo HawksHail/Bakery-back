@@ -26,6 +26,17 @@ public class CustomerBuilder {
 		return new Customer(id, "subID", companyName, contactName, street, city, state);
 	}
 
+	public static Customer of(String companyName, String contactName, String street, String city, String state) {
+		Customer customer = new Customer();
+		customer.setSub("auth0|qwertyasdf" + contactName);
+		customer.setCompanyName(companyName);
+		customer.setContactName(contactName);
+		customer.setStreet(street);
+		customer.setCity(city);
+		customer.setState(state);
+		return customer;
+	}
+
 	public List<Customer> build() {
 		return this.list;
 	}
