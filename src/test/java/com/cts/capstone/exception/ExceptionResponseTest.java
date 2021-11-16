@@ -29,6 +29,7 @@ class ExceptionResponseTest {
 		response.setStatus(null);
 
 		assertNull(response.getStatusObj());
+		assertNull(response.getStatus());
 	}
 
 	@Test
