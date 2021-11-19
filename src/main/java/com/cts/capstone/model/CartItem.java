@@ -74,11 +74,19 @@ public class CartItem {
 	}
 
 	public int add() {
-		return ++quantity;
+		return add(1);
+	}
+
+	public int add(int amount) {
+		return quantity += amount;
 	}
 
 	public int remove() {
-		return --quantity;
+		return remove(1);
+	}
+
+	public int remove(int amount) {
+		return quantity -= amount;
 	}
 
 	@Override

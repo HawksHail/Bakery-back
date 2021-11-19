@@ -70,7 +70,7 @@ class CartItemServiceTest {
 		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
-		service.add(customer, product);
+		service.add(customer, product, 1);
 
 		assertEquals(2, cartItem.getQuantity());
 		verify(repository).save(any(CartItem.class));
@@ -81,7 +81,7 @@ class CartItemServiceTest {
 		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
-		service.add(customer, product);
+		service.add(customer, product, 1);
 
 		assertEquals(1, cartItem.getQuantity());
 		verify(repository).save(any(CartItem.class));
@@ -92,7 +92,7 @@ class CartItemServiceTest {
 		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
-		service.remove(customer, product);
+		service.remove(customer, product, 1);
 
 		assertEquals(0, cartItem.getQuantity());
 		verify(repository).delete(any(CartItem.class));
@@ -104,7 +104,7 @@ class CartItemServiceTest {
 		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
-		service.remove(customer, product);
+		service.remove(customer, product, 1);
 
 		assertEquals(1, cartItem.getQuantity());
 		verify(repository).save(any(CartItem.class));

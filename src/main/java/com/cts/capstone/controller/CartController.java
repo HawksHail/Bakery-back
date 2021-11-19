@@ -68,7 +68,9 @@ public class CartController {
 	}
 
 	@PostMapping("{customerId}/{productId}")
-	public ResponseEntity<List<CartItem>> addCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
+	public ResponseEntity<List<CartItem>> addCartProduct(@PathVariable Long customerId,
+	                                                     @PathVariable Long productId,
+	                                                     @RequestParam(required = false) Integer q) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -77,13 +79,15 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		cartItemService.add(customer, product);
+		cartItemService.add(customer, product, q != null ? q : 1);
 
 		return ResponseEntity.ok(cartItemService.findAllByCustomerId(customerId));
 	}
 
 	@DeleteMapping("{customerId}/{productId}")
-	public ResponseEntity<List<CartItem>> deleteCartProduct(@PathVariable Long customerId, @PathVariable Long productId) {
+	public ResponseEntity<List<CartItem>> deleteCartProduct(@PathVariable Long customerId,
+	                                                        @PathVariable Long productId,
+	                                                        @RequestParam(required = false) Integer q) {
 		Customer customer = customerService.findById(customerId);
 		if (customer == null) {
 			throw new CustomerNotFoundException(customerId);
@@ -92,7 +96,7 @@ public class CartController {
 		if (product == null) {
 			throw new ProductNotFoundException(productId);
 		}
-		cartItemService.remove(customer, product);
+		cartItemService.remove(customer, product, q != null ? q : 1);
 
 		return ResponseEntity.ok(cartItemService.findAllByCustomerId(customerId));
 	}

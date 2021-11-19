@@ -32,22 +32,22 @@ public class CartItemService {
 	}
 
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
-	public void add(Customer customer, Product product) {
+	public void add(Customer customer, Product product, int quantity) {
 		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
 		if (item.isPresent()) {
-			item.get().add();
+			item.get().add(quantity);
 			cartItemRepository.save(item.get());
 		} else {
-			cartItemRepository.save(new CartItem(customer, product, 1));
+			cartItemRepository.save(new CartItem(customer, product, quantity));
 		}
 	}
 
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
-	public void remove(Customer customer, Product product) {
+	public void remove(Customer customer, Product product, int quantity) {
 		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
 		if (item.isPresent()) {
-			int quantity = item.get().remove();
-			if (quantity < 1) {
+			int remove = item.get().remove(quantity);
+			if (remove < 1) {
 				cartItemRepository.delete(item.get());
 			} else {
 				cartItemRepository.save(item.get());

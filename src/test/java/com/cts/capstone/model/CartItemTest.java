@@ -56,6 +56,18 @@ class CartItemTest {
 	}
 
 	@Test
+	void add() {
+		cartItem.add();
+		assertEquals(2, cartItem.getQuantity());
+	}
+
+	@Test
+	void remove() {
+		cartItem.remove();
+		assertEquals(0, cartItem.getQuantity());
+	}
+
+	@Test
 	void hashcodeAndEquals() {
 		CartItem x = new CartItem(
 				CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state"),
