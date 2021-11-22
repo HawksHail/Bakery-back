@@ -20,13 +20,15 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
 			Method method = handlerMethod.getMethod();
-			LOGGER.info("{} - {} - {} - method '{}' on controller '{}' - status {}",
-					request.getMethod(),
-					request.getRequestURI(),
-					request.getRemoteAddr(),
-					method.getName(),
-					handlerMethod.getBean().getClass(),
-					response.getStatus());
+			if (!method.getName().equals("ok") && !handlerMethod.getBean().getClass().getName().equals("class com.cts.capstone.controller.Controller")) {
+				LOGGER.info("{} - {} - {} - method '{}' on controller '{}' - status {}",
+						request.getMethod(),
+						request.getRequestURI(),
+						request.getRemoteAddr(),
+						method.getName(),
+						handlerMethod.getBean().getClass(),
+						response.getStatus());
+			}
 		}
 
 	}
