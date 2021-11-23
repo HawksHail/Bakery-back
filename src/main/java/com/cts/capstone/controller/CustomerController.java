@@ -74,6 +74,7 @@ public class CustomerController {
 			throw new CustomerNotFoundException();
 		}
 		if (find.getSub().equals(customer.getSub())) {
+			customer.setCart(find.getCart());
 			Customer added = customerService.add(customer);
 			return ResponseEntity.noContent().build();
 		}
