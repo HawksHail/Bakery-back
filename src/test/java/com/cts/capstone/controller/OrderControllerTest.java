@@ -1,7 +1,9 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.exception.OrderNotFoundException;
+import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +26,14 @@ class OrderControllerTest {
 	@Mock
 	OrderService service;
 
+	Customer customer;
 	OrderController controller;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		controller = new OrderController(service);
+		customer = CustomerBuilder.of(1234L);
 	}
 
 	@Test
@@ -41,8 +45,8 @@ class OrderControllerTest {
 	@Test
 	void getAllCategories() {
 		List<Order> expected = new OrderBuilder()
-				.w(1234, "id123")
-				.w(1235, "id124")
+				.w(1234L, customer)
+				.w(1235L, customer)
 				.build();
 		when(service.findAll())
 				.thenReturn(expected);
@@ -55,7 +59,7 @@ class OrderControllerTest {
 
 	@Test
 	void getOrder() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer);
 		when(service.findById(anyLong()))
 				.thenReturn(expected);
 
@@ -77,7 +81,7 @@ class OrderControllerTest {
 
 	@Test
 	void addOrder() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer);
 		when(service.add(any(Order.class)))
 				.thenReturn(expected);
 
@@ -92,22 +96,22 @@ class OrderControllerTest {
 	@Test
 	void getOrdersByCustomer() {
 		List<Order> expected = new OrderBuilder()
-				.w(1234, "id123")
-				.w(1235, "id123")
+				.w(1234L, customer)
+				.w(1235L, customer)
 				.build();
-		when(service.findByCustomerId(anyString()))
+		when(service.findByCustomerId(anyLong()))
 				.thenReturn(expected);
 
-		List<Order> actual = controller.getOrdersByCustomer("id123");
+		List<Order> actual = controller.getOrdersByCustomer(customer.getCustomerId());
 
 		assertEquals(expected, actual);
 
-		verify(service, times(1)).findByCustomerId(anyString());
+		verify(service, times(1)).findByCustomerId(anyLong());
 	}
 
 	@Test
 	void putOrder() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, CustomerBuilder.of(1234L));
 		when(service.add(any(Order.class)))
 				.thenReturn(expected);
 
@@ -119,7 +123,7 @@ class OrderControllerTest {
 
 	@Test
 	void deleteOrderById() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer);
 		when(service.delete(anyLong()))
 				.thenReturn(true);
 
@@ -131,7 +135,7 @@ class OrderControllerTest {
 
 	@Test
 	void deleteOrderByIdNotFound() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer);
 		when(service.delete(anyLong()))
 				.thenReturn(false);
 

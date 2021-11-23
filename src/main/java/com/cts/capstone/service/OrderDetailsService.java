@@ -31,10 +31,6 @@ public class OrderDetailsService {
 		return orderDetailsRepository.findAll();
 	}
 
-	public OrderDetails findById(Long id) {
-		return orderDetailsRepository.findById(id).orElse(null);
-	}
-
 	public OrderDetails add(OrderDetails orderDetails) {
 		return orderDetailsRepository.save(orderDetails);
 	}
@@ -43,8 +39,8 @@ public class OrderDetailsService {
 		return orderDetailsRepository.saveAll(list);
 	}
 
-	public OrderDetails findByOrderIdAndProductId(Long orderId, Long productId) {
-		return orderDetailsRepository.findByIdOrderIdAndIdProductId(orderId, productId).orElse(null);
+	public OrderDetails findById(OrderDetailsKey id) {
+		return orderDetailsRepository.findById(id).orElse(null);
 	}
 
 	public List<OrderDetails> findAllById(Long id) {

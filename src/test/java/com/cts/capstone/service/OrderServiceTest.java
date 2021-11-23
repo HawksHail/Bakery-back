@@ -1,6 +1,8 @@
 package com.cts.capstone.service;
 
+import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
+import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 import com.cts.capstone.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +21,16 @@ class OrderServiceTest {
 	@Mock
 	OrderRepository repository;
 
+	Customer customer1;
+	Customer customer2;
 	OrderService service;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		service = new OrderService(repository);
+		customer1 = CustomerBuilder.of(1234L);
+		customer2 = CustomerBuilder.of(1235L);
 	}
 
 	@Test
@@ -36,8 +42,8 @@ class OrderServiceTest {
 	@Test
 	void findAll() {
 		List<Order> expected = new OrderBuilder()
-				.w(1234, "id123")
-				.w(1235, "id124")
+				.w(1234L, customer1)
+				.w(1235L, customer2)
 				.build();
 		when(repository.findAll())
 				.thenReturn(expected);
@@ -50,7 +56,7 @@ class OrderServiceTest {
 
 	@Test
 	void findById() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer1);
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.of(expected));
 
@@ -73,7 +79,7 @@ class OrderServiceTest {
 
 	@Test
 	void add() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer1);
 		when(repository.save(any(Order.class)))
 				.thenReturn(expected);
 
@@ -86,21 +92,21 @@ class OrderServiceTest {
 	@Test
 	void findByCustomerId() {
 		List<Order> expected = new OrderBuilder()
-				.w(1234, "id123")
-				.w(1235, "id124")
+				.w(1234L, customer1)
+				.w(1235L, customer2)
 				.build();
-		when(repository.findByCustomerId(anyString()))
+		when(repository.findByCustomerCustomerId(anyLong()))
 				.thenReturn(expected);
 
-		List<Order> actual = service.findByCustomerId("id123");
+		List<Order> actual = service.findByCustomerId(customer1.getCustomerId());
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findByCustomerId(anyString());
+		verify(repository, times(1)).findByCustomerCustomerId(anyLong());
 	}
 
 	@Test
 	void delete() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer1);
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.of(expected));
 
@@ -113,7 +119,7 @@ class OrderServiceTest {
 
 	@Test
 	void deleteNotFound() {
-		Order expected = OrderBuilder.of(1234, "id123");
+		Order expected = OrderBuilder.of(1234L, customer1);
 		when(repository.findById(anyLong()))
 				.thenReturn(java.util.Optional.empty());
 

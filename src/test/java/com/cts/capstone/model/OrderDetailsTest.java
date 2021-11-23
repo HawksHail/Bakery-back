@@ -1,5 +1,6 @@
 package com.cts.capstone.model;
 
+import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.jparams.verifier.tostring.NameStyle;
@@ -39,7 +40,7 @@ class OrderDetailsTest {
 
 	@Test
 	void setOrder() {
-		Order expected = OrderBuilder.of(123, "id123");
+		Order expected = OrderBuilder.of(123L, CustomerBuilder.of(1234L));
 		orderDetails.setOrder(expected);
 		assertEquals(expected, orderDetails.getOrder());
 	}

@@ -57,7 +57,7 @@ public class OrderDetailsController {
 
 	@GetMapping(value = "{orderId}/product/{productId}")
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
-		OrderDetails find = orderDetailsService.findByOrderIdAndProductId(orderId, productId);
+		OrderDetails find = orderDetailsService.findById(new OrderDetailsKey(orderId, productId));
 		if (find == null) {
 			throw new OrderDetailsNotFoundException(new OrderDetailsKey(orderId, productId));
 		}

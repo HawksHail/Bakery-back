@@ -1,5 +1,6 @@
 package com.cts.capstone.builder;
 
+import com.cts.capstone.model.Customer;
 import com.cts.capstone.model.Order;
 
 import java.time.LocalDate;
@@ -18,29 +19,29 @@ public class OrderBuilder {
 		return new Order();
 	}
 
-	public OrderBuilder w(long orderId, String customerId) {
-		list.add(of(orderId, customerId));
-		return this;
-	}
-
-	public static Order of(long orderId, String customerId) {
-		return new Order(orderId, customerId);
-	}
-
-	public static Order of(Long customerId) {
+	public static Order of(Customer customer) {
 		Order order = new Order();
-		order.setCustomerId(customerId.toString());
-		order.setOrderDate(LocalDate.now());
+		order.setCustomer(customer);
+		order.setOrderDate(LocalDate.of(2021, 1, 1));
 		return order;
 	}
 
-	public OrderBuilder w(long orderId, String customerId, int year, int month, int day) {
-		list.add(of(orderId, customerId, year, month, day));
+	public OrderBuilder w(Long id, Customer customer) {
+		list.add(of(id, customer));
 		return this;
 	}
 
-	public static Order of(long orderId, String customerId, int year, int month, int day) {
-		return new Order(orderId, customerId, LocalDate.of(year, month, day));
+	public static Order of(Long id, Customer customer) {
+		return new Order(id, customer, LocalDate.of(2021, 1, 1));
+	}
+
+	public OrderBuilder w(long orderId, Customer customer, int year, int month, int day) {
+		list.add(of(orderId, customer, year, month, day));
+		return this;
+	}
+
+	public static Order of(long orderId, Customer customer, int year, int month, int day) {
+		return new Order(orderId, customer, LocalDate.of(year, month, day));
 	}
 
 	public List<Order> build() {

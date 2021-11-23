@@ -58,24 +58,24 @@ class OrderDetailsControllerTest {
 	@Test
 	void getOrderDetailsProduct() {
 		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
-		when(service.findByOrderIdAndProductId(anyLong(), anyLong()))
+		when(service.findById(any(OrderDetailsKey.class)))
 				.thenReturn(expected);
 
 		OrderDetails actual = controller.getOrderDetailsProduct(1234L, 1234L);
 
 		assertEquals(expected, actual);
-		verify(service, times(1)).findByOrderIdAndProductId(anyLong(), anyLong());
+		verify(service, times(1)).findById(any(OrderDetailsKey.class));
 	}
 
 	@Test
 	void getOrderDetailsProductNotFound() {
 		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
-		when(service.findByOrderIdAndProductId(anyLong(), anyLong()))
+		when(service.findById(any(OrderDetailsKey.class)))
 				.thenReturn(null);
 
 		assertThrows(OrderDetailsNotFoundException.class, () -> controller.getOrderDetailsProduct(1234L, 1234L));
 
-		verify(service, times(1)).findByOrderIdAndProductId(anyLong(), anyLong());
+		verify(service, times(1)).findById(any(OrderDetailsKey.class));
 	}
 
 	@Test
