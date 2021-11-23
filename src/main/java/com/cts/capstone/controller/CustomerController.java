@@ -32,7 +32,8 @@ public class CustomerController {
 		this.customerService = customerService;
 	}
 
-	@GetMapping()
+	@GetMapping
+	@PreAuthorize("hasAuthority('view:customer')")
 	public List<Customer> getAllCustomers() {
 		List<Customer> all = customerService.findAll();
 		all.forEach(x -> x.setCart(null));
@@ -57,7 +58,8 @@ public class CustomerController {
 		return find;
 	}
 
-	@PostMapping()
+	@PostMapping
+	@PreAuthorize("isAuthenticated() or hasAuthority('update:customer')")
 	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();
@@ -67,8 +69,16 @@ public class CustomerController {
 	@PutMapping
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public ResponseEntity<Customer> putCustomer(@Valid @RequestBody Customer customer) {
-		Customer added = customerService.add(customer);
-		return ResponseEntity.noContent().build();
+		Customer find = customerService.findById(customer.getCustomerId());
+		if (find == null) {
+			throw new CustomerNotFoundException();
+		}
+		if (find.getSub().equals(customer.getSub())) {
+			customer.setCart(find.getCart());
+			Customer added = customerService.add(customer);
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.badRequest().build();
 	}
 
 	@DeleteMapping("{id}")
