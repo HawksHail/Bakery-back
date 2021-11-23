@@ -114,6 +114,8 @@ class CustomerControllerTest {
 	@Test
 	void putCustomer() {
 		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.findById(anyLong()))
+				.thenReturn(expected);
 		when(service.add(any(Customer.class)))
 				.thenReturn(expected);
 
@@ -121,6 +123,35 @@ class CustomerControllerTest {
 
 		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
 		verify(service, times(1)).add(any(Customer.class));
+	}
+
+	@Test
+	void putCustomer_notFound() {
+		Customer expected = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		when(service.findById(anyLong()))
+				.thenReturn(null);
+		when(service.add(any(Customer.class)))
+				.thenReturn(expected);
+
+		assertThrows(CustomerNotFoundException.class, () -> controller.putCustomer(expected));
+
+		verify(service, times(0)).add(any(Customer.class));
+	}
+
+	@Test
+	void putCustomer_IdMismatch() {
+		Customer customer1 = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		Customer customer2 = CustomerBuilder.of(1234L, "name", "description", "street", "city", "state");
+		customer2.setSub("auth0|Id2");
+		when(service.findById(anyLong()))
+				.thenReturn(customer2);
+		when(service.add(any(Customer.class)))
+				.thenReturn(customer1);
+
+		ResponseEntity<Customer> actual = controller.putCustomer(customer1);
+
+		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+		verify(service, times(0)).add(any(Customer.class));
 	}
 
 	@Test

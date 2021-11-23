@@ -69,8 +69,15 @@ public class CustomerController {
 	@PutMapping
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public ResponseEntity<Customer> putCustomer(@Valid @RequestBody Customer customer) {
-		Customer added = customerService.add(customer);
-		return ResponseEntity.noContent().build();
+		Customer find = customerService.findById(customer.getCustomerId());
+		if (find == null) {
+			throw new CustomerNotFoundException();
+		}
+		if (find.getSub().equals(customer.getSub())) {
+			Customer added = customerService.add(customer);
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.badRequest().build();
 	}
 
 	@DeleteMapping("{id}")
