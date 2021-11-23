@@ -20,7 +20,7 @@ public class ProductBuilder {
 		return new Product();
 	}
 
-	public static Product of(int id, String name, String unitPrice) {
+	public static Product of(long id, String name, String unitPrice) {
 		return of(id, name, new Supplier(), new Category(), unitPrice);
 	}
 

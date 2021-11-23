@@ -3,6 +3,7 @@ package com.cts.capstone.model;
 import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.builder.ProductBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,13 @@ class OrderDetailsTest {
 		Order expected = OrderBuilder.of(123L, CustomerBuilder.of(1234L));
 		orderDetails.setOrder(expected);
 		assertEquals(expected, orderDetails.getOrder());
+	}
+
+	@Test
+	void setProduct() {
+		Product expected = ProductBuilder.of(123L, "name", "20");
+		orderDetails.setProduct(expected);
+		assertEquals(expected, orderDetails.getProduct());
 	}
 
 	@Test
