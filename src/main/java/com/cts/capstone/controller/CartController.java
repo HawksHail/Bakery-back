@@ -112,4 +112,14 @@ public class CartController {
 
 		return ResponseEntity.noContent().build();
 	}
+
+	@PostMapping("{customerId}")
+	public ResponseEntity<List<CartItem>> checkoutCart(@PathVariable Long customerId) {
+		Customer customer = customerService.findById(customerId);
+		if (customer == null) {
+			throw new CustomerNotFoundException(customerId);
+		}
+		//todo
+		return ResponseEntity.noContent().build();
+	}
 }
