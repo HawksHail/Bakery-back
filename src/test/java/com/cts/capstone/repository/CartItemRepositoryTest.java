@@ -86,7 +86,7 @@ class CartItemRepositoryTest {
 	void findById_NotFound() {
 		entityManager.remove(item);
 
-		Optional<CartItem> find = repository.findById(1234L);
+		Optional<CartItem> find = repository.findById(new CartItemKey(1234L, 1234L));
 
 		assertFalse(find.isPresent());
 	}

@@ -31,8 +31,8 @@ class CartItemTest {
 
 	@Test
 	void setCartItemId() {
-		cartItem.setCartItemId(4321L);
-		assertEquals(4321, cartItem.getCartItemId());
+		cartItem.setCartItemId(new CartItemKey(4321L, 1234L));
+		assertEquals(new CartItemKey(4321L, 1234L), cartItem.getCartItemId());
 	}
 
 	@Test

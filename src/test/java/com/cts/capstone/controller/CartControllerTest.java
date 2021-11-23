@@ -213,4 +213,27 @@ class CartControllerTest {
 		verify(customerService, times(1)).findById(anyLong());
 		verify(customerService, times(0)).add(any(Customer.class));
 	}
+
+	@Test
+	void checkoutCart() {
+		when(customerService.findById(anyLong()))
+				.thenReturn(customer);
+		when(customerService.add(any(Customer.class)))
+				.thenReturn(customer);
+
+		ResponseEntity<List<CartItem>> actual = controller.checkoutCart(customer.getCustomerId());
+
+		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
+		verify(customerService, times(1)).findById(anyLong());
+	}
+
+	@Test
+	void checkoutCart_notFound() {
+		when(customerService.findById(anyLong()))
+				.thenReturn(null);
+
+		assertThrows(CustomerNotFoundException.class, () -> controller.checkoutCart(customer.getCustomerId()));
+
+		verify(customerService, times(1)).findById(anyLong());
+	}
 }
