@@ -37,7 +37,7 @@ class OrderDetailsRepositoryTest {
 		category = entityManager.persist(CategoryBuilder.of("category name", "description"));
 		product = entityManager.persist(ProductBuilder.of("product name", supplier, category, "765"));
 		entityManager.flush();
-		OrderDetails details = OrderDetailsBuilder.of(order, product.getId(), 2);
+		OrderDetails details = OrderDetailsBuilder.of(order, product, 2);
 		orderDetails = entityManager.persist(details);
 	}
 

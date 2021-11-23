@@ -1,20 +1,13 @@
 package com.cts.capstone.model;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class OrderDetailsKey implements Serializable {
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "orderid")
-	long orderId;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "productid")
+	long orderId;
 	long productId;
 
 	public OrderDetailsKey() {

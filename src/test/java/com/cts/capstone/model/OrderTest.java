@@ -1,6 +1,7 @@
 package com.cts.capstone.model;
 
 import com.cts.capstone.builder.OrderBuilder;
+import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +39,8 @@ class OrderTest {
 	@Test
 	void setDetailsList() {
 		ArrayList<OrderDetails> expected = new ArrayList<>();
-		expected.add(new OrderDetails(1, 2, 3));
-		expected.add(new OrderDetails(1, 5, 1));
+		expected.add(OrderDetailsBuilder.of(1, 2, 3));
+		expected.add(OrderDetailsBuilder.of(1, 5, 1));
 		order.setDetailsList(expected);
 
 		assertEquals(expected, order.getDetailsList());
