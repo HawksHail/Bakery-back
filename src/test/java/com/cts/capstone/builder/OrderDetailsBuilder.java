@@ -25,6 +25,11 @@ public class OrderDetailsBuilder {
 		return this;
 	}
 
+	public OrderDetailsBuilder w(Order order, Product product, int quantity) {
+		list.add(of(order, product, quantity));
+		return this;
+	}
+
 	public static OrderDetails of(long orderId, long productId, int quantity) {
 		return new OrderDetails(new OrderDetailsKey(orderId, productId), quantity);
 	}

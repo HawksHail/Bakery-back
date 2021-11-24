@@ -1,11 +1,15 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.builder.CustomerBuilder;
+import com.cts.capstone.builder.OrderBuilder;
 import com.cts.capstone.builder.OrderDetailsBuilder;
+import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
-import com.cts.capstone.model.OrderDetails;
-import com.cts.capstone.model.OrderDetailsKey;
+import com.cts.capstone.model.*;
 import com.cts.capstone.service.OrderDetailsService;
+import com.cts.capstone.service.OrderService;
+import com.cts.capstone.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,18 +30,38 @@ class OrderDetailsControllerTest {
 	@Mock
 	OrderDetailsService service;
 
+	@Mock
+	ProductService productService;
+
+	@Mock
+	OrderService orderService;
+
 	OrderDetailsController controller;
 
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
 		controller = new OrderDetailsController(service);
+		controller.setOrderService(orderService);
+		controller.setProductService(productService);
 	}
 
 	@Test
 	void setOrderDetailsService() {
 		controller.setOrderDetailsService(null);
 		assertNull(controller.getOrderDetailsService());
+	}
+
+	@Test
+	void setOrderService() {
+		controller.setOrderService(null);
+		assertNull(controller.getOrderService());
+	}
+
+	@Test
+	void setProductService() {
+		controller.setProductService(null);
+		assertNull(controller.getProductService());
 	}
 
 	@Test
@@ -80,12 +104,22 @@ class OrderDetailsControllerTest {
 
 	@Test
 	void addOrderDetails() {
+		Customer customer = CustomerBuilder.of(1L);
+		Order order = OrderBuilder.of(5L, customer);
+		Product product1 = ProductBuilder.of(10L, "product1", "10");
+		Product product2 = ProductBuilder.of(11L, "product2", "10");
 		List<OrderDetails> expected = new OrderDetailsBuilder()
-				.w(1234, 1234, 2)
-				.w(1234, 1234, 4)
+				.w(order, product1, 2)
+				.w(order, product2, 4)
 				.build();
+		when(orderService.findById(5L))
+				.thenReturn(order);
+		when(productService.findById(10L))
+				.thenReturn(product1);
+		when(productService.findById(11L))
+				.thenReturn(product2);
 		when(service.addList(any()))
-				.thenReturn(expected);
+				.thenReturn(List.copyOf(expected));
 
 		ResponseEntity<Object> actual = controller.addOrderDetailsList(expected);
 
@@ -93,6 +127,91 @@ class OrderDetailsControllerTest {
 		assertEquals(expected, actual.getBody());
 		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.get(0).getId().getOrderId())));
 		verify(service, times(1)).addList(any());
+	}
+
+	@Test
+	void addOrderDetails_OrderNotFound() {
+		Customer customer = CustomerBuilder.of(1L);
+		Order order = OrderBuilder.of(5L, customer);
+		Product product1 = ProductBuilder.of(10L, "product1", "10");
+		Product product2 = ProductBuilder.of(11L, "product2", "10");
+		List<OrderDetails> expected = new OrderDetailsBuilder()
+				.w(order, product1, 2)
+				.w(order, product2, 4)
+				.build();
+		when(orderService.findById(5L))
+				.thenReturn(null);
+		when(productService.findById(10L))
+				.thenReturn(product1);
+		when(productService.findById(11L))
+				.thenReturn(product2);
+		when(service.addList(any()))
+				.thenReturn(List.copyOf(expected));
+
+		ResponseEntity<Object> actual = controller.addOrderDetailsList(expected);
+		ExceptionResponse body = (ExceptionResponse) actual.getBody();
+
+		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+		assertNotNull(body);
+		assertEquals("Order " + order.getId() + " not found", body.getMessage());
+		verify(service, times(0)).addList(any());
+	}
+
+	@Test
+	void addOrderDetails_ProductNotFound() {
+		Customer customer = CustomerBuilder.of(1L);
+		Order order = OrderBuilder.of(5L, customer);
+		Product product1 = ProductBuilder.of(10L, "product1", "10");
+		Product product2 = ProductBuilder.of(11L, "product2", "10");
+		List<OrderDetails> expected = new OrderDetailsBuilder()
+				.w(order, product1, 2)
+				.w(order, product2, 4)
+				.build();
+		when(orderService.findById(5L))
+				.thenReturn(order);
+		when(productService.findById(10L))
+				.thenReturn(null);
+		when(productService.findById(11L))
+				.thenReturn(product2);
+		when(service.addList(any()))
+				.thenReturn(List.copyOf(expected));
+
+		ResponseEntity<Object> actual = controller.addOrderDetailsList(expected);
+		ExceptionResponse body = (ExceptionResponse) actual.getBody();
+
+		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+		assertNotNull(body);
+		assertEquals("Product " + product1.getId() + " not found", body.getMessage());
+		verify(service, times(0)).addList(any());
+	}
+
+	@Test
+	void addOrderDetails_noID() {
+		Customer customer = CustomerBuilder.of(1L);
+		Order order = OrderBuilder.of(5L, customer);
+		Product product1 = ProductBuilder.of(10L, "product1", "10");
+		Product product2 = ProductBuilder.of(11L, "product2", "10");
+		List<OrderDetails> expected = new OrderDetailsBuilder()
+				.w(order, product1, 2)
+				.w(order, product2, 4)
+				.build();
+		expected.get(1).setId(null);
+		when(orderService.findById(5L))
+				.thenReturn(order);
+		when(productService.findById(10L))
+				.thenReturn(product1);
+		when(productService.findById(11L))
+				.thenReturn(product2);
+		when(service.addList(any()))
+				.thenReturn(List.copyOf(expected));
+
+		ResponseEntity<Object> actual = controller.addOrderDetailsList(expected);
+		ExceptionResponse body = (ExceptionResponse) actual.getBody();
+
+		assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+		assertNotNull(body);
+		assertEquals("ID was missing", body.getMessage());
+		verify(service, times(0)).addList(any());
 	}
 
 	@Test
