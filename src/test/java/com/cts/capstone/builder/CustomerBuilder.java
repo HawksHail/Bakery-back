@@ -17,6 +17,12 @@ public class CustomerBuilder {
 		return new Customer();
 	}
 
+	public static Customer of(Long l) {
+		Customer customer = new Customer();
+		customer.setCustomerId(l);
+		return customer;
+	}
+
 	public CustomerBuilder w(Long id, String companyName, String contactName, String street, String city, String state) {
 		list.add(of(id, companyName, contactName, street, city, state));
 		return this;

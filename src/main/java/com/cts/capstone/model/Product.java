@@ -15,7 +15,7 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "productid")
-	private long id;
+	private Long id;
 
 	@Column(name = "productname", nullable = false, length = 40)
 	@Length(max = 40, message = "Product name max length 40")
@@ -46,7 +46,7 @@ public class Product {
 		//Empty
 	}
 
-	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice) {
+	public Product(Long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice) {
 		this.id = id;
 		this.productName = productName;
 		this.supplier = supplier;
@@ -56,7 +56,7 @@ public class Product {
 		this.imgCredit = null;
 	}
 
-	public Product(long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice, String imgURL, String imgCredit) {
+	public Product(Long id, String productName, Supplier supplier, Category category, BigDecimal unitPrice, String imgURL, String imgCredit) {
 		this.id = id;
 		this.productName = productName;
 		this.supplier = supplier;
@@ -74,11 +74,11 @@ public class Product {
 		this.supplier = supplier;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -136,7 +136,7 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return id == product.id && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice) && Objects.equals(imgURL, product.imgURL) && Objects.equals(imgCredit, product.imgCredit);
+		return Objects.equals(id, product.id) && Objects.equals(productName, product.productName) && Objects.equals(supplier, product.supplier) && Objects.equals(category, product.category) && Objects.equals(unitPrice, product.unitPrice) && Objects.equals(imgURL, product.imgURL) && Objects.equals(imgCredit, product.imgCredit);
 	}
 
 	@Override

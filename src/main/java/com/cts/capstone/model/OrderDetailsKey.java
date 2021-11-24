@@ -1,44 +1,37 @@
 package com.cts.capstone.model;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class OrderDetailsKey implements Serializable {
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "orderid")
-	long orderId;
 
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "productid")
-	long productId;
+	Long orderId;
+	Long productId;
 
 	public OrderDetailsKey() {
 		//Empty
 	}
 
-	public OrderDetailsKey(long orderId, long productId) {
+	public OrderDetailsKey(Long orderId, Long productId) {
 		this.orderId = orderId;
 		this.productId = productId;
 	}
 
-	public long getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(long orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
 
-	public long getProductId() {
+	public Long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(long productId) {
+	public void setProductId(Long productId) {
 		this.productId = productId;
 	}
 
@@ -52,7 +45,7 @@ public class OrderDetailsKey implements Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		OrderDetailsKey that = (OrderDetailsKey) o;
-		return orderId == that.orderId && productId == that.productId;
+		return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId);
 	}
 
 	@Override

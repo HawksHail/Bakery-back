@@ -18,11 +18,16 @@ public class OrderDetails {
 	@JsonIgnoreProperties("detailsList")
 	private Order order;
 
+	@ManyToOne
+	@MapsId("productId")
+	@JoinColumn(name = "productid")
+	private Product product;
+
 	@Column(name = "quantity", nullable = false)
 	private int quantity;
 
 	public OrderDetails() {
-		//Empty
+		id = new OrderDetailsKey();
 	}
 
 	public OrderDetails(OrderDetailsKey id, int quantity) {
@@ -30,8 +35,10 @@ public class OrderDetails {
 		this.quantity = quantity;
 	}
 
-	public OrderDetails(long orderId, long productId, int quantity) {
-		this.id = new OrderDetailsKey(orderId, productId);
+	public OrderDetails(Order order, Product product, int quantity) {
+		this.id = new OrderDetailsKey(order.getId(), product.getId());
+		this.order = order;
+		this.product = product;
 		this.quantity = quantity;
 	}
 
@@ -49,6 +56,14 @@ public class OrderDetails {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	public int getQuantity() {
@@ -77,6 +92,7 @@ public class OrderDetails {
 		return "OrderDetails{" +
 				"id=" + id +
 				", order=" + order +
+				", product=" + product +
 				", quantity=" + quantity +
 				'}';
 	}

@@ -31,13 +31,14 @@ class OrderRepositoryTest {
 	void setUp() {
 		customer = entityManager.persist(CustomerBuilder.of("customer company", "contact name", "street", "city", "state"));
 
-		order = entityManager.persist(OrderBuilder.of(customer.getCustomerId()));
+		order = entityManager.persist(OrderBuilder.of(customer));
+		entityManager.flush();
 	}
 
 	@Test
 	void save() {
-		entityManager.clear();
-		order.setId(0);
+		entityManager.remove(order);
+		order = OrderBuilder.of(customer);
 
 		Order actual = repository.save(order);
 
@@ -60,7 +61,7 @@ class OrderRepositoryTest {
 
 	@Test
 	public void findAll_Empty() {
-		entityManager.clear();
+		entityManager.remove(order);
 
 		List<Order> all = repository.findAll();
 
@@ -84,7 +85,7 @@ class OrderRepositoryTest {
 
 	@Test
 	void findByCustomerId() {
-		List<Order> all = repository.findByCustomerId(customer.getCustomerId().toString());
+		List<Order> all = repository.findByCustomerCustomerId(customer.getCustomerId());
 
 		assertEquals(List.of(order), all);
 	}

@@ -14,7 +14,7 @@ public class Category {
 	@Id
 	@Column(name = "categoryid")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@Column(name = "categoryname", nullable = false, length = 15)
 	@Length(max = 15, message = "Category name max length of 15")
@@ -32,17 +32,17 @@ public class Category {
 		//Empty
 	}
 
-	public Category(long id, String categoryName, String description) {
+	public Category(Long id, String categoryName, String description) {
 		this.id = id;
 		this.categoryName = categoryName;
 		this.description = description;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -80,7 +80,7 @@ public class Category {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Category category = (Category) o;
-		return id == category.id && Objects.equals(categoryName, category.categoryName) && Objects.equals(description, category.description) && Objects.equals(productList, category.productList);
+		return Objects.equals(id, category.id) && Objects.equals(categoryName, category.categoryName) && Objects.equals(description, category.description) && Objects.equals(productList, category.productList);
 	}
 
 	@Override

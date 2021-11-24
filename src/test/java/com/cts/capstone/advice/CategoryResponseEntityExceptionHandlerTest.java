@@ -46,7 +46,7 @@ class CategoryResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		CategoryNotFoundException exception = new CategoryNotFoundException(1);
+		CategoryNotFoundException exception = new CategoryNotFoundException(1L);
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

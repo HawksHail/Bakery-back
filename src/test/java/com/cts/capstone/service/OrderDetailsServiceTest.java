@@ -53,24 +53,24 @@ class OrderDetailsServiceTest {
 	@Test
 	void findById() {
 		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
-		when(repository.findById(anyLong()))
+		when(repository.findById(any(OrderDetailsKey.class)))
 				.thenReturn(java.util.Optional.of(expected));
 
-		OrderDetails actual = service.findById(123L);
+		OrderDetails actual = service.findById(expected.getId());
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findById(anyLong());
+		verify(repository, times(1)).findById(any(OrderDetailsKey.class));
 	}
 
 	@Test
 	void findByIdNotFound() {
-		when(repository.findById(anyLong()))
+		when(repository.findById(any(OrderDetailsKey.class)))
 				.thenReturn(java.util.Optional.empty());
 
-		OrderDetails actual = service.findById(123L);
+		OrderDetails actual = service.findById(new OrderDetailsKey(1L, 1L));
 
 		assertNull(actual);
-		verify(repository, times(1)).findById(anyLong());
+		verify(repository, times(1)).findById(any(OrderDetailsKey.class));
 	}
 
 	@Test
@@ -98,29 +98,6 @@ class OrderDetailsServiceTest {
 
 		assertEquals(expected, actual);
 		verify(repository, times(1)).saveAll(ArgumentMatchers.<List<OrderDetails>>any());
-	}
-
-	@Test
-	void findByOrderIdAndProductId() {
-		OrderDetails expected = OrderDetailsBuilder.of(1234, 1234, 2);
-		when(repository.findByIdOrderIdAndIdProductId(anyLong(), anyLong()))
-				.thenReturn(java.util.Optional.of(expected));
-
-		OrderDetails actual = service.findByOrderIdAndProductId(expected.getId().getOrderId(), expected.getId().getProductId());
-
-		assertEquals(expected, actual);
-		verify(repository, times(1)).findByIdOrderIdAndIdProductId(anyLong(), anyLong());
-	}
-
-	@Test
-	void findByOrderIdAndProductIdNotFound() {
-		when(repository.findByIdOrderIdAndIdProductId(anyLong(), anyLong()))
-				.thenReturn(java.util.Optional.empty());
-
-		OrderDetails actual = service.findByOrderIdAndProductId(1234L, 1234L);
-
-		assertNull(actual);
-		verify(repository, times(1)).findByIdOrderIdAndIdProductId(anyLong(), anyLong());
 	}
 
 	@Test

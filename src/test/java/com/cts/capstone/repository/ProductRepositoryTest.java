@@ -35,13 +35,15 @@ class ProductRepositoryTest {
 		supplier = entityManager.persist(SupplierBuilder.of("company name", "contact name"));
 		category = entityManager.persist(CategoryBuilder.of("category name", "description"));
 		product = entityManager.persist(ProductBuilder.of("product name", supplier, category, "765"));
-
+		entityManager.flush();
 	}
 
 	@Test
 	void save() {
-		entityManager.clear();
-		product.setId(0);
+		entityManager.remove(product);
+		entityManager.flush();
+
+		product.setId(null);
 
 		Product actual = repository.save(product);
 
@@ -64,7 +66,8 @@ class ProductRepositoryTest {
 
 	@Test
 	public void findAll_Empty() {
-		entityManager.clear();
+		entityManager.remove(product);
+		entityManager.flush();
 
 		List<Product> all = repository.findAll();
 

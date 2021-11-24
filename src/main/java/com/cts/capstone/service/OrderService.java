@@ -38,8 +38,8 @@ public class OrderService {
 		return orderRepository.save(order);
 	}
 
-	public List<Order> findByCustomerId(String customerId) {
-		return orderRepository.findByCustomerId(customerId);
+	public List<Order> findByCustomerId(Long customerId) {
+		return orderRepository.findByCustomerCustomerId(customerId);
 	}
 
 	public boolean delete(Long id) {

@@ -8,11 +8,11 @@ public class SupplierNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public SupplierNotFoundException(long id) {
+	public SupplierNotFoundException(Long id) {
 		this(id, null);
 	}
 
-	public SupplierNotFoundException(long id, Throwable cause) {
+	public SupplierNotFoundException(Long id, Throwable cause) {
 		super(message + " " + id, cause);
 	}
 }

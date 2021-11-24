@@ -53,7 +53,7 @@ public class OrderController {
 	}
 
 	@GetMapping("customer/{customerId}")
-	public List<Order> getOrdersByCustomer(@PathVariable String customerId) {
+	public List<Order> getOrdersByCustomer(@PathVariable Long customerId) {
 		return orderService.findByCustomerId(customerId);
 	}
 

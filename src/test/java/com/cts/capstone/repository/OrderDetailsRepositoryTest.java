@@ -32,18 +32,19 @@ class OrderDetailsRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		customer = entityManager.persist(CustomerBuilder.of("customer company", "contact name", "street", "city", "state"));
-		order = entityManager.persist(OrderBuilder.of(customer.getCustomerId()));
+		order = entityManager.persist(OrderBuilder.of(customer));
 		supplier = entityManager.persist(SupplierBuilder.of("company name", "contact name"));
 		category = entityManager.persist(CategoryBuilder.of("category name", "description"));
 		product = entityManager.persist(ProductBuilder.of("product name", supplier, category, "765"));
 		entityManager.flush();
-		OrderDetails details = OrderDetailsBuilder.of(order, product.getId(), 2);
+		OrderDetails details = OrderDetailsBuilder.of(order, product, 2);
 		orderDetails = entityManager.persist(details);
 	}
 
 	@Test
 	void save() {
-		entityManager.clear();
+		entityManager.remove(orderDetails);
+		orderDetails = OrderDetailsBuilder.of(order, product, 6);
 
 		OrderDetails actual = repository.save(orderDetails);
 
@@ -84,21 +85,6 @@ class OrderDetailsRepositoryTest {
 	@Test
 	void findById_NotFound() {
 		Optional<OrderDetails> find = repository.findById(new OrderDetailsKey(123L, 123L));
-
-		assertFalse(find.isPresent());
-	}
-
-	@Test
-	void findByIdOrderIdAndIdProductId() {
-		Optional<OrderDetails> find = repository.findByIdOrderIdAndIdProductId(order.getId(), product.getId());
-
-		assertTrue(find.isPresent());
-		assertEquals(orderDetails, find.get());
-	}
-
-	@Test
-	void findByIdOrderIdAndIdProductId_NotFound() {
-		Optional<OrderDetails> find = repository.findByIdOrderIdAndIdProductId(123L, 123L);
 
 		assertFalse(find.isPresent());
 	}

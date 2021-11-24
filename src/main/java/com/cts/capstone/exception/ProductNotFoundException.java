@@ -8,11 +8,11 @@ public class ProductNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public ProductNotFoundException(long id) {
+	public ProductNotFoundException(Long id) {
 		this(id, null);
 	}
 
-	public ProductNotFoundException(long id, Throwable cause) {
+	public ProductNotFoundException(Long id, Throwable cause) {
 		super(message + " " + id, cause);
 	}
 }

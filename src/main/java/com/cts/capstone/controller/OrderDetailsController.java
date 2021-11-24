@@ -2,9 +2,14 @@ package com.cts.capstone.controller;
 
 import com.cts.capstone.exception.ExceptionResponse;
 import com.cts.capstone.exception.OrderDetailsNotFoundException;
+import com.cts.capstone.model.Order;
 import com.cts.capstone.model.OrderDetails;
 import com.cts.capstone.model.OrderDetailsKey;
+import com.cts.capstone.model.Product;
 import com.cts.capstone.service.OrderDetailsService;
+import com.cts.capstone.service.OrderService;
+import com.cts.capstone.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +27,12 @@ public class OrderDetailsController {
 
 	private OrderDetailsService orderDetailsService;
 
+	@Autowired
+	private OrderService orderService;
+
+	@Autowired
+	private ProductService productService;
+
 	public OrderDetailsController(OrderDetailsService orderDetailsService) {
 		super();
 		this.orderDetailsService = orderDetailsService;
@@ -33,6 +44,22 @@ public class OrderDetailsController {
 
 	public void setOrderDetailsService(OrderDetailsService orderDetailsService) {
 		this.orderDetailsService = orderDetailsService;
+	}
+
+	public OrderService getOrderService() {
+		return orderService;
+	}
+
+	public void setOrderService(OrderService orderService) {
+		this.orderService = orderService;
+	}
+
+	public ProductService getProductService() {
+		return productService;
+	}
+
+	public void setProductService(ProductService productService) {
+		this.productService = productService;
 	}
 
 	@GetMapping()
@@ -50,6 +77,40 @@ public class OrderDetailsController {
 					"Empty list",
 					"order/details"));
 		}
+		try {
+			for (OrderDetails od : list) {
+				Order order = orderService.findById(od.getId().getOrderId());
+				if (order == null) {
+					return ResponseEntity.badRequest().body(new ExceptionResponse(
+							LocalDateTime.now(),
+							HttpStatus.BAD_REQUEST,
+							HttpStatus.BAD_REQUEST.getReasonPhrase(),
+							"Order " + od.getId().getOrderId() + " not found",
+							"order/details"));
+				}
+				od.setOrder(order);
+
+				Product product = productService.findById(od.getId().getProductId());
+				if (product == null) {
+					return ResponseEntity.badRequest().body(new ExceptionResponse(
+							LocalDateTime.now(),
+							HttpStatus.BAD_REQUEST,
+							HttpStatus.BAD_REQUEST.getReasonPhrase(),
+							"Product " + od.getId().getProductId() + " not found",
+							"order/details"));
+				}
+				od.setProduct(product);
+			}
+		} catch (NullPointerException ex) {
+			return ResponseEntity.badRequest().body(new ExceptionResponse(
+					LocalDateTime.now(),
+					HttpStatus.BAD_REQUEST,
+					HttpStatus.BAD_REQUEST.getReasonPhrase(),
+					"ID was missing",
+					"order/details"));
+		}
+
+
 		List<OrderDetails> added = orderDetailsService.addList(list);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.get(0).getId().getOrderId()).toUri();
 		return ResponseEntity.created(location).body(added);
@@ -57,7 +118,7 @@ public class OrderDetailsController {
 
 	@GetMapping(value = "{orderId}/product/{productId}")
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
-		OrderDetails find = orderDetailsService.findByOrderIdAndProductId(orderId, productId);
+		OrderDetails find = orderDetailsService.findById(new OrderDetailsKey(orderId, productId));
 		if (find == null) {
 			throw new OrderDetailsNotFoundException(new OrderDetailsKey(orderId, productId));
 		}

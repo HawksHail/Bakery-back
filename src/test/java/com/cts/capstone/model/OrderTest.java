@@ -1,6 +1,8 @@
 package com.cts.capstone.model;
 
+import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.OrderBuilder;
+import com.cts.capstone.builder.OrderDetailsBuilder;
 import com.jparams.verifier.tostring.NameStyle;
 import com.jparams.verifier.tostring.ToStringVerifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,24 +11,17 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OrderTest {
 
+	Customer customer;
 	Order order;
 
 	@BeforeEach
 	void setUp() {
-		order = OrderBuilder.of(123L, "cm1234");
-	}
-
-	@Test
-	void order() {
-		Order order = OrderBuilder.of(1234, "id123", 2020, 9, 2);
-		assertEquals(1234, order.getId());
-		assertEquals("id123", order.getCustomerId());
-		assertEquals(LocalDate.of(2020, 9, 2), order.getOrderDate());
+		customer = CustomerBuilder.of(1234L, "Cognizant", "Bob", "street", "city", "state");
+		order = OrderBuilder.of(123L, customer);
 	}
 
 	@Test
@@ -38,17 +33,17 @@ class OrderTest {
 	@Test
 	void setDetailsList() {
 		ArrayList<OrderDetails> expected = new ArrayList<>();
-		expected.add(new OrderDetails(1, 2, 3));
-		expected.add(new OrderDetails(1, 5, 1));
+		expected.add(OrderDetailsBuilder.of(1, 2, 3));
+		expected.add(OrderDetailsBuilder.of(1, 5, 1));
 		order.setDetailsList(expected);
 
 		assertEquals(expected, order.getDetailsList());
 	}
 
 	@Test
-	void setCustomerId() {
-		order.setCustomerId("abc");
-		assertEquals("abc", order.getCustomerId());
+	void setCustomer() {
+		order.setCustomer(null);
+		assertNull(order.getCustomer());
 	}
 
 	@Test
@@ -65,8 +60,8 @@ class OrderTest {
 
 	@Test
 	void hashcodeAndEquals() {
-		Order x = OrderBuilder.of(123L, "cm1234");
-		Order y = OrderBuilder.of(123L, "cm1234");
+		Order x = OrderBuilder.of(123L, customer);
+		Order y = OrderBuilder.of(123L, customer);
 		Order a = OrderBuilder.of();
 		Order b = OrderBuilder.of();
 

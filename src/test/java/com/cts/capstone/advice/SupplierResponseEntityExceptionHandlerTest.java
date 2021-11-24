@@ -46,7 +46,7 @@ class SupplierResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		SupplierNotFoundException exception = new SupplierNotFoundException(1);
+		SupplierNotFoundException exception = new SupplierNotFoundException(1L);
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

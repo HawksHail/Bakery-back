@@ -8,11 +8,11 @@ public class OrderNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public OrderNotFoundException(long id) {
+	public OrderNotFoundException(Long id) {
 		this(id, null);
 	}
 
-	public OrderNotFoundException(long id, Throwable cause) {
+	public OrderNotFoundException(Long id, Throwable cause) {
 		super(message + " " + id, cause);
 	}
 }

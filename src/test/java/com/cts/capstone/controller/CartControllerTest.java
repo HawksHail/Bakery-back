@@ -1,14 +1,17 @@
 package com.cts.capstone.controller;
 
+import com.cts.capstone.builder.CartItemBuilder;
 import com.cts.capstone.builder.CustomerBuilder;
 import com.cts.capstone.builder.ProductBuilder;
 import com.cts.capstone.exception.CustomerNotFoundException;
 import com.cts.capstone.exception.ProductNotFoundException;
 import com.cts.capstone.model.CartItem;
 import com.cts.capstone.model.Customer;
+import com.cts.capstone.model.Order;
 import com.cts.capstone.model.Product;
 import com.cts.capstone.service.CartItemService;
 import com.cts.capstone.service.CustomerService;
+import com.cts.capstone.service.OrderService;
 import com.cts.capstone.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,6 +39,9 @@ class CartControllerTest {
 	@Mock
 	CartItemService cartItemService;
 
+	@Mock
+	OrderService orderService;
+
 	CartController controller;
 
 	Customer customer;
@@ -48,7 +55,12 @@ class CartControllerTest {
 		product = ProductBuilder.of(1, "product name", "123");
 		product2 = ProductBuilder.of(2, "product2 name", "321");
 		customer.getCart().add(new CartItem(customer, product, 1));
-		controller = new CartController(customerService, productService, cartItemService);
+
+		controller = new CartController();
+		controller.setOrderService(orderService);
+		controller.setCartItemService(cartItemService);
+		controller.setCustomerService(customerService);
+		controller.setProductService(productService);
 	}
 
 	@Test
@@ -67,6 +79,12 @@ class CartControllerTest {
 	void setCartRepository() {
 		controller.setCartItemService(null);
 		assertNull(controller.getCartItemService());
+	}
+
+	@Test
+	void setOrderService() {
+		controller.setOrderService(null);
+		assertNull(controller.getOrderService());
 	}
 
 	@Test
@@ -216,15 +234,29 @@ class CartControllerTest {
 
 	@Test
 	void checkoutCart() {
+		List<CartItem> cart = new CartItemBuilder(customer)
+				.w(product, 1)
+				.w(product2, 2)
+				.build();
+
 		when(customerService.findById(anyLong()))
 				.thenReturn(customer);
-		when(customerService.add(any(Customer.class)))
-				.thenReturn(customer);
+		when(cartItemService.findAllByCustomerId(anyLong()))
+				.thenReturn(cart);
+		when(orderService.add(any(Order.class)))
+				.then(a -> {
+					a.getArgument(0, Order.class).setId(56L);
+					return a.getArgument(0, Order.class);
+				});
 
-		ResponseEntity<List<CartItem>> actual = controller.checkoutCart(customer.getCustomerId());
+		ResponseEntity<Object> actual = controller.checkoutCart(customer.getCustomerId());
 
-		assertEquals(HttpStatus.NO_CONTENT, actual.getStatusCode());
-		verify(customerService, times(1)).findById(anyLong());
+		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+		assertTrue(Objects.requireNonNull(actual.getHeaders().getLocation()).toString().contains("/order/56"));
+		verify(customerService).findById(anyLong());
+		verify(cartItemService).findAllByCustomerId(anyLong());
+		verify(orderService, times(2)).add(any(Order.class));
+		verify(cartItemService).clear(anyLong());
 	}
 
 	@Test
@@ -236,4 +268,6 @@ class CartControllerTest {
 
 		verify(customerService, times(1)).findById(anyLong());
 	}
+
+
 }
