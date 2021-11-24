@@ -8,11 +8,11 @@ public class CategoryNotFoundException extends RuntimeException {
 		super(message);
 	}
 
-	public CategoryNotFoundException(long id) {
+	public CategoryNotFoundException(Long id) {
 		this(id, null);
 	}
 
-	public CategoryNotFoundException(long id, Throwable cause) {
+	public CategoryNotFoundException(Long id, Throwable cause) {
 		super(message + " " + id, cause);
 	}
 }

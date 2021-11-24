@@ -67,7 +67,7 @@ class OrderDetailsServiceTest {
 		when(repository.findById(any(OrderDetailsKey.class)))
 				.thenReturn(java.util.Optional.empty());
 
-		OrderDetails actual = service.findById(new OrderDetailsKey(1, 1));
+		OrderDetails actual = service.findById(new OrderDetailsKey(1L, 1L));
 
 		assertNull(actual);
 		verify(repository, times(1)).findById(any(OrderDetailsKey.class));

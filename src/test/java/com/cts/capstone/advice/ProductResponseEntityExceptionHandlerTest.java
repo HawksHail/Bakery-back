@@ -46,7 +46,7 @@ class ProductResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		ProductNotFoundException exception = new ProductNotFoundException(1);
+		ProductNotFoundException exception = new ProductNotFoundException(1L);
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

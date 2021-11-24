@@ -14,7 +14,7 @@ public class Supplier {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "supplierid")
-	private long id;
+	private Long id;
 
 	@Column(name = "companyname", nullable = false, length = 40)
 	@Length(max = 40, message = "Company name max length 40")
@@ -32,17 +32,17 @@ public class Supplier {
 		//Empty
 	}
 
-	public Supplier(long id, String companyName, String contactName) {
+	public Supplier(Long id, String companyName, String contactName) {
 		this.id = id;
 		this.companyName = companyName;
 		this.contactName = contactName;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -80,7 +80,7 @@ public class Supplier {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Supplier supplier = (Supplier) o;
-		return id == supplier.id && Objects.equals(companyName, supplier.companyName) && Objects.equals(contactName, supplier.contactName) && Objects.equals(productList, supplier.productList);
+		return Objects.equals(id, supplier.id) && Objects.equals(companyName, supplier.companyName) && Objects.equals(contactName, supplier.contactName) && Objects.equals(productList, supplier.productList);
 	}
 
 	@Override

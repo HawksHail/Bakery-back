@@ -26,13 +26,14 @@ class CategoryRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-		category = entityManager.persist(CategoryBuilder.of("category name", "description"));
+		category = entityManager.persistAndFlush(CategoryBuilder.of("category name", "description"));
 	}
 
 	@Test
 	void save() {
-		entityManager.clear();
-		category.setId(0);
+		entityManager.remove(category);
+		entityManager.flush();
+		category.setId(null);
 
 		Category actual = repository.save(category);
 
@@ -55,7 +56,8 @@ class CategoryRepositoryTest {
 
 	@Test
 	public void findAll_Empty() {
-		entityManager.clear();
+		entityManager.remove(category);
+		entityManager.flush();
 
 		List<Category> all = repository.findAll();
 

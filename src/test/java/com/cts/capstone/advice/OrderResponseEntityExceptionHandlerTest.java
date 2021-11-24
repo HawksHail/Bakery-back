@@ -46,7 +46,7 @@ class OrderResponseEntityExceptionHandlerTest {
 
 	@Test
 	void handleNotFoundException() {
-		OrderNotFoundException exception = new OrderNotFoundException(1);
+		OrderNotFoundException exception = new OrderNotFoundException(1L);
 		ResponseEntity<ExceptionResponse> response = notFoundAdvice.handleNotFoundException(exception, servletWebRequest);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

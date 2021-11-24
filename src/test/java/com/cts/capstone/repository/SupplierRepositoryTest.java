@@ -26,13 +26,14 @@ class SupplierRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-		supplier = entityManager.persist(SupplierBuilder.of("company name", "contact name"));
+		supplier = entityManager.persistAndFlush(SupplierBuilder.of("company name", "contact name"));
 	}
 
 	@Test
 	void save() {
 		entityManager.clear();
-		supplier.setId(0);
+		entityManager.flush();
+		supplier.setId(null);
 
 		Supplier actual = repository.save(supplier);
 
@@ -55,7 +56,8 @@ class SupplierRepositoryTest {
 
 	@Test
 	public void findAll_Empty() {
-		entityManager.clear();
+		entityManager.remove(supplier);
+		entityManager.flush();
 
 		List<Supplier> all = repository.findAll();
 
