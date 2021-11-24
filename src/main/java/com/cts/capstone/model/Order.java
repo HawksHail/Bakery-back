@@ -39,6 +39,11 @@ public class Order {
 		this.orderDate = orderDate;
 	}
 
+	public Order(Customer customer) {
+		this.customer = customer;
+		this.orderDate = LocalDate.now();
+	}
+
 	public List<OrderDetails> getDetailsList() {
 		return detailsList;
 	}
