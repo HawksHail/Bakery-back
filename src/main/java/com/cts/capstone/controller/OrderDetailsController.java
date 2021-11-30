@@ -12,6 +12,7 @@ import com.cts.capstone.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -63,11 +64,13 @@ public class OrderDetailsController {
 	}
 
 	@GetMapping()
+	@PreAuthorize("hasAuthority('view:order')")
 	public List<OrderDetails> getAllOrderDetails() {
 		return orderDetailsService.findAll();
 	}
 
 	@PostMapping()
+	@PreAuthorize("isAuthenticated()") //does not test if user owns order
 	public ResponseEntity<Object> addOrderDetailsList(@Valid @RequestBody List<OrderDetails> list) {
 		if (list.size() < 1) {
 			return ResponseEntity.badRequest().body(new ExceptionResponse(
@@ -117,6 +120,7 @@ public class OrderDetailsController {
 	}
 
 	@GetMapping(value = "{orderId}/product/{productId}")
+	@PreAuthorize("hasAuthority('view:order')")
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
 		OrderDetails find = orderDetailsService.findById(new OrderDetailsKey(orderId, productId));
 		if (find == null) {
@@ -126,12 +130,14 @@ public class OrderDetailsController {
 	}
 
 	@PutMapping
+	@PreAuthorize("hasAuthority('update:order')")
 	public ResponseEntity<OrderDetails> putOrderDetails(@Valid @RequestBody OrderDetails orderDetails) {
 		OrderDetails added = orderDetailsService.add(orderDetails);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("{orderId}/product/{productId}")
+	@PreAuthorize("hasAuthority('delete:order')")
 	public ResponseEntity<OrderDetails> deleteOrderDetails(@PathVariable Long orderId, @PathVariable Long productId) {
 		OrderDetailsKey key = new OrderDetailsKey(orderId, productId);
 		boolean delete = orderDetailsService.delete(key);
