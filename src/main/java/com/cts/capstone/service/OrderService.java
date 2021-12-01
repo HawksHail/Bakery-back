@@ -39,7 +39,7 @@ public class OrderService {
 	}
 
 	public List<Order> findByCustomerId(Long customerId) {
-		return orderRepository.findByCustomerCustomerId(customerId);
+		return orderRepository.findByCustomerCustomerIdOrderByOrderDateDesc(customerId);
 	}
 
 	public boolean delete(Long id) {
