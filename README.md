@@ -83,7 +83,7 @@ Each route has sub-routes for various actions
 * PUT `/order` - Updates a order from JSON body. Must have `update:order` permission.
 * DELETE `/order/<id>` - Deletes an order with specified id. Must have `delete:order` permission.
 
-
+##### Order Details
 * POST `/order/details` - Adds list of `OrderDetails` to an order from JSON body. Must be authenticated.
 * GET `/order/details` - Returns a list of all order details. Must have `view:order` permission.
 * GET `/order/details/<order id>/<product id>` - Returns an order detail from an order for a product.
