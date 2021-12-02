@@ -59,7 +59,7 @@ public class CustomerController {
 	}
 
 	@PostMapping
-	@PreAuthorize("isAuthenticated() or hasAuthority('update:customer')")
+	@PreAuthorize("isAuthenticated() or hasAuthority('create:customer')")
 	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();

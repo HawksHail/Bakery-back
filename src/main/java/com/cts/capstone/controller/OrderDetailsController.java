@@ -119,7 +119,7 @@ public class OrderDetailsController {
 		return ResponseEntity.created(location).body(added);
 	}
 
-	@GetMapping(value = "{orderId}/product/{productId}")
+	@GetMapping(value = "{orderId}/{productId}")
 	@PreAuthorize("hasAuthority('view:order')")
 	public OrderDetails getOrderDetailsProduct(@PathVariable Long orderId, @PathVariable Long productId) {
 		OrderDetails find = orderDetailsService.findById(new OrderDetailsKey(orderId, productId));
@@ -136,7 +136,7 @@ public class OrderDetailsController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping("{orderId}/product/{productId}")
+	@DeleteMapping("{orderId}/{productId}")
 	@PreAuthorize("hasAuthority('delete:order')")
 	public ResponseEntity<OrderDetails> deleteOrderDetails(@PathVariable Long orderId, @PathVariable Long productId) {
 		OrderDetailsKey key = new OrderDetailsKey(orderId, productId);
