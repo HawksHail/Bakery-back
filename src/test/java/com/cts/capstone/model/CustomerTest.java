@@ -29,8 +29,8 @@ class CustomerTest {
 
 	@Test
 	void setCustomerId() {
-		customer.setCustomerId(4321L);
-		assertEquals(4321, customer.getCustomerId());
+		customer.setId(4321L);
+		assertEquals(4321, customer.getId());
 	}
 
 	@Test

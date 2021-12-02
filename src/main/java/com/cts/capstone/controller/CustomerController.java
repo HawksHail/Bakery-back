@@ -62,14 +62,14 @@ public class CustomerController {
 	@PreAuthorize("isAuthenticated() or hasAuthority('create:customer')")
 	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
 		Customer added = customerService.add(customer);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getCustomerId()).toUri();
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(added.getId()).toUri();
 		return ResponseEntity.created(location).body(added);
 	}
 
 	@PutMapping
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public ResponseEntity<Customer> putCustomer(@Valid @RequestBody Customer customer) {
-		Customer find = customerService.findById(customer.getCustomerId());
+		Customer find = customerService.findById(customer.getId());
 		if (find == null) {
 			throw new CustomerNotFoundException();
 		}

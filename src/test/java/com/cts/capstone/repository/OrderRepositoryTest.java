@@ -85,7 +85,7 @@ class OrderRepositoryTest {
 
 	@Test
 	void findByCustomerId() {
-		List<Order> all = repository.findByCustomerCustomerIdOrderByOrderDateDescIdDesc(customer.getCustomerId());
+		List<Order> all = repository.findByCustomerIdOrderByOrderDateDescIdDesc(customer.getId());
 
 		assertEquals(List.of(order), all);
 	}

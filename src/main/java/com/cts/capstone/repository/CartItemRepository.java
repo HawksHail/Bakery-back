@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, CartItemKey> {
 
-	List<CartItem> findAllByCustomerCustomerId(Long CustomerId);
+	List<CartItem> findAllByCustomerId(Long CustomerId);
 
-	Optional<CartItem> findByCustomerCustomerIdAndProductId(Long customerId, Long productId);
+	Optional<CartItem> findByCustomerIdAndProductId(Long customerId, Long productId);
 }

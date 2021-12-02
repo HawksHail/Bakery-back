@@ -93,7 +93,7 @@ class CartItemRepositoryTest {
 
 	@Test
 	void findAllByCustomerCustomerId() {
-		List<CartItem> all = repository.findAllByCustomerCustomerId(customer.getCustomerId());
+		List<CartItem> all = repository.findAllByCustomerId(customer.getId());
 
 		assertEquals(List.of(item), all);
 	}
@@ -102,14 +102,14 @@ class CartItemRepositoryTest {
 	void findAllByCustomerCustomerId_Empty() {
 		entityManager.remove(item);
 
-		List<CartItem> all = repository.findAllByCustomerCustomerId(customer.getCustomerId());
+		List<CartItem> all = repository.findAllByCustomerId(customer.getId());
 
 		assertEquals(List.of(), all);
 	}
 
 	@Test
 	void findByCustomerCustomerIdAndProductId() {
-		Optional<CartItem> find = repository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
+		Optional<CartItem> find = repository.findByCustomerIdAndProductId(customer.getId(), product.getId());
 
 		assertTrue(find.isPresent());
 		assertEquals(item, find.get());
@@ -119,7 +119,7 @@ class CartItemRepositoryTest {
 	void findByCustomerCustomerIdAndProductId_NotFound() {
 		entityManager.remove(item);
 
-		Optional<CartItem> find = repository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
+		Optional<CartItem> find = repository.findByCustomerIdAndProductId(customer.getId(), product.getId());
 
 		assertFalse(find.isPresent());
 	}

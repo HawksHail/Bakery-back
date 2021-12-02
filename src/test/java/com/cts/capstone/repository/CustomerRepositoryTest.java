@@ -32,7 +32,7 @@ class CustomerRepositoryTest {
 	@Test
 	void save() {
 		entityManager.clear();
-		customer.setCustomerId(null);
+		customer.setId(null);
 
 		Customer actual = repository.save(customer);
 
@@ -43,7 +43,7 @@ class CustomerRepositoryTest {
 	void delete() {
 		repository.delete(customer);
 
-		assertNull(entityManager.find(Customer.class, customer.getCustomerId()));
+		assertNull(entityManager.find(Customer.class, customer.getId()));
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class CustomerRepositoryTest {
 
 	@Test
 	void findById() {
-		Optional<Customer> find = repository.findById(customer.getCustomerId());
+		Optional<Customer> find = repository.findById(customer.getId());
 
 		assertTrue(find.isPresent());
 		assertEquals(customer, find.get());
