@@ -1,7 +1,7 @@
 package com.cts.capstone.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -23,12 +23,12 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "supplierid")
-	@JsonIgnoreProperties("productList")
+	@JsonIncludeProperties({"id", "companyName"})
 	private Supplier supplier;
 
 	@ManyToOne
 	@JoinColumn(name = "categoryid")
-	@JsonIgnoreProperties("productList")
+	@JsonIncludeProperties({"id", "categoryName"})
 	private Category category;
 
 	@Column(name = "unitprice", precision = 7, scale = 2)
