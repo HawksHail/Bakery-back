@@ -80,7 +80,7 @@ Each route has sub-routes for various actions
 * GET `/order/<id>` - Returns an order with the id. Must be owned by yourself or have `view:order` permission.
 * GET `/order/customer/<customer id>` - Returns a list of all orders for a customer. Must be owned by yourself or
   have `view:order` permission.
-* PUT `/order` - Updates a order from JSON body. Must have `update:order` permission.
+* PUT `/order` - Updates an order from JSON body. Must have `update:order` permission.
 * DELETE `/order/<id>` - Deletes an order with specified id. Must have `delete:order` permission.
 
 ##### Order Details
