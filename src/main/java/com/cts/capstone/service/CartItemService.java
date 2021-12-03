@@ -28,12 +28,12 @@ public class CartItemService {
 	}
 
 	public CartItem findById(Long customerId, Long productId) {
-		return cartItemRepository.findByCustomerCustomerIdAndProductId(customerId, productId).orElse(null);
+		return cartItemRepository.findByCustomerIdAndProductId(customerId, productId).orElse(null);
 	}
 
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public void add(Customer customer, Product product, int quantity) {
-		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
+		Optional<CartItem> item = cartItemRepository.findByCustomerIdAndProductId(customer.getId(), product.getId());
 		if (item.isPresent()) {
 			item.get().add(quantity);
 			cartItemRepository.save(item.get());
@@ -44,7 +44,7 @@ public class CartItemService {
 
 	@PreAuthorize("#customer.sub == authentication.name or hasAuthority('update:customer')")
 	public void remove(Customer customer, Product product, int quantity) {
-		Optional<CartItem> item = cartItemRepository.findByCustomerCustomerIdAndProductId(customer.getCustomerId(), product.getId());
+		Optional<CartItem> item = cartItemRepository.findByCustomerIdAndProductId(customer.getId(), product.getId());
 		if (item.isPresent()) {
 			int remove = item.get().remove(quantity);
 			if (remove < 1) {
@@ -60,6 +60,6 @@ public class CartItemService {
 	}
 
 	public List<CartItem> findAllByCustomerId(Long customerId) {
-		return cartItemRepository.findAllByCustomerCustomerId(customerId);
+		return cartItemRepository.findAllByCustomerId(customerId);
 	}
 }

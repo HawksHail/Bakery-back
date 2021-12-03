@@ -102,7 +102,7 @@ class OrderControllerTest {
 		when(service.findByCustomerId(anyLong()))
 				.thenReturn(expected);
 
-		List<Order> actual = controller.getOrdersByCustomer(customer.getCustomerId());
+		List<Order> actual = controller.getOrdersByCustomer(customer.getId());
 
 		assertEquals(expected, actual);
 

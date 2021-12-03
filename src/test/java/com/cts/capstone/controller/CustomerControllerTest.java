@@ -107,7 +107,7 @@ class CustomerControllerTest {
 
 		assertEquals(HttpStatus.CREATED, actual.getStatusCode());
 		assertEquals(expected, actual.getBody());
-		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getCustomerId())));
+		assertTrue(Objects.requireNonNull(actual.getHeaders().get("Location")).get(0).contains(String.valueOf(expected.getId())));
 		verify(service, times(1)).add(any(Customer.class));
 	}
 

@@ -14,7 +14,7 @@ public class Customer {
 	@Id
 	@Column(name = "customerid")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long customerId;
+	private Long id;
 
 	@Column(unique = true, nullable = false)
 	private String sub;
@@ -47,8 +47,8 @@ public class Customer {
 		cart = new ArrayList<>();
 	}
 
-	public Customer(Long customerId, String sub, String companyName, String contactName, String street, String city, String state) {
-		this.customerId = customerId;
+	public Customer(Long id, String sub, String companyName, String contactName, String street, String city, String state) {
+		this.id = id;
 		this.sub = sub;
 		this.companyName = companyName;
 		this.contactName = contactName;
@@ -58,8 +58,8 @@ public class Customer {
 		cart = new ArrayList<>();
 	}
 
-	public Customer(Long customerId, String sub, String companyName, String contactName, String street, String city, String state, List<CartItem> cart) {
-		this.customerId = customerId;
+	public Customer(Long id, String sub, String companyName, String contactName, String street, String city, String state, List<CartItem> cart) {
+		this.id = id;
 		this.sub = sub;
 		this.companyName = companyName;
 		this.contactName = contactName;
@@ -69,12 +69,12 @@ public class Customer {
 		this.cart = cart;
 	}
 
-	public Long getCustomerId() {
-		return customerId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getCompanyName() {
@@ -135,7 +135,7 @@ public class Customer {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(customerId, sub, companyName, contactName, street, city, state, cart);
+		return Objects.hash(id, sub, companyName, contactName, street, city, state, cart);
 	}
 
 	@Override
@@ -143,13 +143,13 @@ public class Customer {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Customer customer = (Customer) o;
-		return Objects.equals(customerId, customer.customerId) && Objects.equals(sub, customer.sub) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state) && Objects.equals(cart, customer.cart);
+		return Objects.equals(id, customer.id) && Objects.equals(sub, customer.sub) && Objects.equals(companyName, customer.companyName) && Objects.equals(contactName, customer.contactName) && Objects.equals(street, customer.street) && Objects.equals(city, customer.city) && Objects.equals(state, customer.state) && Objects.equals(cart, customer.cart);
 	}
 
 	@Override
 	public String toString() {
 		return "Customer{" +
-				"customerId=" + customerId +
+				"id=" + id +
 				", sub='" + sub + '\'' +
 				", companyName='" + companyName + '\'' +
 				", contactName='" + contactName + '\'' +

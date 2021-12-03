@@ -95,13 +95,13 @@ class OrderServiceTest {
 				.w(1234L, customer1)
 				.w(1235L, customer2)
 				.build();
-		when(repository.findByCustomerCustomerIdOrderByOrderDateDescIdDesc(anyLong()))
+		when(repository.findByCustomerIdOrderByOrderDateDescIdDesc(anyLong()))
 				.thenReturn(expected);
 
-		List<Order> actual = service.findByCustomerId(customer1.getCustomerId());
+		List<Order> actual = service.findByCustomerId(customer1.getId());
 
 		assertEquals(expected, actual);
-		verify(repository, times(1)).findByCustomerCustomerIdOrderByOrderDateDescIdDesc(anyLong());
+		verify(repository, times(1)).findByCustomerIdOrderByOrderDateDescIdDesc(anyLong());
 	}
 
 	@Test

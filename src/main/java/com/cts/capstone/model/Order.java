@@ -19,7 +19,7 @@ public class Order {
 
 	@ManyToOne
 	@JoinColumn(name = "customerid")
-	@JsonIncludeProperties("customerId")
+	@JsonIncludeProperties("id")
 	private Customer customer;
 
 	@Column(name = "orderdate")

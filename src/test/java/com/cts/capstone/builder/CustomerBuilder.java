@@ -19,7 +19,7 @@ public class CustomerBuilder {
 
 	public static Customer of(Long l) {
 		Customer customer = new Customer();
-		customer.setCustomerId(l);
+		customer.setId(l);
 		return customer;
 	}
 

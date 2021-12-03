@@ -45,29 +45,29 @@ class CartItemServiceTest {
 
 	@Test
 	void findById() {
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
 		CartItem actual = service.findById(1234L, 123L);
 
 		assertEquals(cartItem, actual);
-		verify(repository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(repository).findByCustomerIdAndProductId(anyLong(), anyLong());
 	}
 
 	@Test
 	void findByIdNotFound() {
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
 		CartItem actual = service.findById(1234L, 123L);
 
 		assertNull(actual);
-		verify(repository).findByCustomerCustomerIdAndProductId(anyLong(), anyLong());
+		verify(repository).findByCustomerIdAndProductId(anyLong(), anyLong());
 	}
 
 	@Test
 	void add() {
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
 		service.add(customer, product, 1);
@@ -78,7 +78,7 @@ class CartItemServiceTest {
 
 	@Test
 	void addNewItem() {
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.empty());
 
 		service.add(customer, product, 1);
@@ -89,7 +89,7 @@ class CartItemServiceTest {
 
 	@Test
 	void remove() {
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
 		service.remove(customer, product, 1);
@@ -101,7 +101,7 @@ class CartItemServiceTest {
 	@Test
 	void removeDecrementOnly() {
 		cartItem.setQuantity(2);
-		when(repository.findByCustomerCustomerIdAndProductId(anyLong(), anyLong()))
+		when(repository.findByCustomerIdAndProductId(anyLong(), anyLong()))
 				.thenReturn(java.util.Optional.of(cartItem));
 
 		service.remove(customer, product, 1);
@@ -112,22 +112,22 @@ class CartItemServiceTest {
 
 	@Test
 	void clear() {
-		when(repository.findAllByCustomerCustomerId(anyLong()))
+		when(repository.findAllByCustomerId(anyLong()))
 				.thenReturn(List.of(cartItem));
 
-		service.clear(customer.getCustomerId());
+		service.clear(customer.getId());
 
-		verify(repository).findAllByCustomerCustomerId(anyLong());
+		verify(repository).findAllByCustomerId(anyLong());
 		verify(repository).deleteAllInBatch(anyList());
 	}
 
 	@Test
 	void findAllByCustomerId() {
-		when(repository.findAllByCustomerCustomerId(anyLong()))
+		when(repository.findAllByCustomerId(anyLong()))
 				.thenReturn(List.of(cartItem));
 
-		service.findAllByCustomerId(customer.getCustomerId());
+		service.findAllByCustomerId(customer.getId());
 
-		verify(repository).findAllByCustomerCustomerId(anyLong());
+		verify(repository).findAllByCustomerId(anyLong());
 	}
 }
