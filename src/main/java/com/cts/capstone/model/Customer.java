@@ -1,5 +1,6 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -41,6 +42,7 @@ public class Customer {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customerid")
+	@JsonIgnore
 	private List<CartItem> cart;
 
 	public Customer() {
