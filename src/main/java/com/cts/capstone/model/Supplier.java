@@ -1,5 +1,7 @@
 package com.cts.capstone.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -24,6 +26,7 @@ public class Supplier {
 	private String contactName;
 
 	@OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+	@JsonInclude(Include.NON_NULL)
 	private List<Product> productList;
 
 	public Supplier() {
