@@ -5,7 +5,7 @@
 ## About
 
 This is the backend of my Academy Enablement capstone project. The frontend can be
-found [here](https://github.com/GenC-EESept21/zion-mantey-frontend).
+found [here](https://github.com/HawksHail/bakery-front).
 
 This is an e-commerce website for an imaginary bakery. The backend is protected with spring security and users must
 authorize with Auth0 frontend to generate a Bearer Token.
